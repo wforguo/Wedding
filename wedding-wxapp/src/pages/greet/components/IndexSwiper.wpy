@@ -1,0 +1,43 @@
+<style lang="less">
+
+    .box {
+        position: relative;
+        height: 100%;
+        .item,image,.swiper {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+</style>
+<template>
+    <div class="box">
+        <swiper class="swiper"
+                autoplay="true"
+                circular="true"
+                current="0"
+                indicator-dots="true"
+                vertical="true"
+        >
+            <repeat for="{{list}}" item="item" wx:key="index">
+                <swiper-item class="item">
+                    <text clsss="" style="width: 100%;height: 100%;position: absolute" wx:if="{{item.name}}">{{item.name}}</text>
+                    <image mode="aspectFill" lazy-load="true" src="{{item.url}}" class="slide-image"></image>
+                </swiper-item>
+            </repeat>
+        </swiper>
+    </div>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    export default class IndexSwiper extends wepy.component {
+        props = {
+            list: {
+                type: Array,
+                required: true,
+            }
+        };
+    }
+</script>

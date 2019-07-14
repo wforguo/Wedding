@@ -1,0 +1,180 @@
+<template>
+  <div>
+    <Card>
+        <Button style="margin: 15px 0;" type="primary" @click="showAddAlbum">添加</Button>
+        <tables border :loading="loading" stripe ref="tables" editable search-place="top" v-model="tableData" :columns="columns" @on-delete="handleDelete"/>
+        <Button style="margin: 10px 0;" type="primary" @click="exportExcel">导出为Csv文件</Button>
+
+        <Modal
+            v-model="addShow"
+            title="添加照片"
+            :mask-closable="false"
+            @on-ok="handleSubmit"
+            :loading="true"
+            @on-cancel="cancel">
+            <Form ref="formCustom" label-position="top" style="width: 95%;margin: auto">
+<!--                <Upload action="//jsonplaceholder.typicode.com/posts/">-->
+<!--                    <Button icon="ios-cloud-upload-outline">上传照片</Button>-->
+<!--                </Upload>-->
+                <FormItem label="照片链接" style="margin-top: 15px;">
+                    <Input type="text" v-model="formData.url"></Input>
+                </FormItem>
+                <FormItem label="照片描述" style="margin-top: 15px;">
+                    <Input type="text" v-model="formData.desc"></Input>
+                </FormItem>
+            </Form>
+        </Modal>
+
+    </Card>
+  </div>
+</template>
+
+<script>
+import Tables from '_c/tables'
+import axios from 'axios'
+const addAlbum = (p) => {
+  return new Promise((resolve, reject) => {
+    axios.get(`http://127.0.0.1:3333/wedding/album/add?url=${p.url}&desc=${p.desc}`)
+      .then(function (res) {
+      // handle success
+        resolve(res.data.result)
+      })
+      .catch(function (error) {
+      // handle error
+        console.log(error)
+        reject(error)
+      })
+  })
+}
+const delAlbum = (p) => {
+  return new Promise((resolve, reject) => {
+    axios.get(`http://127.0.0.1:3333/wedding/album/del?id=${p.id}`)
+      .then(function (res) {
+      // handle success
+        resolve(res.data.result)
+      })
+      .catch(function (error) {
+      // handle error
+        console.log(error)
+        reject(error)
+      })
+  })
+}
+const getAlbum = (p) => {
+  return new Promise((resolve, reject) => {
+    axios.get(`http://127.0.0.1:3333/wedding/album/list?page=${p.page}&pageSize=${p.pageSize}`)
+      .then(function (res) {
+      // handle success
+        resolve(res.data.result)
+      })
+      .catch(function (error) {
+      // handle error
+        console.log(error)
+        reject(error)
+      })
+  })
+}
+export default {
+  name: 'album',
+  components: {
+    Tables
+  },
+  data () {
+    return {
+      loading: true,
+      addShow: false,
+      formData: {
+        url: '',
+        desc: ''
+      },
+      columns: [
+        { title: '照片', key: 'url', sortable: true, align: 'center' },
+        { title: '描述', key: 'desc', editable: true, align: 'center' },
+        { title: '时间', key: 'time' },
+        {
+          title: '操作',
+          key: 'action',
+          width: 160,
+          align: 'center',
+          render: (h, params) => {
+            return h('div', [
+              h('Button', {
+                props: {
+                  type: 'error',
+                  size: 'small'
+                },
+                on: {
+                  click: () => {
+                    this.delAlbum(params.index)
+                  }
+                }
+              }, '删除')
+            ])
+          }
+        }
+      ],
+      tableData: []
+    }
+  },
+  methods: {
+    handleDelete (params) {
+      console.log(params)
+    },
+    exportExcel () {
+      this.$refs.tables.exportCsv({
+        filename: `table-${(new Date()).valueOf()}.csv`
+      })
+    },
+    cancel () {
+      this.addShow = false
+    },
+    showAddAlbum () {
+      this.addShow = true
+    },
+    delAlbum (index) {
+      console.log(index)
+      this.$Modal.confirm({
+        title: '确认删除吗？',
+        content: '<p>删除后将不可恢复</p>',
+        loading: true,
+        onOk: () => {
+          this.confirmDel(index)
+        }
+      })
+    },
+    confirmDel (index) {
+      delAlbum({
+        id: this.tableData[index].id
+      }).then(res => {
+        this.tableData.splice(index, 1)
+        this.$Modal.remove()
+        this.$Message.success('删除成功')
+      }).catch(() => {
+        this.$Modal.remove()
+        this.$Message.error('删除失败')
+      })
+    },
+    handleSubmit () {
+      addAlbum(this.formData).then(res => {
+        this.addShow = false
+        this.$Message.success('添加成功')
+        this.tableData.push(res)
+      })
+    }
+  },
+  mounted () {
+    getAlbum({
+      page: 1,
+      pageSize: 10
+    }).then(res => {
+      this.tableData = res.list
+      console.log(res.list)
+      this.loading = false
+    })
+  }
+}
+</script>
+
+<style>
+
+</style>
