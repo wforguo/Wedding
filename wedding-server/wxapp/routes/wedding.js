@@ -5,8 +5,8 @@ const Album = require('../../models/album');
 require('./../../util/util');
 
 //连接MongoDB数据库
-mongoose.connect(`${config.database.url}:${config.database.port}/${config.database.name}`, { useNewUrlParser: true });
-// mongoose.connect('mongodb+srv://admin:root@shop-p0l56.gcp.mongodb.net/dumall?retryWrites=true&w=majority', { useNewUrlParser: true });
+// mongoose.connect(`${config.database.url}:${config.database.port}/${config.database.name}`, { useNewUrlParser: true });
+mongoose.connect('mongodb+srv://admin:root@shop-p0l56.gcp.mongodb.net/dumall?retryWrites=true&w=majority', { useNewUrlParser: true });
 
 mongoose.connection.on("connected", function () {
     console.log("MongoDB connected success.")

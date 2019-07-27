@@ -34,7 +34,7 @@ import Tables from '_c/tables'
 import axios from 'axios'
 const addAlbum = (p) => {
   return new Promise((resolve, reject) => {
-    axios.get(`http://127.0.0.1:3333/wedding/album/add?url=${p.url}&desc=${p.desc}`)
+    axios.get(`http://wedding.forguo.com/wedding/album/add?url=${p.url}&desc=${p.desc}`)
       .then(function (res) {
       // handle success
         resolve(res.data.result)
@@ -48,7 +48,7 @@ const addAlbum = (p) => {
 }
 const delAlbum = (p) => {
   return new Promise((resolve, reject) => {
-    axios.get(`http://127.0.0.1:3333/wedding/album/del?id=${p.id}`)
+    axios.get(`http://wedding.forguo.com/wedding/album/del?id=${p.id}`)
       .then(function (res) {
       // handle success
         resolve(res.data.result)
@@ -62,7 +62,7 @@ const delAlbum = (p) => {
 }
 const getAlbum = (p) => {
   return new Promise((resolve, reject) => {
-    axios.get(`http://127.0.0.1:3333/wedding/album/list?page=${p.page}&pageSize=${p.pageSize}`)
+    axios.get(`http://wedding.forguo.com/wedding/album/list?page=${p.page}&pageSize=${p.pageSize}`)
       .then(function (res) {
       // handle success
         resolve(res.data.result)
