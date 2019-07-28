@@ -28,11 +28,14 @@ export default {
       'getUserInfo'
     ]),
     handleSubmit ({ userName, password }) {
-      this.handleLogin({ userName, password }).then(res => {
-        this.getUserInfo().then(res => {
-          this.$router.push({
-            name: this.$config.homeName
-          })
+      this.handleLogin({ userName, password }).then(() => {
+        this.$store.commit('setAvatar', 'https://f2e.forguo.com/img/photo.jpg')
+        this.$store.commit('setUserName', 'admin')
+        this.$store.commit('setUserId', '2')
+        this.$store.commit('setAccess', 'admin')
+        this.$store.commit('setHasGetInfo', true)
+        this.$router.push({
+          name: this.$config.homeName
         })
       })
     }

@@ -12,7 +12,7 @@ const USER_MAP = {
     user_id: '2',
     access: ['admin'],
     token: 'admin',
-    avatar: 'https://avatars0.githubusercontent.com/u/20942571?s=460&v=4'
+    avatar: 'https://f2e.forguo.com/img/photo.jpg'
   }
 }
 
