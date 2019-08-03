@@ -1,5 +1,9 @@
 <style lang="less">
   @import './login.less';
+  .demo-spin-icon-load{
+      margin-bottom: 10px;
+      animation: ani-demo-spin 1s linear infinite;
+  }
 </style>
 
 <template>
@@ -7,7 +11,7 @@
     <div class="login-con">
       <Card icon="log-in" title="欢迎登录" :bordered="false">
         <div class="form-con">
-          <login-form @on-success-valid="handleSubmit"></login-form>
+          <login-form @on-success-valid="handleSubmit" :loading="loading"></login-form>
           <p class="login-tip">输入任意用户名和密码即可</p>
         </div>
       </Card>
@@ -19,6 +23,11 @@
 import LoginForm from '_c/login-form'
 import { mapActions } from 'vuex'
 export default {
+  data () {
+    return {
+      loading: false
+    }
+  },
   components: {
     LoginForm
   },
@@ -27,16 +36,25 @@ export default {
       'handleLogin',
       'getUserInfo'
     ]),
-    handleSubmit ({ userName, password }) {
-      this.handleLogin({ userName, password }).then(() => {
+    handleSubmit ({ userName, userPwd }) {
+      this.loading = true
+      this.handleLogin({ userName, userPwd }).then(() => {
         this.$store.commit('setAvatar', 'https://f2e.forguo.com/img/photo.jpg')
-        this.$store.commit('setUserName', 'admin')
+        this.$store.commit('setUserName', 'super_admin')
         this.$store.commit('setUserId', '2')
-        this.$store.commit('setAccess', 'admin')
+        this.$store.commit('setAccess', 'super_admin')
         this.$store.commit('setHasGetInfo', true)
         this.$router.push({
           name: this.$config.homeName
         })
+        setTimeout(() => {
+          this.loading = false
+        }, 300)
+      }).catch(error => {
+        console.log(error)
+        setTimeout(() => {
+          this.loading = false
+        }, 100)
       })
     }
   }

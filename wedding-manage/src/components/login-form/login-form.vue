@@ -15,7 +15,7 @@
       </Input>
     </FormItem>
     <FormItem>
-      <Button @click="handleSubmit" type="primary" long>登录</Button>
+      <Button @click="handleSubmit" :loading="loading" type="primary" long>登录</Button>
     </FormItem>
   </Form>
 </template>
@@ -23,6 +23,9 @@
 export default {
   name: 'LoginForm',
   props: {
+    loading: {
+      type: Boolean
+    },
     userNameRules: {
       type: Array,
       default: () => {
@@ -43,7 +46,7 @@ export default {
   data () {
     return {
       form: {
-        userName: 'super_admin',
+        userName: '',
         password: ''
       }
     }
@@ -62,7 +65,7 @@ export default {
         if (valid) {
           this.$emit('on-success-valid', {
             userName: this.form.userName,
-            password: this.form.password
+            userPwd: this.form.password
           })
         }
       })

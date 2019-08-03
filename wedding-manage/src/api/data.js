@@ -49,3 +49,27 @@ export const getTreeSelectData = () => {
     method: 'get'
   })
 }
+
+export const getAlbum = (p) => {
+  return axios.request({
+    url: 'manage/album/list',
+    method: 'post',
+    data: p
+  })
+}
+
+export const delAlbum = (p) => {
+  return axios.request({
+    url: 'manage/album/del',
+    method: 'post',
+    data: p
+  })
+}
+
+export const addAlbum = (p) => {
+  return axios.request({
+    url: 'manage/album/add',
+    method: 'post',
+    data: p
+  })
+}

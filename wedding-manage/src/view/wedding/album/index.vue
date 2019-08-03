@@ -31,49 +31,7 @@
 
 <script>
 import Tables from '_c/tables'
-import axios from 'axios'
-const addAlbum = (p) => {
-  return new Promise((resolve, reject) => {
-    axios.get(`https://wedding-wxapp.herokuapp.com/wedding/album/add?url=${p.url}&desc=${p.desc}`)
-      .then(function (res) {
-      // handle success
-        resolve(res.data.result)
-      })
-      .catch(function (error) {
-      // handle error
-        console.log(error)
-        reject(error)
-      })
-  })
-}
-const delAlbum = (p) => {
-  return new Promise((resolve, reject) => {
-    axios.get(`https://wedding-wxapp.herokuapp.com/wedding/album/del?id=${p.id}`)
-      .then(function (res) {
-      // handle success
-        resolve(res.data.result)
-      })
-      .catch(function (error) {
-      // handle error
-        console.log(error)
-        reject(error)
-      })
-  })
-}
-const getAlbum = (p) => {
-  return new Promise((resolve, reject) => {
-    axios.get(`https://wedding-wxapp.herokuapp.com/wedding/album/list?page=${p.page}&pageSize=${p.pageSize}`)
-      .then(function (res) {
-      // handle success
-        resolve(res.data.result)
-      })
-      .catch(function (error) {
-      // handle error
-        console.log(error)
-        reject(error)
-      })
-  })
-}
+import { getAlbum, addAlbum, delAlbum } from '@/api/data'
 export default {
   name: 'album',
   components: {
@@ -132,7 +90,6 @@ export default {
       this.addShow = true
     },
     delAlbum (index) {
-      console.log(index)
       this.$Modal.confirm({
         title: '确认删除吗？',
         content: '<p>删除后将不可恢复</p>',
@@ -167,9 +124,12 @@ export default {
       page: 1,
       pageSize: 10
     }).then(res => {
-      this.tableData = res.list
-      console.log(res.list)
+      this.tableData = res.result.list
       this.loading = false
+    }).catch(error => {
+      console.log(error)
+      this.loading = false
+      // this.$Message.error(error || '当前访问人数过多，请稍后再试')
     })
   }
 }
