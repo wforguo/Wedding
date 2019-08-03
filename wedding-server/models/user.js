@@ -1,30 +1,14 @@
-var mongoose = require('mongoose');
+let mongoose = require('mongoose')
+let Schema = mongoose.Schema;
 
-var userSchema = new mongoose.Schema({
-  "userId":String,
-  "userName":String,
-  "userPwd":String,
-  "orderList":Array,
-  "cartList":[
-    {
-      "productId":String,
-      "productName":String,
-      "salePrice":String,
-      "productImage":String,
-      "checked":String,
-      "productNum":String
-    }
-  ],
-  "addressList":[
-    {
-      "addressId": String,
-      "userName": String,
-      "streetName": String,
-      "postCode": Number,
-      "tel": Number,
-      "isDefault": Boolean
-    }
-  ]
+let userSchema = new Schema({
+  userId: String,
+  userName: String,
+  userPwd: String,
+  userIp: String,
+  userTime: String,
+  userAvatar: String,
+  userRole: String,
 });
 
-module.exports = mongoose.model("User",userSchema);
+module.exports = mongoose.model('User', userSchema, 'wedd-user');

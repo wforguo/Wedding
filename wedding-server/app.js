@@ -6,9 +6,9 @@ const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
 
-// const manage = require('./manage/routes/index')
+const manage = require('./manage/routes/index')
 // const users = require('./wxapp/routes/users')
-const wedding = require('./wxapp/routes/wedding')
+// const wedding = require('./wxapp/routes/wedding')
 
 // error handler
 onerror(app)
@@ -38,9 +38,9 @@ app.use(async (ctx, next) => {
 })
 
 // routes
-// app.use(manage.routes(), manage.allowedMethods())
+app.use(manage.routes(), manage.allowedMethods())
 // app.use(users.routes(), users.allowedMethods())
-app.use(wedding.routes(), wedding.allowedMethods())
+// app.use(wedding.routes(), wedding.allowedMethods())
 
 // error-handling
 app.on('error', (err, ctx) => {
