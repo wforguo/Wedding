@@ -39,11 +39,6 @@ export default {
     handleSubmit ({ userName, userPwd }) {
       this.loading = true
       this.handleLogin({ userName, userPwd }).then(() => {
-        this.$store.commit('setAvatar', 'https://f2e.forguo.com/img/photo.jpg')
-        this.$store.commit('setUserName', 'super_admin')
-        this.$store.commit('setUserId', '2')
-        this.$store.commit('setAccess', 'super_admin')
-        this.$store.commit('setHasGetInfo', true)
         this.$router.push({
           name: this.$config.homeName
         })

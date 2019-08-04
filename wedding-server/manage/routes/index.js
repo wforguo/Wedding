@@ -31,8 +31,50 @@ router.get('/', async (ctx, next) => {
 })
 
 /**
- * 用户登录
+ * 用户信息
  */
+router.post('/manage/user/get_info', async (ctx, next) => {
+  let request = ctx.request.body;
+  let userName = request.userName;
+  if (!userName || userName.length === 0) {
+    ctx.body = {
+      errcode: 10009,
+      msg: '用户名不能为空',
+    };
+    return false;
+  }
+
+  let param = {
+    userName: userName
+  };
+  let res = await User.findOne(param).catch(error => {
+    ctx.body = {
+      errcode: 10086,
+      msg:error.message
+    };
+  });
+
+  if (!res || res.length === 0) {
+    ctx.body = {
+      errcode: 10086,
+      msg: '用户名错误',
+    };
+  } else {
+    const user = {
+      userId: res.userId,
+      userName: res.userName,
+      userTime: res.userTime,
+      userAvatar: res.userAvatar,
+      userRole: res.userRole,
+    }
+    ctx.body = {
+      errcode: 0,
+      msg: 'ok',
+      result: user
+    };
+  }
+})
+
 router.post('/manage/user/login', async (ctx, next) => {
   if (!ctx.request.body || ctx.request.body.length === 0) {
     ctx.body = {
@@ -77,10 +119,17 @@ router.post('/manage/user/login', async (ctx, next) => {
       msg: '用户名或密码错误',
     };
   } else {
+    const user = {
+      userId: res.userId,
+      userName: res.userName,
+      userTime: res.userTime,
+      userAvatar: res.userAvatar,
+      userRole: res.userRole,
+    };
     ctx.body = {
       errcode: 0,
       msg: 'ok',
-      result: res
+      result: user
     };
   }
 })

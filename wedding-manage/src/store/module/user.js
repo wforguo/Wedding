@@ -1,6 +1,5 @@
 import {
   userLogin,
-  logout,
   getUserInfo
 } from '@/api/user'
 import { setToken, getToken } from '@/libs/util'
@@ -12,12 +11,7 @@ export default {
     avatarImgPath: '',
     token: getToken(),
     access: '',
-    hasGetInfo: false,
-    unreadCount: 0,
-    messageUnreadList: [],
-    messageReadedList: [],
-    messageTrashList: [],
-    messageContentStore: {}
+    hasGetInfo: false
   },
   mutations: {
     setAvatar (state, avatarPath) {
@@ -38,37 +32,11 @@ export default {
     },
     setHasGetInfo (state, status) {
       state.hasGetInfo = status
-    },
-    setMessageCount (state, count) {
-      state.unreadCount = count
-    },
-    setMessageUnreadList (state, list) {
-      state.messageUnreadList = list
-    },
-    setMessageReadedList (state, list) {
-      state.messageReadedList = list
-    },
-    setMessageTrashList (state, list) {
-      state.messageTrashList = list
-    },
-    updateMessageContentStore (state, { msg_id, content }) {
-      state.messageContentStore[msg_id] = content
-    },
-    moveMsg (state, { from, to, msg_id }) {
-      const index = state[from].findIndex(_ => _.msg_id === msg_id)
-      const msgItem = state[from].splice(index, 1)[0]
-      msgItem.loading = false
-      state[to].unshift(msgItem)
     }
-  },
-  getters: {
-    messageUnreadCount: state => state.messageUnreadList.length,
-    messageReadedCount: state => state.messageReadedList.length,
-    messageTrashCount: state => state.messageTrashList.length
   },
   actions: {
     // 登录
-    handleLogin ({ commit }, { userName, userPwd }) {
+    handleLogin ({ state, commit }, { userName, userPwd }) {
       userName = userName.trim()
       userPwd = userPwd.trim()
       return new Promise((resolve, reject) => {
@@ -76,8 +44,14 @@ export default {
           userName: userName,
           userPwd: userPwd
         }).then(res => {
+          const data = res.result
           commit('setToken', userName)
-          resolve()
+          commit('setAvatar', data.userAvatar)
+          commit('setUserName', data.userName)
+          commit('setUserId', data.userId)
+          commit('setAccess', data.userRole)
+          commit('setHasGetInfo', true)
+          resolve(data)
         }).catch(error => {
           reject(error)
         })
@@ -86,17 +60,10 @@ export default {
     // 退出登录
     handleLogOut ({ state, commit }) {
       return new Promise((resolve, reject) => {
-        logout(state.token).then(() => {
-          commit('setToken', '')
-          commit('setAccess', [])
-          resolve()
-        }).catch(err => {
-          reject(err)
-        })
-        // 如果你的退出登录无需请求接口，则可以直接使用下面三行代码而无需使用logout调用接口
-        // commit('setToken', '')
-        // commit('setAccess', [])
-        // resolve()
+        commit('setUserName', '')
+        commit('setToken', '')
+        commit('setAccess', [])
+        resolve()
       })
     },
     // 获取用户相关信息
@@ -104,11 +71,11 @@ export default {
       return new Promise((resolve, reject) => {
         try {
           getUserInfo(state.token).then(res => {
-            const data = res
-            commit('setAvatar', data.avatar)
-            commit('setUserName', data.name)
-            commit('setUserId', data.user_id)
-            commit('setAccess', data.access)
+            const data = res.result
+            commit('setAvatar', data.userAvatar)
+            commit('setUserName', data.userName)
+            commit('setUserId', data.userId)
+            commit('setAccess', data.userRole)
             commit('setHasGetInfo', true)
             resolve(data)
           }).catch(err => {
