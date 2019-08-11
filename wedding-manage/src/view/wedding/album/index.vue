@@ -10,7 +10,7 @@
             title="添加照片"
             :mask-closable="false"
             @on-ok="handleSubmit"
-            :loading="true"
+            :loading="false"
             @on-cancel="cancel">
             <Form ref="formCustom" label-position="top" style="width: 95%;margin: auto">
 <!--                <Upload action="//jsonplaceholder.typicode.com/posts/">-->
