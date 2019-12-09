@@ -6,16 +6,22 @@ const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
 
-const manage = require('./manage/routes/index')
+// const manage = require('./manage/routes/index')
 // const users = require('./wxapp/routes/users')
 // const wedding = require('./wxapp/routes/wedding')
+const utils = require('./manage/routes/utils')
 
 // error handler
 onerror(app)
 
 // middlewares
 app.use(bodyparser({
-  enableTypes:['json', 'form', 'text']
+    multipart:true, // 支持文件上传
+    encoding:'gzip',
+    formidable: {
+        maxFileSize: 200 * 1024 * 1024	// 设置上传文件大小最大限制，默认2M
+    },
+    enableTypes:['json', 'form', 'text']
 }))
 app.use(json())
 app.use(logger())
@@ -38,7 +44,7 @@ app.use(async (ctx, next) => {
 })
 
 // routes
-app.use(manage.routes(), manage.allowedMethods())
+app.use(utils.routes(), utils.allowedMethods())
 // app.use(users.routes(), users.allowedMethods())
 // app.use(wedding.routes(), wedding.allowedMethods())
 

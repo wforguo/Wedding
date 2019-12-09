@@ -21,7 +21,8 @@
     "koa-views": "^6.2.0",
     "koa2-request": "^1.0.4",
     "mongoose": "^5.6.3",
-    "pug": "^2.0.3"
+    "pug": "^2.0.3",
+    "ip": "latest"
   },
   "devDependencies": {
     "nodemon": "^1.19.1"
