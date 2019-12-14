@@ -137,6 +137,7 @@ router.post('/user/login', async (ctx, next) => {
             userAvatar: res.userAvatar,
             userRole: res.userRole,
         };
+        console.log(user);
         ctx.body = {
             errcode: 0,
             msg: 'ok',
