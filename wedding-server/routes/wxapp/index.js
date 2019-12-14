@@ -4,6 +4,9 @@ const wxApp = config.wxApp;
 const getRunData  = require('./../getRunData');
 const koa2Req = require('koa2-request');
 
+// 添加路由前缀
+router.prefix('/wxapp');
+
 // 获取微信登录信息
 const wxAuth = async (req) => {
 

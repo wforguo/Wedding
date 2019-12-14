@@ -11,4 +11,4 @@ let userSchema = new Schema({
   userRole: String,
 });
 
-module.exports = mongoose.model('User', userSchema, 'wedd-user');
+module.exports = mongoose.model('User', userSchema, 'wedd_users');

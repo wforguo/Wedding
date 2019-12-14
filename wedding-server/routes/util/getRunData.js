@@ -1,5 +1,5 @@
 let WXBizDataCrypt = require('./WXBizDataCrypt');
-let config = require('./../config');
+let config = require('../../config');
 let wxApp = config.wxApp;
 
 module.exports =

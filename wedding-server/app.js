@@ -6,23 +6,22 @@ const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
 
-const manage = require('./manage/routes/index')
-// const users = require('./wxapp/routes/users')
-// const wedding = require('./wxapp/routes/wedding')
+const manage = require('./routes/manage')
+// const users = require('./routes/wxapp')
 
 // error handler
 onerror(app)
 
 // middlewares
 app.use(bodyparser({
-  enableTypes:['json', 'form', 'text']
+    enableTypes: ['json', 'form', 'text']
 }))
 app.use(json())
 app.use(logger())
 app.use(require('koa-static')(__dirname + '/public'))
 
 app.use(views(__dirname + '/views', {
-  extension: 'pug'
+    extension: 'pug'
 }))
 
 // logger
@@ -40,11 +39,10 @@ app.use(async (ctx, next) => {
 // routes
 app.use(manage.routes(), manage.allowedMethods())
 // app.use(users.routes(), users.allowedMethods())
-// app.use(wedding.routes(), wedding.allowedMethods())
 
 // error-handling
 app.on('error', (err, ctx) => {
-  console.error('server error', err, ctx)
+    console.error('server error', err, ctx)
 });
 
 module.exports = app

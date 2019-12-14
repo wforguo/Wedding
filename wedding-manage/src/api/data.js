@@ -42,25 +42,25 @@ export const getTreeSelectData = () => {
   })
 }
 
-export const getAlbum = (p) => {
+export const getPhoto = (p) => {
   return axios.request({
-    url: 'manage/album/list',
+    url: 'manage/photo/list',
     method: 'post',
     data: p
   })
 }
 
-export const delAlbum = (p) => {
+export const delPhoto = (p) => {
   return axios.request({
-    url: 'manage/album/del',
+    url: 'manage/photo/del',
     method: 'post',
     data: p
   })
 }
 
-export const addAlbum = (p) => {
+export const addPhoto = (p) => {
   return axios.request({
-    url: 'manage/album/add',
+    url: 'manage/photo/add',
     method: 'post',
     data: p
   })

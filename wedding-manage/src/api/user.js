@@ -14,7 +14,7 @@ export const userLogin = ({ userName, userPwd }) => {
 
 export const getUserInfo = (userName) => {
   return axios.request({
-    url: 'manage/user/get_info',
+    url: 'manage/user/getInfo',
     data: {
       userName: userName
     },

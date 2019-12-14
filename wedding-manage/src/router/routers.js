@@ -80,21 +80,21 @@ export default [
     ]
   },
   {
-    path: '/album',
-    name: 'album',
+    path: '/photo',
+    name: 'photo',
     meta: {
       hideInBread: true
     },
     component: Main,
     children: [
       {
-        path: 'album_page',
-        name: 'album_page',
+        path: 'photo_page',
+        name: 'photo_page',
         meta: {
           icon: 'md-grid',
           title: '相册'
         },
-        component: () => import('@/view/wedding/album/index.vue')
+        component: () => import('@/view/wedding/photo/index.vue')
       }
     ]
   },

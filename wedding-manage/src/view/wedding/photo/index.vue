@@ -1,7 +1,7 @@
 <template>
   <div>
     <Card>
-        <Button style="margin: 15px 0;" type="primary" @click="showAddAlbum">添加</Button>
+        <Button style="margin: 15px 0;" type="primary" @click="showAddPhoto">添加</Button>
         <tables border :loading="loading" stripe ref="tables" editable search-place="top" v-model="tableData" :columns="columns" @on-delete="handleDelete"/>
         <Button style="margin: 10px 0;" type="primary" @click="exportExcel">导出为Csv文件</Button>
 
@@ -31,9 +31,9 @@
 
 <script>
 import Tables from '_c/tables'
-import { getAlbum, addAlbum, delAlbum } from '@/api/data'
+import { getPhoto, addPhoto, delPhoto } from '@/api/data'
 export default {
-  name: 'album',
+  name: 'photo',
   components: {
     Tables
   },
@@ -63,7 +63,7 @@ export default {
                 },
                 on: {
                   click: () => {
-                    this.delAlbum(params.index)
+                    this.delPhoto(params.index)
                   }
                 }
               }, '删除')
@@ -86,10 +86,10 @@ export default {
     cancel () {
       this.addShow = false
     },
-    showAddAlbum () {
+    showAddPhoto () {
       this.addShow = true
     },
-    delAlbum (index) {
+    delPhoto (index) {
       this.$Modal.confirm({
         title: '确认删除吗？',
         content: '<p>删除后将不可恢复</p>',
@@ -100,7 +100,7 @@ export default {
       })
     },
     confirmDel (index) {
-      delAlbum({
+      delPhoto({
         id: this.tableData[index].id
       }).then(res => {
         this.tableData.splice(index, 1)
@@ -112,7 +112,7 @@ export default {
       })
     },
     handleSubmit () {
-      addAlbum(this.formData).then(res => {
+      addPhoto(this.formData).then(res => {
         this.addShow = false
         this.$Message.success('添加成功')
         this.tableData.push(res)
@@ -120,7 +120,7 @@ export default {
     }
   },
   mounted () {
-    getAlbum({
+    getPhoto({
       page: 1,
       pageSize: 10
     }).then(res => {
