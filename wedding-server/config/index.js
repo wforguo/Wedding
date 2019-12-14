@@ -1,9 +1,9 @@
 const config = {
     // 本地
     // database: {
-    //     url: 'mongodb://127.0.0.1',
+    //     url: 'mongodb-srv://admin:root@shop-p0l56.gcp.mongodb.net',
     //     port: '27017',
-    //     name: 'wedding',
+    //     name: 'dumall',
     // },
     wxApp: {
         APPID: 'wx7db9d1d26deed64d',
