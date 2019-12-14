@@ -5,6 +5,7 @@ export const userLogin = ({ userName, userPwd }) => {
     userName,
     userPwd
   }
+  console.log(data)
   return axios.request({
     url: 'manage/user/login',
     method: 'post',

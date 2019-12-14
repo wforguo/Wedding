@@ -37,6 +37,7 @@ export default {
       'getUserInfo'
     ]),
     handleSubmit ({ userName, userPwd }) {
+        console.log(userName, userPwd)
       this.loading = true
       this.handleLogin({ userName, userPwd }).then(() => {
         this.$router.push({

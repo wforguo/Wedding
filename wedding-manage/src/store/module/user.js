@@ -37,7 +37,7 @@ export default {
     },
     actions: {
         // 登录
-        handleLogin (state, commit) {
+        handleLogin ({ state, commit }, { userName, userPwd }) {
             userName = userName.trim()
             userPwd = userPwd.trim()
             return new Promise((resolve, reject) => {
