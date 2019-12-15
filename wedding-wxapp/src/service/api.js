@@ -54,11 +54,11 @@ const Api = {
                 reject(new Error(res));
                 return
             }
-            if (res.data.errorcode === 0) {
-                resolve(res.data.data)
+            if (res.photo.errorcode === 0) {
+                resolve(res.photo.photo)
             } else {
                 // token 失效的处理
-                if (res.data.errorcode === 10020 && ifNeedToken) {
+                if (res.photo.errorcode === 10020 && ifNeedToken) {
                     wepy.$store.dispatch({
                         type: TOKEN,
                         token: ''
@@ -68,10 +68,10 @@ const Api = {
                     });
                 }
                 wx.showToast({
-                    title: res.data.msg ? res.data.msg : '请求失败，请重试！',
+                    title: res.photo.msg ? res.photo.msg : '请求失败，请重试！',
                     icon: 'none'
                 });
-                reject(new Error(res.data.msg ? res.data.msg : '请求失败，请重试！'))
+                reject(new Error(res.photo.msg ? res.photo.msg : '请求失败，请重试！'))
             }
         })
     }

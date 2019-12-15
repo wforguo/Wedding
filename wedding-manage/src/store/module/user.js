@@ -44,7 +44,7 @@ export default {
                     userName: userName,
                     userPwd: userPwd
                 }).then(res => {
-                    const data = res.result
+                    const data = res.data
                     commit('setToken', userName)
                     commit('setAvatar', data.userAvatar)
                     commit('setUserName', data.userName)
@@ -71,7 +71,7 @@ export default {
             return new Promise((resolve, reject) => {
                 try {
                     getUserInfo(state.token).then(res => {
-                        const data = res.result
+                        const data = res.data
                         commit('setAvatar', data.userAvatar)
                         commit('setUserName', data.userName)
                         commit('setUserId', data.userId)

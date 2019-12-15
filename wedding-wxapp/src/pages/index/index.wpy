@@ -180,7 +180,7 @@
                 dataType: 'json',
                 success: (res) => {
                     wx.hideNavigationBarLoading();
-                    this.list = res.data.result.list;
+                    this.list = res.photo.result.list;
                     this.$apply();
                 },
                 fail: (e) => {

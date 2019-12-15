@@ -18,167 +18,166 @@ import Main from '@/components/main'
  */
 
 export default [
-  {
-    path: '/login',
-    name: 'login',
-    meta: {
-      title: 'Login - 登录',
-      hideInMenu: true
-    },
-    component: () => import('@/view/login/login.vue')
-  },
-  {
-    path: '/',
-    name: '_home',
-    redirect: '/home',
-    component: Main,
-    meta: {
-      hideInMenu: true,
-      notCache: true
-    },
-    children: [
-      {
-        path: '/home',
-        name: 'home',
+    {
+        path: '/login',
+        name: 'login',
         meta: {
-          hideInMenu: true,
-          title: '首页',
-          notCache: true,
-          icon: 'md-home'
+            title: 'Login - 登录',
+            hideInMenu: true
         },
-        component: () => import('@/view/single-page/home')
-      }
-    ]
-  },
-  {
-    path: '',
-    name: 'blog',
-    meta: {
-      title: '博客',
-      href: 'https://www.forguo.com',
-      icon: 'ios-book'
+        component: () => import('@/view/login/login.vue')
+    },
+    {
+        path: '/',
+        name: '_home',
+        redirect: '/home',
+        component: Main,
+        meta: {
+            hideInMenu: true,
+            notCache: true
+        },
+        children: [
+            {
+                path: '/home',
+                name: 'home',
+                meta: {
+                    hideInMenu: true,
+                    title: '首页',
+                    notCache: true,
+                    icon: 'md-home'
+                },
+                component: () => import('@/view/single-page/home')
+            }
+        ]
+    },
+    {
+        path: '',
+        name: 'blog',
+        meta: {
+            title: '博客',
+            href: 'https://www.forguo.com',
+            icon: 'ios-book'
+        }
+    },
+    {
+        path: '/photo',
+        name: 'photo',
+        meta: {
+            hideInBread: true
+        },
+        component: Main,
+        children: [
+            {
+                path: 'photo_page',
+                name: 'photo_page',
+                meta: {
+                    icon: 'md-photos',
+                    title: '相册'
+                },
+                component: () => import('@/view/wedding/photo/index.vue')
+            }
+        ]
+    },
+    {
+        path: '/user',
+        name: 'user',
+        meta: {
+            hideInBread: true
+        },
+        component: Main,
+        children: [
+            {
+                path: 'user_page',
+                name: 'user_page',
+                meta: {
+                    icon: 'md-contact',
+                    title: '用户'
+                },
+                component: () => import('@/view/wedding/user/index.vue')
+            }
+        ]
+    },
+    {
+        path: '/components',
+        name: 'components',
+        meta: {
+            icon: 'logo-buffer',
+            title: '组件'
+        },
+        component: Main,
+        children: [
+            {
+                path: 'cropper_page',
+                name: 'cropper_page',
+                meta: {
+                    icon: 'md-crop',
+                    title: '图片裁剪'
+                },
+                component: () => import('@/view/components/cropper/cropper.vue')
+            },
+            {
+                path: 'markdown_page',
+                name: 'markdown_page',
+                meta: {
+                    icon: 'logo-markdown',
+                    title: 'Markdown编辑器'
+                },
+                component: () => import('@/view/components/markdown/markdown.vue')
+            }]
+    },
+    {
+        path: '/argu',
+        name: 'argu',
+        meta: {
+            hideInMenu: true
+        },
+        component: Main,
+        children: [
+            {
+                path: 'params/:id',
+                name: 'params',
+                meta: {
+                    icon: 'md-flower',
+                    title: route => `{{ params }}-${route.params.id}`,
+                    notCache: true,
+                    beforeCloseName: 'before_close_normal'
+                },
+                component: () => import('@/view/argu-page/params.vue')
+            },
+            {
+                path: 'query',
+                name: 'query',
+                meta: {
+                    icon: 'md-flower',
+                    title: route => `{{ query }}-${route.query.id}`,
+                    notCache: true
+                },
+                component: () => import('@/view/argu-page/query.vue')
+            }
+        ]
+    },
+    {
+        path: '/401',
+        name: 'error_401',
+        meta: {
+            hideInMenu: true
+        },
+        component: () => import('@/view/error-page/401.vue')
+    },
+    {
+        path: '/500',
+        name: 'error_500',
+        meta: {
+            hideInMenu: true
+        },
+        component: () => import('@/view/error-page/500.vue')
+    },
+    {
+        path: '*',
+        name: 'error_404',
+        meta: {
+            hideInMenu: true
+        },
+        component: () => import('@/view/error-page/404.vue')
     }
-  },
-  {
-    path: '/message',
-    name: 'message',
-    component: Main,
-    meta: {
-      hideInBread: true,
-      hideInMenu: true
-    },
-    children: [
-      {
-        path: 'message_page',
-        name: 'message_page',
-        meta: {
-          icon: 'md-notifications',
-          title: '消息中心'
-        },
-        component: () => import('@/view/single-page/message/index.vue')
-      }
-    ]
-  },
-  {
-    path: '/photo',
-    name: 'photo',
-    meta: {
-      hideInBread: true
-    },
-    component: Main,
-    children: [
-      {
-        path: 'photo_page',
-        name: 'photo_page',
-        meta: {
-          icon: 'md-grid',
-          title: '相册'
-        },
-        component: () => import('@/view/wedding/photo/index.vue')
-      }
-    ]
-  },
-  {
-    path: '/components',
-    name: 'components',
-    meta: {
-      icon: 'logo-buffer',
-      title: '组件'
-    },
-    component: Main,
-    children: [
-      {
-        path: 'cropper_page',
-        name: 'cropper_page',
-        meta: {
-          icon: 'md-crop',
-          title: '图片裁剪'
-        },
-        component: () => import('@/view/components/cropper/cropper.vue')
-      },
-      {
-        path: 'markdown_page',
-        name: 'markdown_page',
-        meta: {
-          icon: 'logo-markdown',
-          title: 'Markdown编辑器'
-        },
-        component: () => import('@/view/components/markdown/markdown.vue')
-      }]
-  },
-  {
-    path: '/argu',
-    name: 'argu',
-    meta: {
-      hideInMenu: true
-    },
-    component: Main,
-    children: [
-      {
-        path: 'params/:id',
-        name: 'params',
-        meta: {
-          icon: 'md-flower',
-          title: route => `{{ params }}-${route.params.id}`,
-          notCache: true,
-          beforeCloseName: 'before_close_normal'
-        },
-        component: () => import('@/view/argu-page/params.vue')
-      },
-      {
-        path: 'query',
-        name: 'query',
-        meta: {
-          icon: 'md-flower',
-          title: route => `{{ query }}-${route.query.id}`,
-          notCache: true
-        },
-        component: () => import('@/view/argu-page/query.vue')
-      }
-    ]
-  },
-  {
-    path: '/401',
-    name: 'error_401',
-    meta: {
-      hideInMenu: true
-    },
-    component: () => import('@/view/error-page/401.vue')
-  },
-  {
-    path: '/500',
-    name: 'error_500',
-    meta: {
-      hideInMenu: true
-    },
-    component: () => import('@/view/error-page/500.vue')
-  },
-  {
-    path: '*',
-    name: 'error_404',
-    meta: {
-      hideInMenu: true
-    },
-    component: () => import('@/view/error-page/404.vue')
-  }
 ]

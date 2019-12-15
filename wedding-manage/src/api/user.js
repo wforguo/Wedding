@@ -5,7 +5,6 @@ export const userLogin = ({ userName, userPwd }) => {
     userName,
     userPwd
   }
-  console.log(data)
   return axios.request({
     url: 'manage/user/login',
     method: 'post',
@@ -28,4 +27,28 @@ export const logout = (token) => {
     url: 'logout',
     method: 'post'
   })
+}
+
+export const getUser = (p) => {
+    return axios.request({
+        url: 'manage/user/list',
+        method: 'get',
+        params: p
+    })
+}
+
+export const delUser = (p) => {
+    return axios.request({
+        url: 'manage/user/del',
+        method: 'post',
+        data: p
+    })
+}
+
+export const addUser = (p) => {
+    return axios.request({
+        url: 'manage/user/add',
+        method: 'post',
+        data: p
+    })
 }

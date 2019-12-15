@@ -15,7 +15,7 @@ export default {
     return {
       columns: [
         {
-          type: 'index',
+          type: 'photo.js',
           title: '序号',
           width: 100
         },

@@ -1,6 +1,6 @@
 /**
  * 微信小程序JavaScriptSDK
- * 
+ *
  * @version 1.0
  * @date 2017-01-10
  * @author jaysonzhou@tencent.com
@@ -89,7 +89,7 @@ var Utils = {
 
     /**
      * 验证param对应的key值是否为空
-     * 
+     *
      * @param {Object} param 接口参数
      * @param {String} key 对应参数的key
      */
@@ -105,7 +105,7 @@ var Utils = {
 
     /**
      * 验证参数中是否存在检索词keyword
-     * 
+     *
      * @param {Object} param 接口参数
      */
     checkKeyword(param){
@@ -114,7 +114,7 @@ var Utils = {
 
     /**
      * 验证location值
-     * 
+     *
      * @param {Object} param 接口参数
      */
     checkLocation(param) {
@@ -142,7 +142,7 @@ var Utils = {
 
     /**
      * 构造微信请求参数，公共属性处理
-     * 
+     *
      * @param {Object} param 接口参数
      * @param {Object} param 配置项
      */
@@ -151,7 +151,7 @@ var Utils = {
         options.header = { "content-type": "application/json" };
         options.method = 'GET';
         options.success = function (res) {
-            var data = res.data;
+            var data = res.photo;
             if (data.status === 0) {
                 param.success(data);
             } else {
@@ -170,7 +170,7 @@ var Utils = {
                     break;
                 }
                 case ERROR_CONF.WX_OK_CODE: {
-                    var data = res.data;
+                    var data = res.photo;
                     if (data.status === 0) {
                         param.complete(data);
                     } else {
@@ -215,7 +215,7 @@ class QQMapWX {
 
     /**
      * 构造函数
-     * 
+     *
      * @param {Object} options 接口参数,key 为必选参数
      */
     constructor(options) {
@@ -229,7 +229,7 @@ class QQMapWX {
      * POI周边检索
      *
      * @param {Object} options 接口参数对象
-     * 
+     *
      * 参数对象结构可以参考
      * @see http://lbs.qq.com/webservice_v1/guide-search.html
      */
@@ -277,7 +277,7 @@ class QQMapWX {
      * sug模糊检索
      *
      * @param {Object} options 接口参数对象
-     * 
+     *
      * 参数对象结构可以参考
      * http://lbs.qq.com/webservice_v1/guide-suggestion.html
      */
@@ -308,7 +308,7 @@ class QQMapWX {
      * 逆地址解析
      *
      * @param {Object} options 接口参数对象
-     * 
+     *
      * 请求参数结构可以参考
      * http://lbs.qq.com/webservice_v1/guide-gcoder.html
      */
@@ -340,7 +340,7 @@ class QQMapWX {
      * 地址解析
      *
      * @param {Object} options 接口参数对象
-     * 
+     *
      * 请求参数结构可以参考
      * http://lbs.qq.com/webservice_v1/guide-geocoder.html
      */
@@ -370,7 +370,7 @@ class QQMapWX {
      * 获取城市列表
      *
      * @param {Object} options 接口参数对象
-     * 
+     *
      * 请求参数结构可以参考
      * http://lbs.qq.com/webservice_v1/guide-region.html
      */
@@ -393,7 +393,7 @@ class QQMapWX {
      * 获取对应城市ID的区县列表
      *
      * @param {Object} options 接口参数对象
-     * 
+     *
      * 请求参数结构可以参考
      * http://lbs.qq.com/webservice_v1/guide-region.html
      */
@@ -424,7 +424,7 @@ class QQMapWX {
      * 起点到终点最大限制直线距离10公里。
      *
      * @param {Object} options 接口参数对象
-     * 
+     *
      * 请求参数结构可以参考
      * http://lbs.qq.com/webservice_v1/guide-distance.html
      */
@@ -454,7 +454,7 @@ class QQMapWX {
         if (options.from) {
             options.location = options.from;
         }
-        
+
         Utils.locationProcess(options, locationsuccess);
     }
 }

@@ -7,8 +7,7 @@
 const router = require('koa-router')();
 const config = require('../../config');
 const mongoose = require('mongoose');
-const Album = require('../../models/photo');
-const User = require('../../models/user');
+const Photo = require('../../models/photo');
 require('../../util/util');
 
 // 连接MongoDB数据库
@@ -33,117 +32,9 @@ router.prefix('/manage');
  * /
  */
 router.get('/', async (ctx, next) => {
-    await ctx.render('index', {
+    await ctx.render('photo.js', {
         title: 'Welcome Wedding!'
     })
-})
-
-/**
- * 获取用户信息
- */
-router.post('/user/getInfo', async (ctx, next) => {
-    let request = ctx.request.body;
-    let userName = request.userName;
-    if (!userName || userName.length === 0) {
-        ctx.body = {
-            errcode: 10009,
-            msg: '用户名不能为空',
-        };
-        return false;
-    }
-
-    let param = {
-        userName: userName
-    };
-    let res = await User.findOne(param).catch(error => {
-        ctx.body = {
-            errcode: 10086,
-            msg: error.message
-        };
-    });
-
-    if (!res || res.length === 0) {
-        ctx.body = {
-            errcode: 10086,
-            msg: '用户名错误',
-        };
-    } else {
-        const user = {
-            userId: res.userId,
-            userName: res.userName,
-            userTime: res.userTime,
-            userAvatar: res.userAvatar,
-            userRole: res.userRole,
-        }
-        ctx.body = {
-            errcode: 0,
-            msg: 'ok',
-            result: user
-        };
-    }
-})
-
-/**
- * 管理员登录
- */
-router.post('/user/login', async (ctx, next) => {
-    if (!ctx.request.body || ctx.request.body.length === 0) {
-        ctx.body = {
-            errcode: 10009,
-            msg: '用户名或密码不能为空不能为空',
-        };
-        return false;
-    }
-    let request = ctx.request.body;
-    let userName = request.userName;
-    let userPwd = request.userPwd;
-    if (!userName || userName.length === 0) {
-        ctx.body = {
-            errcode: 10009,
-            msg: '用户名不能为空',
-        };
-        return false;
-    }
-    if (!userPwd || userPwd.length === 0) {
-        ctx.body = {
-            errcode: 10009,
-            msg: '密码不能为空',
-        };
-        return false;
-    }
-
-    let param = {
-        userName: userName,
-        userPwd: userPwd
-    };
-
-    let res = await User.findOne(param).catch(error => {
-        ctx.body = {
-            errcode: 10086,
-            msg: error.message
-        };
-    });
-
-    if (!res || res.length === 0) {
-        ctx.body = {
-            errcode: 10086,
-            msg: '用户名或密码错误',
-        };
-    } else {
-        const user = {
-            userId: res.userId,
-            userName: res.userName,
-            userTime: res.userTime,
-            userAvatar: res.userAvatar,
-            userRole: res.userRole,
-        };
-        console.log(user);
-        ctx.body = {
-            errcode: 0,
-            msg: 'ok',
-            result: user
-        };
-    }
 })
 
 /**
@@ -151,11 +42,11 @@ router.post('/user/login', async (ctx, next) => {
  */
 router.post('/photo/list', async (ctx, next) => {
     let request = ctx.request.body;
-    let page = request.page || 0;
+    let pageNum = request.pageNum || 0;
     let pageSize = request.pageSize || 10;
-    let skip = (page - 1) * pageSize;
+    let skip = (pageNum - 1) * pageSize;
     let params = {};
-    let res = await Album.find(params).skip(Number(skip)).limit(Number(pageSize)).catch(error => {
+    let res = await Photo.find(params).skip(Number(skip)).limit(Number(pageSize)).catch(error => {
         ctx.body = {
             errcode: 10086,
             msg: error.message
@@ -164,7 +55,7 @@ router.post('/photo/list', async (ctx, next) => {
     ctx.body = {
         errcode: 0,
         msg: 'ok',
-        result: {
+        data: {
             count: res.length,
             list: res
         }
@@ -176,11 +67,11 @@ router.post('/photo/list', async (ctx, next) => {
  */
 router.get('/photo/list', async (ctx, next) => {
     let query = ctx.request.query; // if nothing to pass just return a {}
-    let page = query.page || 0;
-    let pageSize = query.page.pageSize || 10;
-    let skip = (page - 1) * 10;
+    let pageNum = query.pageNum || 0;
+    let pageSize = query.pageSize || 10;
+    let skip = (pageNum - 1) * pageSize;
     let params = {};
-    let res = await Album.find(params).skip(Number(skip)).limit(Number(pageSize)).catch(error => {
+    let res = await Photo.find(params).skip(Number(skip)).limit(Number(pageSize)).catch(error => {
         ctx.body = {
             errcode: 10086,
             msg: error.message
@@ -189,7 +80,7 @@ router.get('/photo/list', async (ctx, next) => {
     ctx.body = {
         errcode: 0,
         msg: 'ok',
-        result: {
+        data: {
             count: res.length,
             list: res
         }
@@ -230,7 +121,7 @@ router.post('/photo/add', async (ctx, next) => {
 
     let sysDate = new Date().Format('yyyyMMddhhmmss');
     let id = platform + r1 + sysDate + r2;
-    let photo = new Album({
+    let photo = new Photo({
         id: id,
         url: url,
         desc: desc,
@@ -245,7 +136,7 @@ router.post('/photo/add', async (ctx, next) => {
     ctx.body = {
         errcode: 0,
         msg: 'ok',
-        result: res
+        data: res
     };
 })
 
@@ -254,7 +145,7 @@ router.post('/photo/add', async (ctx, next) => {
  */
 router.post('/photo/del', async (ctx, next) => {
     let id = ctx.request.body.id || '';
-    let res = await Album.deleteOne({'id': id}).catch(error => {
+    let res = await Photo.deleteOne({'id': id}).catch(error => {
         ctx.body = {
             errcode: 10086,
             msg: error.message
@@ -263,7 +154,7 @@ router.post('/photo/del', async (ctx, next) => {
     ctx.body = {
         errcode: 0,
         msg: 'ok',
-        result: {
+        data: {
             res: res
         }
     };

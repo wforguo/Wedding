@@ -45,8 +45,8 @@ export const getTreeSelectData = () => {
 export const getPhoto = (p) => {
   return axios.request({
     url: 'manage/photo/list',
-    method: 'post',
-    data: p
+    method: 'get',
+    params: p
   })
 }
 

@@ -1,9 +1,9 @@
 <template>
     <div>
         <Card>
-            <Button style="margin: 15px 0;" type="primary" @click="showAddPhoto">添加</Button>
+            <Button style="margin: 15px 0;" type="primary" @click="showAddUser">添加</Button>
             <Button style="margin: 10px 15px;" type="primary" @click="exportExcel">导出为Csv文件</Button>
-            <tables border :loading="listLoading" stripe ref="tables" editable search-place="top" v-model="tableData"
+            <tables border :loading="loading" stripe ref="tables" editable search-place="top" v-model="tableData"
                     :columns="columns" @on-delete="handleDelete"/>
 
             <Modal
@@ -17,41 +17,23 @@
                     <!--                <Upload action="//jsonplaceholder.typicode.com/posts/">-->
                     <!--                    <Button icon="ios-cloud-upload-outline">上传照片</Button>-->
                     <!--                </Upload>-->
-                    <FormItem label="照片链接" style="margin-top: 15px;">
-                        <Input type="text" v-model="formData.url"></Input>
+                    <FormItem label="用户头像" style="margin-top: 15px;">
+                        <Input type="text" v-model="formData.userAvatar"></Input>
                     </FormItem>
-                    <FormItem label="照片描述" style="margin-top: 15px;">
-                        <Input type="text" v-model="formData.desc"></Input>
+                    <FormItem label="用户昵称" style="margin-top: 15px;">
+                        <Input type="text" v-model="formData.userName"></Input>
                     </FormItem>
                 </Form>
             </Modal>
-            <div class="pagination-container">
-                <Page :total="100"
-                      :page-size="listQuery.pageSize"
-                      :current="listQuery.pageNum"
-                      :page-size-opts="[5, 10, 15]"
-                      show-sizer
-                      @on-change="handleCurrentChange"
-                      @on-page-size-change="handleSizeChange"
-                />
-            </div>
+
         </Card>
     </div>
 </template>
 
 <script>
     import Tables from '_c/tables'
-    import { getPhoto, addPhoto, delPhoto } from '@/api/index'
-    const defaultListQuery = {
-        pageNum: 1,
-        pageSize: 10,
-        id: null,
-        receiverKeyword: null,
-        status: null,
-        createTime: null,
-        handleMan: null,
-        handleTime: null
-    }
+    import { getUser, addUser, delUser } from '@/api/user'
+
     export default {
         name: 'photo',
         components: {
@@ -59,8 +41,7 @@
         },
         data () {
             return {
-                listQuery: Object.assign({}, defaultListQuery),
-                listLoading: true,
+                loading: true,
                 addShow: false,
                 formData: {
                     url: '',
@@ -68,7 +49,7 @@
                 },
                 columns: [
                     {
-                        title: '照片',
+                        title: '头像',
                         key: 'url',
                         sortable: false,
                         align: 'center',
@@ -76,17 +57,18 @@
                         render: (h, params) => {
                             return h('Avatar', {
                                 props: {
-                                    src: params.row.url
+                                    src: params.row.userAvatar
                                 }
                             })
                         }
                     },
-                    { title: '描述', key: 'desc', editable: true, align: 'center' },
+                    {
+                        title: '昵称', key: 'userName', editable: false, align: 'center' },
                     {
                         title: '创建时间',
-                        key: 'time',
-                        align: 'center',
-                        width: 260 },
+                        key: 'userTime',
+                        align: 'center'
+                    },
                     {
                         title: '操作',
                         key: 'action',
@@ -101,7 +83,7 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.delPhoto(params.index)
+                                            this.delUser(params.index)
                                         }
                                     }
                                 }, '删除')
@@ -124,10 +106,10 @@
             cancel () {
                 this.addShow = false
             },
-            showAddPhoto () {
+            showAddUser () {
                 this.addShow = true
             },
-            delPhoto (index) {
+            delUser (index) {
                 this.$Modal.confirm({
                     title: '确认删除吗？',
                     content: '<p>删除后将不可恢复</p>',
@@ -138,9 +120,9 @@
                 })
             },
             confirmDel (index) {
-                console.log(index)
-                delPhoto({
-                    id: this.tableData[index].id
+                console.log(index, this.tableData[index])
+                delUser({
+                    userId: this.tableData[index]._id
                 }).then(res => {
                     this.tableData.splice(index, 1)
                     this.$Modal.remove()
@@ -151,50 +133,31 @@
                 })
             },
             handleSubmit () {
-                addPhoto(this.formData).then(res => {
+                addUser(this.formData).then(res => {
                     this.addShow = false
                     console.log(res)
                     this.$Message.success('添加成功')
                     this.tableData.push(res.data)
                 })
-            },
-            handleSizeChange (val) {
-                console.log(val)
-                this.listQuery.pageNum = 1
-                this.listQuery.pageSize = val
-                this.getList()
-            },
-            handleCurrentChange (val) {
-                console.log(val)
-                this.listQuery.pageNum = val
-                this.getList()
-            },
-            getList () {
-                this.listLoading = true
-                getPhoto(this.listQuery).then(res => {
-                    console.log(res.data.list)
-                    this.tableData = res.data.list
-                    this.listLoading = false
-                }).catch(error => {
-                    console.log(error)
-                    this.listLoading = false
-                    // this.$Message.error(error || '当前访问人数过多，请稍后再试')
-                })
             }
         },
         mounted () {
-            this.getList()
+            getUser({
+                pageNum: 1,
+                pageSize: 10
+            }).then(res => {
+                console.log(res.data.list)
+                this.tableData = res.data.list
+                this.loading = false
+            }).catch(error => {
+                console.log(error)
+                this.loading = false
+                // this.$Message.error(error || '当前访问人数过多，请稍后再试')
+            })
         }
     }
 </script>
 
 <style>
 
-    .pagination-container {
-        width: 100%;
-        overflow: hidden;
-        text-align: right;
-        margin-top: 20px;
-        margin-bottom: 5px;
-    }
 </style>
