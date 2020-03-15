@@ -10,9 +10,14 @@ const mongoose = require('mongoose');
 const User = require('../../models/user');
 require('../../util/util');
 
-// 连接MongoDB数据库
-mongoose.connect(`${config.database.url}:${config.database.port}/${config.database.name}`, {useNewUrlParser: true});
+// 数据库连接字符串
+const dbStr = `mongodb://${config.database.user}:${config.database.pwd}@${config.database.url}:${config.database.port}/${config.database.name}?authSource=admin`;
+console.log(dbStr);
 
+// 连接MongoDB数据库
+mongoose.connect(dbStr, {useNewUrlParser: true});
+
+// mongodb://admin:2333!@106.12.182.39:27019/wedding?readPreference=primary&appname=MongoDB%20Compass&ssl=false
 mongoose.connection.on("connected", function () {
     console.log("MongoDB connected success.")
 });
@@ -29,58 +34,13 @@ mongoose.connection.on("disconnected", function () {
 router.prefix('/manage');
 
 /**
- * 获取用户信息
- */
-router.post('/user/getInfo', async (ctx, next) => {
-    let request = ctx.request.body;
-    let userName = request.userName;
-    if (!userName || userName.length === 0) {
-        ctx.body = {
-            errcode: 10009,
-            msg: '用户名不能为空',
-        };
-        return false;
-    }
-
-    let param = {
-        userName: userName
-    };
-    let res = await User.findOne(param).catch(error => {
-        ctx.body = {
-            errcode: 10086,
-            msg: error.message
-        };
-    });
-
-    if (!res || res.length === 0) {
-        ctx.body = {
-            errcode: 10086,
-            msg: '用户名错误',
-        };
-    } else {
-        const user = {
-            userId: res.userId,
-            userName: res.userName,
-            userTime: res.userTime,
-            userAvatar: res.userAvatar,
-            userRole: res.userRole,
-        }
-        ctx.body = {
-            errcode: 0,
-            msg: 'ok',
-            data: user
-        };
-    }
-})
-
-/**
  * 管理员登录
  */
 router.post('/user/login', async (ctx, next) => {
     if (!ctx.request.body || ctx.request.body.length === 0) {
         ctx.body = {
-            errcode: 10009,
-            msg: '用户名或密码不能为空不能为空',
+            code: 10009,
+            message: '用户名或密码不能为空不能为空',
         };
         return false;
     }
@@ -89,15 +49,15 @@ router.post('/user/login', async (ctx, next) => {
     let userPwd = request.userPwd;
     if (!userName || userName.length === 0) {
         ctx.body = {
-            errcode: 10009,
-            msg: '用户名不能为空',
+            code: 10009,
+            message: '用户名不能为空',
         };
         return false;
     }
     if (!userPwd || userPwd.length === 0) {
         ctx.body = {
-            errcode: 10009,
-            msg: '密码不能为空',
+            code: 10009,
+            message: '密码不能为空',
         };
         return false;
     }
@@ -109,15 +69,15 @@ router.post('/user/login', async (ctx, next) => {
 
     let res = await User.findOne(param).catch(error => {
         ctx.body = {
-            errcode: 10086,
-            msg: error.message
+            code: 10086,
+            message: error.message
         };
     });
 
     if (!res || res.length === 0) {
         ctx.body = {
-            errcode: 10086,
-            msg: '用户名或密码错误',
+            code: 10086,
+            message: '用户名或密码错误',
         };
     } else {
         const user = {
@@ -125,12 +85,103 @@ router.post('/user/login', async (ctx, next) => {
             userName: res.userName,
             userTime: res.userTime,
             userAvatar: res.userAvatar,
-            userRole: res.userRole,
+            userRoles: res.userRoles,
         };
         console.log(user);
         ctx.body = {
-            errcode: 0,
-            msg: 'ok',
+            code: 0,
+            message: 'ok',
+            data: user
+        };
+    }
+})
+
+/**
+ * 获取用户信息
+ */
+router.get('/user/info', async (ctx, next) => {
+    let query = ctx.request.query;
+    console.log(query);
+    let userId = query.userId || '10001';
+    if (!userId || userId.length === 0) {
+        ctx.body = {
+            code: 10009,
+            message: '用户id不能为空',
+        };
+        return false;
+    }
+
+    let param = {
+        userId: userId
+    };
+    let res = await User.findOne(param).catch(error => {
+        ctx.body = {
+            code: 10086,
+            message: error.message
+        };
+    });
+
+    if (!res || res.length === 0) {
+        ctx.body = {
+            code: 10086,
+            message: '改用户不存在',
+        };
+    } else {
+        console.log(res)
+        const user = {
+            userId: res.userId,
+            userName: res.userName,
+            userTime: res.userTime,
+            userAvatar: res.userAvatar,
+            userRoles: res.userRoles,
+        }
+        ctx.body = {
+            code: 0,
+            message: 'ok',
+            data: user
+        };
+    }
+})
+
+router.post('/user/info', async (ctx, next) => {
+    let request = ctx.request.body;
+    console.log(request);
+    let userId = request.userId;
+    if (!userId || userId.length === 0) {
+        ctx.body = {
+            code: 10009,
+            message: '用户id不能为空',
+        };
+        return false;
+    }
+
+    let param = {
+        userId: userId
+    };
+    let res = await User.findOne(param).catch(error => {
+        ctx.body = {
+            code: 10086,
+            message: error.message
+        };
+    });
+
+    if (!res || res.length === 0) {
+        ctx.body = {
+            code: 10086,
+            message: '改用户不存在',
+        };
+    } else {
+        console.log(res)
+        const user = {
+            userId: res.userId,
+            userName: res.userName,
+            userTime: res.userTime,
+            userAvatar: res.userAvatar,
+            userRoles: res.userRoles,
+        }
+        ctx.body = {
+            code: 0,
+            message: 'ok',
             data: user
         };
     }
@@ -141,19 +192,19 @@ router.post('/user/login', async (ctx, next) => {
  */
 router.post('/user/list', async (ctx, next) => {
     let request = ctx.request.body;
-    let pageNum = request.pageNum || 0;
+    let pageNum = request.pageNum || 1;
     let pageSize = request.pageSize || 10;
     let skip = (pageNum - 1) * pageSize;
     let params = {};
     let res = await User.find(params).skip(Number(skip)).limit(Number(pageSize)).catch(error => {
         ctx.body = {
-            errcode: 10086,
-            msg: error.message
+            code: 10086,
+            message: error.message
         };
     });
     ctx.body = {
-        errcode: 0,
-        msg: 'ok',
+        code: 0,
+        message: 'ok',
         data: {
             count: res.length,
             list: res
@@ -166,19 +217,22 @@ router.post('/user/list', async (ctx, next) => {
  */
 router.get('/user/list', async (ctx, next) => {
     let query = ctx.request.query; // if nothing to pass just return a {}
-    let pageNum = query.pageNum || 0;
+    let pageNum = query.pageNum || 1;
     let pageSize = query.pageSize || 10;
     let skip = (pageNum - 1) * pageSize;
     let params = {};
+    console.log(skip)
+    console.log(pageSize)
     let res = await User.find(params).skip(Number(skip)).limit(Number(pageSize)).catch(error => {
         ctx.body = {
-            errcode: 10086,
-            msg: error.message
+            code: 10086,
+            message: error.message
         };
     });
+    console.log(res);
     ctx.body = {
-        errcode: 0,
-        msg: 'ok',
+        code: 0,
+        message: 'ok',
         data: {
             count: res.length,
             list: res
@@ -192,16 +246,16 @@ router.get('/user/list', async (ctx, next) => {
 router.post('/user/add', async (ctx, next) => {
     if (!ctx.request.body || ctx.request.body.length === 0) {
         ctx.body = {
-            errcode: 10001,
-            msg: '参数不能为空',
+            code: 10001,
+            message: '参数不能为空',
         };
         return false;
     }
     let userName = ctx.request.body.userName;
     if (!userName || userName.length === 0) {
         ctx.body = {
-            errcode: 10000,
-            msg: '用户名不能为空',
+            code: 10000,
+            message: '用户名不能为空',
         };
         return false;
     }
@@ -220,13 +274,13 @@ router.post('/user/add', async (ctx, next) => {
     });
     let res = await user.save().catch(error => {
         ctx.body = {
-            errcode: 10086,
-            msg: error.message
+            code: 10086,
+            message: error.message
         };
     });
     ctx.body = {
-        errcode: 0,
-        msg: 'ok',
+        code: 0,
+        message: 'ok',
         data: res
     };
 })
@@ -240,21 +294,21 @@ router.post('/user/del', async (ctx, next) => {
 
     if (!userId || userId.length === 0) {
         ctx.body = {
-            errcode: 10000,
-            msg: '用户不存在',
+            code: 10000,
+            message: '用户不存在',
         };
         return false;
     }
 
     let res = await User.deleteOne({'_id': userId}).catch(error => {
         ctx.body = {
-            errcode: 10086,
-            msg: error.message
+            code: 10086,
+            message: error.message
         };
     });
     ctx.body = {
-        errcode: 0,
-        msg: 'ok',
+        code: 0,
+        message: 'ok',
         data: {
             res: res
         }

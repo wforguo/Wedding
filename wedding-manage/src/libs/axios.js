@@ -42,10 +42,10 @@ class HttpRequest {
       if (status !== 200) {
         console.log(res)
         this.destroy(url)
-        Vue.prototype.$Message.error(data.msg || '当前访问人数过多，请稍后再试')
-        return Promise.reject(data.msg || new Error('当前访问人数过多，请稍后再试'))
-      } else if (data.errcode !== 0) {
-        Vue.prototype.$Message.error(data.msg)
+        Vue.prototype.$Message.error(data.message || '当前访问人数过多，请稍后再试')
+        return Promise.reject(data.message || new Error('当前访问人数过多，请稍后再试'))
+      } else if (data.code !== 0) {
+        Vue.prototype.$Message.error(data.message)
         return Promise.reject(data)
       } else {
         return Promise.resolve(data)

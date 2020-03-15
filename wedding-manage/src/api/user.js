@@ -12,12 +12,10 @@ export const userLogin = ({ userName, userPwd }) => {
   })
 }
 
-export const getUserInfo = (userName) => {
+export const getUserInfo = (data) => {
   return axios.request({
-    url: 'manage/user/getInfo',
-    data: {
-      userName: userName
-    },
+    url: 'manage/user/info',
+    data,
     method: 'post'
   })
 }

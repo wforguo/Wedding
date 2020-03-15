@@ -10,9 +10,14 @@ const mongoose = require('mongoose');
 const Photo = require('../../models/photo');
 require('../../util/util');
 
-// 连接MongoDB数据库
-mongoose.connect(`${config.database.url}:${config.database.port}/${config.database.name}`, {useNewUrlParser: true});
+// 数据库连接字符串
+const dbStr = `mongodb://${config.database.user}:${config.database.pwd}@${config.database.url}:${config.database.port}/${config.database.name}?authSource=admin`;
+console.log(dbStr);
 
+// 连接MongoDB数据库
+mongoose.connect(dbStr, {useNewUrlParser: true});
+
+// mongodb://admin:2333!@106.12.182.39:27019/wedding?readPreference=primary&appname=MongoDB%20Compass&ssl=false
 mongoose.connection.on("connected", function () {
     console.log("MongoDB connected success.")
 });
@@ -42,19 +47,19 @@ router.get('/', async (ctx, next) => {
  */
 router.post('/photo/list', async (ctx, next) => {
     let request = ctx.request.body;
-    let pageNum = request.pageNum || 0;
+    let pageNum = request.pageNum || 1;
     let pageSize = request.pageSize || 10;
     let skip = (pageNum - 1) * pageSize;
     let params = {};
     let res = await Photo.find(params).skip(Number(skip)).limit(Number(pageSize)).catch(error => {
         ctx.body = {
-            errcode: 10086,
-            msg: error.message
+            code: 10086,
+            message: error.message
         };
     });
     ctx.body = {
-        errcode: 0,
-        msg: 'ok',
+        code: 0,
+        message: 'ok',
         data: {
             count: res.length,
             list: res
@@ -67,19 +72,19 @@ router.post('/photo/list', async (ctx, next) => {
  */
 router.get('/photo/list', async (ctx, next) => {
     let query = ctx.request.query; // if nothing to pass just return a {}
-    let pageNum = query.pageNum || 0;
+    let pageNum = query.pageNum || 1;
     let pageSize = query.pageSize || 10;
     let skip = (pageNum - 1) * pageSize;
     let params = {};
     let res = await Photo.find(params).skip(Number(skip)).limit(Number(pageSize)).catch(error => {
         ctx.body = {
-            errcode: 10086,
-            msg: error.message
+            code: 10086,
+            message: error.message
         };
     });
     ctx.body = {
-        errcode: 0,
-        msg: 'ok',
+        code: 0,
+        message: 'ok',
         data: {
             count: res.length,
             list: res
@@ -93,8 +98,8 @@ router.get('/photo/list', async (ctx, next) => {
 router.post('/photo/add', async (ctx, next) => {
     if (!ctx.request.body || ctx.request.body.length === 0) {
         ctx.body = {
-            errcode: 10001,
-            msg: '参数不能为空',
+            code: 10001,
+            message: '参数不能为空',
         };
         return false;
     }
@@ -102,15 +107,15 @@ router.post('/photo/add', async (ctx, next) => {
     let desc = ctx.request.body.desc;
     if (!url || url.length === 0) {
         ctx.body = {
-            errcode: 10000,
-            msg: '图片不能为空',
+            code: 10000,
+            message: '图片不能为空',
         };
         return false;
     }
     if (!desc || desc.length === 0) {
         ctx.body = {
-            errcode: 10000,
-            msg: '图片描述能为空',
+            code: 10000,
+            message: '图片描述能为空',
         };
         return false;
     }
@@ -129,13 +134,13 @@ router.post('/photo/add', async (ctx, next) => {
     });
     let res = await photo.save().catch(error => {
         ctx.body = {
-            errcode: 10086,
-            msg: error.message
+            code: 10086,
+            message: error.message
         };
     });
     ctx.body = {
-        errcode: 0,
-        msg: 'ok',
+        code: 0,
+        message: 'ok',
         data: res
     };
 })
@@ -147,13 +152,13 @@ router.post('/photo/del', async (ctx, next) => {
     let id = ctx.request.body.id || '';
     let res = await Photo.deleteOne({'id': id}).catch(error => {
         ctx.body = {
-            errcode: 10086,
-            msg: error.message
+            code: 10086,
+            message: error.message
         };
     });
     ctx.body = {
-        errcode: 0,
-        msg: 'ok',
+        code: 0,
+        message: 'ok',
         data: {
             res: res
         }

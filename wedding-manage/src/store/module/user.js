@@ -45,12 +45,13 @@ export default {
                     userPwd: userPwd
                 }).then(res => {
                     const data = res.data
-                    commit('setToken', userName)
+                    commit('setToken', data.userId)
                     commit('setAvatar', data.userAvatar)
                     commit('setUserName', data.userName)
                     commit('setUserId', data.userId)
-                    commit('setAccess', data.userRole)
+                    commit('setAccess', data.userRoles)
                     commit('setHasGetInfo', true)
+                    console.log(data);
                     resolve(data)
                 }).catch(error => {
                     reject(error)
@@ -60,7 +61,7 @@ export default {
         // 退出登录
         handleLogOut ({ state, commit }) {
             return new Promise((resolve, reject) => {
-                commit('setUserName', '')
+                commit('setUserId', '')
                 commit('setToken', '')
                 commit('setAccess', [])
                 resolve()
@@ -70,7 +71,9 @@ export default {
         getUserInfo ({ state, commit }) {
             return new Promise((resolve, reject) => {
                 try {
-                    getUserInfo(state.token).then(res => {
+                    getUserInfo({
+                        userId: state.token
+                    }).then(res => {
                         const data = res.data
                         commit('setAvatar', data.userAvatar)
                         commit('setUserName', data.userName)

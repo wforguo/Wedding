@@ -2,15 +2,25 @@
 
 > 给予koa2和MongoDB的小程序和后台管理系统
 
-## 后台管理
+## 管理后台
 
-iview Admin
+Vue + Element Admin
 
-## koa2后台
+### vue-element-admin
+
+- [文档](https://panjiachen.github.io/)
+
+- [预览](https://panjiachen.gitee.io/vue-element-admin/)
+
+用户名：admin
+
+密码：123456
+
+## 服务端
 
 koa2
 
 ## 小程序
 
-wepy开发
+wepy
 
