@@ -4,7 +4,7 @@ import {fakeAccountLogin} from '@/services/login';
 import {setAuthority} from '@/utils/authority';
 import {getPageQuery} from '@/utils/utils';
 import { message} from 'antd';
-import {duration} from "moment";
+
 const Model = {
     namespace: 'login',
     state: {
@@ -17,16 +17,17 @@ const Model = {
                 duration: 0
             });
             const response = yield call(fakeAccountLogin, payload);
-            yield put({
-                type: 'changeLoginStatus',
-                payload: response,
-            }); // Login successfully
+            // Login successfully
             message.destroy();
             if (response.code === 200) {
                 const urlParams = new URL(window.location.href);
                 const params = getPageQuery();
                 let {redirect} = params;
-
+                // 更新当前登录用户角色
+                yield put({
+                    type: 'changeLoginStatus',
+                    payload: response.data,
+                });
                 if (redirect) {
                     const redirectUrlParams = new URL(redirect);
 

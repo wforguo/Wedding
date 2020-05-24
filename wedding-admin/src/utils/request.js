@@ -28,19 +28,30 @@ const codeMessage = {
  */
 const errorHandler = (error) => {
     const { response } = error;
+    console.log(response);
     if (response && response.status) {
+        if (response.status >= 200 && response.status < 300) {
+            return response;
+        }
         const errorText = codeMessage[response.status] || response.statusText;
         const { status, url } = response;
-
         notification.error({
             message: `请求错误 ${status}: ${url}`,
             description: errorText,
         });
+        const err = new Error(errorText);
+        err.name = response.status;
+        err.response = response;
+        throw err;
     } else if (!response) {
         notification.error({
             description: '您的网络发生异常，无法连接服务器',
             message: '网络异常',
         });
+        const err = new Error('您的网络发生异常，无法连接服务器');
+        err.name = response.status;
+        err.response = response;
+        throw err;
     }
     return response;
 };

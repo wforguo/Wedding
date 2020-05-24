@@ -15,7 +15,7 @@ export default {
         //     //   },
         //     // },
         '/api/': {
-            target: 'http://192.168.1.101:3300',
+            target: 'http://192.168.0.9:3300',
             changeOrigin: true,
             pathRewrite: {
                 '^': '',

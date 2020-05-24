@@ -51,3 +51,16 @@ ol {
     min-height: 100vh;
   }
 }
+
+// 修改菜单跟随内容滚动的问题
+.ant-layout-sider-children {
+    height: 100vh;
+    overflow: hidden;
+    overflow-y: auto;
+}
+.ant-layout.ant-layout-has-sider {
+    min-height: 100vh;
+    height: 100vh;
+    overflow: hidden;
+    overflow-y: auto;
+}
