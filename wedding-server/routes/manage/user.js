@@ -31,7 +31,7 @@ mongoose.connection.on("disconnected", function () {
 });
 
 // 添加路由前缀
-router.prefix('/manage');
+router.prefix('/api');
 
 /**
  * 管理员登录
@@ -63,8 +63,8 @@ router.post('/user/login', async (ctx, next) => {
     }
 
     let param = {
-        userName: userName,
-        userPwd: userPwd
+        userName,
+        userPwd
     };
 
     let res = await User.findOne(param).catch(error => {
@@ -76,6 +76,7 @@ router.post('/user/login', async (ctx, next) => {
 
     if (!res || res.length === 0) {
         ctx.body = {
+            success: false,
             code: 10086,
             message: '用户名或密码错误',
         };
@@ -89,7 +90,8 @@ router.post('/user/login', async (ctx, next) => {
         };
         console.log(user);
         ctx.body = {
-            code: 0,
+            code: 200,
+            success: true,
             message: 'ok',
             data: user
         };

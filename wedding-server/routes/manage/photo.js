@@ -29,9 +29,8 @@ mongoose.connection.on("error", function () {
 mongoose.connection.on("disconnected", function () {
     console.log("MongoDB connected disconnected.")
 });
-
 // 添加路由前缀
-router.prefix('/manage');
+router.prefix('/api');
 
 /**
  * /
@@ -54,16 +53,19 @@ router.post('/photo/list', async (ctx, next) => {
     let res = await Photo.find(params).skip(Number(skip)).limit(Number(pageSize)).catch(error => {
         ctx.body = {
             code: 10086,
+            success: false,
             message: error.message
         };
     });
+    console.log(res);
     ctx.body = {
-        code: 0,
+        code: 200,
         message: 'ok',
-        data: {
-            count: res.length,
-            list: res
-        }
+        data: res,
+        "total": res.length,
+        "success": true,
+        "pageSize": pageSize || 10,
+        "current": pageNum || 1
     };
 })
 
@@ -72,25 +74,28 @@ router.post('/photo/list', async (ctx, next) => {
  */
 router.get('/photo/list', async (ctx, next) => {
     let query = ctx.request.query; // if nothing to pass just return a {}
-    let pageNum = query.pageNum || 1;
+    let current = query.current || 1;
     let pageSize = query.pageSize || 10;
-    let skip = (pageNum - 1) * pageSize;
+    let skip = (current - 1) * pageSize;
     let params = {};
     let res = await Photo.find(params).skip(Number(skip)).limit(Number(pageSize)).catch(error => {
         ctx.body = {
+            success: false,
             code: 10086,
             message: error.message
         };
     });
+    console.log(res);
     ctx.body = {
-        code: 0,
+        code: 200,
         message: 'ok',
-        data: {
-            count: res.length,
-            list: res
-        }
+        data: res,
+        "total": res.length,
+        "success": true,
+        "pageSize": pageSize || 10,
+        "current": current || 1
     };
-})
+});
 
 /**
  * 添加照片

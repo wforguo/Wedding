@@ -15,7 +15,7 @@ const config = {
     database: {
         user: 'admin',
         pwd: '2333!',
-        url: 'www.forguo.com',
+        url: '106.12.182.39',
         port: '27019',
         name: 'wedding',
     },
