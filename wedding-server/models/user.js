@@ -9,6 +9,7 @@ let userSchema = new Schema({
     userTime: String,
     userAvatar: String,
     userRoles: Array,
+    currentAuthority: String
 });
 
 module.exports = mongoose.model('User', userSchema, 'wedd_users');

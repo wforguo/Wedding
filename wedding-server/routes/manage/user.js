@@ -5,9 +5,10 @@
  */
 
 const router = require('koa-router')();
-const config = require('../../config');
 const mongoose = require('mongoose');
-const User = require('../../models/user');
+const md5 = require('md5');
+const config = require('../../config');
+const User = require('../../models');
 require('../../util/util');
 
 // 数据库连接字符串
@@ -31,12 +32,12 @@ mongoose.connection.on("disconnected", function () {
 });
 
 // 添加路由前缀
-router.prefix('/api');
+router.prefix('/api/user');
 
 /**
  * 管理员登录
  */
-router.post('/user/login', async (ctx, next) => {
+router.post('/login', async (ctx, next) => {
     if (!ctx.request.body || ctx.request.body.length === 0) {
         ctx.body = {
             code: 10009,
@@ -87,8 +88,8 @@ router.post('/user/login', async (ctx, next) => {
             userTime: res.userTime,
             userAvatar: res.userAvatar,
             userRoles: res.userRoles,
+            currentAuthority: res.currentAuthority
         };
-        console.log(user);
         ctx.body = {
             code: 200,
             success: true,
@@ -96,12 +97,12 @@ router.post('/user/login', async (ctx, next) => {
             data: user
         };
     }
-})
+});
 
 /**
  * 获取用户信息
  */
-router.get('/user/info', async (ctx, next) => {
+router.get('/info', async (ctx, next) => {
     let query = ctx.request.query;
     console.log(query);
     let userId = query.userId || '10001';
@@ -129,102 +130,33 @@ router.get('/user/info', async (ctx, next) => {
             message: '改用户不存在',
         };
     } else {
-        console.log(res)
+        console.log(res);
         const user = {
             userId: res.userId,
             userName: res.userName,
             userTime: res.userTime,
             userAvatar: res.userAvatar,
             userRoles: res.userRoles,
-        }
+        };
         ctx.body = {
             code: 0,
             message: 'ok',
             data: user
         };
     }
-})
-
-router.post('/user/info', async (ctx, next) => {
-    let request = ctx.request.body;
-    console.log(request);
-    let userId = request.userId;
-    if (!userId || userId.length === 0) {
-        ctx.body = {
-            code: 10009,
-            message: '用户id不能为空',
-        };
-        return false;
-    }
-
-    let param = {
-        userId: userId
-    };
-    let res = await User.findOne(param).catch(error => {
-        ctx.body = {
-            code: 10086,
-            message: error.message
-        };
-    });
-
-    if (!res || res.length === 0) {
-        ctx.body = {
-            code: 10086,
-            message: '改用户不存在',
-        };
-    } else {
-        console.log(res)
-        const user = {
-            userId: res.userId,
-            userName: res.userName,
-            userTime: res.userTime,
-            userAvatar: res.userAvatar,
-            userRoles: res.userRoles,
-        }
-        ctx.body = {
-            code: 0,
-            message: 'ok',
-            data: user
-        };
-    }
-})
+});
 
 /**
- * 获取用户列表（post方式）
+ * 获取用户列表）
  */
-router.post('/user/list', async (ctx, next) => {
-    let request = ctx.request.body;
-    let pageNum = request.pageNum || 1;
-    let pageSize = request.pageSize || 10;
-    let skip = (pageNum - 1) * pageSize;
-    let params = {};
-    let res = await User.find(params).skip(Number(skip)).limit(Number(pageSize)).catch(error => {
-        ctx.body = {
-            code: 10086,
-            message: error.message
-        };
-    });
-    ctx.body = {
-        code: 0,
-        message: 'ok',
-        data: {
-            count: res.length,
-            list: res
-        }
-    };
-})
-
-/**
- * 获取用户列表（get方式）
- */
-router.get('/user/list', async (ctx, next) => {
+router.get('/list', async (ctx, next) => {
     let query = ctx.request.query; // if nothing to pass just return a {}
     let pageNum = query.pageNum || 1;
     let pageSize = query.pageSize || 10;
     let skip = (pageNum - 1) * pageSize;
     let params = {};
-    console.log(skip)
-    console.log(pageSize)
+    console.log(skip);
+    console.log(pageSize);
     let res = await User.find(params).skip(Number(skip)).limit(Number(pageSize)).catch(error => {
         ctx.body = {
             code: 10086,
@@ -240,12 +172,12 @@ router.get('/user/list', async (ctx, next) => {
             list: res
         }
     };
-})
+});
 
 /**
  * 添加用户
  */
-router.post('/user/add', async (ctx, next) => {
+router.post('/add', async (ctx, next) => {
     if (!ctx.request.body || ctx.request.body.length === 0) {
         ctx.body = {
             code: 10001,
@@ -254,10 +186,18 @@ router.post('/user/add', async (ctx, next) => {
         return false;
     }
     let userName = ctx.request.body.userName;
+    let userPwd = ctx.request.body.userPwd;
     if (!userName || userName.length === 0) {
         ctx.body = {
             code: 10000,
             message: '用户名不能为空',
+        };
+        return false;
+    }
+    if (!userPwd || userPwd.length === 0) {
+        ctx.body = {
+            code: 10000,
+            message: '密码不能为空',
         };
         return false;
     }
@@ -271,7 +211,7 @@ router.post('/user/add', async (ctx, next) => {
     let user = new User({
         userId: id,
         userName: userName,
-        userPwd: 123456,
+        userPwd: md5(userPwd),
         userTime: createTime
     });
     let res = await user.save().catch(error => {
@@ -285,12 +225,12 @@ router.post('/user/add', async (ctx, next) => {
         message: 'ok',
         data: res
     };
-})
+});
 
 /**
  * 删除用户
  */
-router.post('/user/del', async (ctx, next) => {
+router.post('/del', async (ctx, next) => {
 
     let userId = ctx.request.body.userId || '';
 
@@ -315,6 +255,6 @@ router.post('/user/del', async (ctx, next) => {
             res: res
         }
     };
-})
+});
 
-module.exports = router
+module.exports = router;
