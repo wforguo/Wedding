@@ -42,6 +42,7 @@ router.post('/login', async (ctx, next) => {
     if (!ctx.request.body || ctx.request.body.length === 0) {
         ctx.body = {
             code: 10009,
+            success: false,
             message: '用户名或密码不能为空不能为空',
         };
         return false;
@@ -52,6 +53,7 @@ router.post('/login', async (ctx, next) => {
     if (!userName || userName.length === 0) {
         ctx.body = {
             code: 10009,
+            success: false,
             message: '用户名不能为空',
         };
         return false;
@@ -59,6 +61,7 @@ router.post('/login', async (ctx, next) => {
     if (!userPwd || userPwd.length === 0) {
         ctx.body = {
             code: 10009,
+            success: false,
             message: '密码不能为空',
         };
         return false;
@@ -66,12 +69,13 @@ router.post('/login', async (ctx, next) => {
 
     let param = {
         userName,
-        userPwd
+        userPwd: md5(userPwd)
     };
 
     let res = await User.findOne(param).catch(error => {
         ctx.body = {
             code: 10086,
+            success: false,
             message: error.message
         };
     });
@@ -110,6 +114,7 @@ router.get('/info', async (ctx, next) => {
     if (!userId || userId.length === 0) {
         ctx.body = {
             code: 10009,
+            success: false,
             message: '用户id不能为空',
         };
         return false;
@@ -121,6 +126,7 @@ router.get('/info', async (ctx, next) => {
     let res = await User.findOne(param).catch(error => {
         ctx.body = {
             code: 10086,
+            success: false,
             message: error.message
         };
     });
@@ -128,6 +134,7 @@ router.get('/info', async (ctx, next) => {
     if (!res || res.length === 0) {
         ctx.body = {
             code: 10086,
+            success: false,
             message: '改用户不存在',
         };
     } else {
@@ -140,7 +147,8 @@ router.get('/info', async (ctx, next) => {
             userRoles: res.userRoles,
         };
         ctx.body = {
-            code: 0,
+            code: 200,
+            success: true,
             message: 'ok',
             data: user
         };
@@ -159,6 +167,7 @@ router.get('/list', async (ctx, next) => {
     let res = await User.find(params).skip(Number(skip)).limit(Number(pageSize)).catch(error => {
         ctx.body = {
             code: 10086,
+            success: false,
             message: error.message
         };
     });
@@ -166,6 +175,7 @@ router.get('/list', async (ctx, next) => {
     ctx.body = {
         code: 0,
         message: 'ok',
+        success: true,
         data: res,
         "total": res.length,
         "success": true,
@@ -181,6 +191,7 @@ router.post('/add', async (ctx, next) => {
     if (!ctx.request.body || ctx.request.body.length === 0) {
         ctx.body = {
             code: 10001,
+            success: false,
             message: '参数不能为空',
         };
         return false;
@@ -195,6 +206,7 @@ router.post('/add', async (ctx, next) => {
     if (!userName || userName.length === 0) {
         ctx.body = {
             code: 10000,
+            success: false,
             message: '用户名不能为空',
         };
         return false;
@@ -202,6 +214,7 @@ router.post('/add', async (ctx, next) => {
     if (!userPwd || userPwd.length === 0) {
         ctx.body = {
             code: 10000,
+            success: false,
             message: '密码不能为空',
         };
         return false;
@@ -231,11 +244,13 @@ router.post('/add', async (ctx, next) => {
     let res = await user.save().catch(error => {
         ctx.body = {
             code: 10086,
+            success: false,
             message: error.message
         };
     });
     ctx.body = {
-        code: 0,
+        code: 200,
+        success: false,
         message: 'ok',
         data: res
     };
@@ -263,7 +278,7 @@ router.post('/del', async (ctx, next) => {
         };
     });
     ctx.body = {
-        code: 0,
+        code: 200,
         message: 'ok',
         data: {
             res: res

@@ -16,10 +16,16 @@ const handleAdd = async fields => {
     const hide = message.loading('正在添加');
 
     try {
-        await addUser({...fields});
+        let res = await addUser({...fields});
+        console.log(res);
         hide();
-        message.success('添加成功');
-        return true;
+        if (res.code !== 200) {
+            message.warning(res.message || '添加失败，请重试');
+            return false;
+        } else {
+            message.success('添加成功');
+            return true;
+        }
     } catch (error) {
         hide();
         message.error('添加失败请重试！');
