@@ -4,11 +4,16 @@ let Schema = mongoose.Schema;
 let userSchema = new Schema({
     userId: String,
     userName: String,
+    userEmail: String,
+    userMobile: String,
     userPwd: String,
     userIp: String,
-    userTime: String,
+    lastLoginIp: String,
+    lastLoginTime: String,
+    createTime: String,
     userAvatar: String,
     userRoles: Array,
+    userStatus: Number,
     currentAuthority: String
 });
 

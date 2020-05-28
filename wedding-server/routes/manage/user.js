@@ -7,8 +7,9 @@
 const router = require('koa-router')();
 const mongoose = require('mongoose');
 const md5 = require('md5');
+const ip = require('ip');
 const config = require('../../config');
-const User = require('../../models');
+const User = require('../../models/user');
 require('../../util/util');
 
 // 数据库连接字符串
@@ -155,8 +156,6 @@ router.get('/list', async (ctx, next) => {
     let pageSize = query.pageSize || 10;
     let skip = (pageNum - 1) * pageSize;
     let params = {};
-    console.log(skip);
-    console.log(pageSize);
     let res = await User.find(params).skip(Number(skip)).limit(Number(pageSize)).catch(error => {
         ctx.body = {
             code: 10086,
@@ -167,10 +166,11 @@ router.get('/list', async (ctx, next) => {
     ctx.body = {
         code: 0,
         message: 'ok',
-        data: {
-            count: res.length,
-            list: res
-        }
+        data: res,
+        "total": res.length,
+        "success": true,
+        "pageSize": pageSize || 10,
+        "current": pageNum || 1
     };
 });
 
@@ -185,8 +185,13 @@ router.post('/add', async (ctx, next) => {
         };
         return false;
     }
-    let userName = ctx.request.body.userName;
-    let userPwd = ctx.request.body.userPwd;
+    const { body } = ctx.request;
+    let {
+        userName,
+        userEmail,
+        userMobile,
+        userPwd,
+    } = body;
     if (!userName || userName.length === 0) {
         ctx.body = {
             code: 10000,
@@ -210,9 +215,18 @@ router.post('/add', async (ctx, next) => {
     let id = platform + r1 + sysDate + r2;
     let user = new User({
         userId: id,
-        userName: userName,
+        userName,
+        userEmail,
+        userMobile,
         userPwd: md5(userPwd),
-        userTime: createTime
+        userIp: ip.address(),
+        lastLoginIp: ip.address(),
+        lastLoginTime: createTime,
+        createTime,
+        userAvatar: 'userAvatar',
+        userRoles: ['admin'],
+        userStatus: 1,
+        currentAuthority: 'admin'
     });
     let res = await user.save().catch(error => {
         ctx.body = {

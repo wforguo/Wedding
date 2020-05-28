@@ -86,6 +86,12 @@ export default defineConfig({
                             component: './Attend',
                         },
                         {
+                            name: '用户管理',
+                            icon: 'UserOutlined',
+                            path: '/User',
+                            component: './User',
+                        },
+                        {
                             name: '个人中心',
                             icon: 'UserOutlined',
                             path: '/Account',

@@ -30,7 +30,7 @@ mongoose.connection.on("disconnected", function () {
     console.log("MongoDB connected disconnected.")
 });
 // 添加路由前缀
-router.prefix('/api');
+router.prefix('/api/photo');
 
 /**
  * /
@@ -44,7 +44,7 @@ router.get('/', async (ctx, next) => {
 /**
  * 获取照片列表（post方式）
  */
-router.post('/photo/list', async (ctx, next) => {
+router.post('/list', async (ctx, next) => {
     let request = ctx.request.body;
     let pageNum = request.pageNum || 1;
     let pageSize = request.pageSize || 10;
@@ -72,7 +72,7 @@ router.post('/photo/list', async (ctx, next) => {
 /**
  * 获取照片列表（get方式）
  */
-router.get('/photo/list', async (ctx, next) => {
+router.get('/list', async (ctx, next) => {
     let query = ctx.request.query; // if nothing to pass just return a {}
     let current = query.current || 1;
     let pageSize = query.pageSize || 10;
@@ -100,7 +100,7 @@ router.get('/photo/list', async (ctx, next) => {
 /**
  * 添加照片
  */
-router.post('/photo/add', async (ctx, next) => {
+router.post('/add', async (ctx, next) => {
     if (!ctx.request.body || ctx.request.body.length === 0) {
         ctx.body = {
             code: 10001,
@@ -153,7 +153,7 @@ router.post('/photo/add', async (ctx, next) => {
 /**
  * 删除照片
  */
-router.post('/photo/del', async (ctx, next) => {
+router.post('/del', async (ctx, next) => {
     let id = ctx.request.body.id || '';
     let res = await Photo.deleteOne({'id': id}).catch(error => {
         ctx.body = {

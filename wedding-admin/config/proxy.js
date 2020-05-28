@@ -15,7 +15,7 @@ export default {
         //     //   },
         //     // },
         '/api/': {
-            target: 'http://192.168.0.9:3300',
+            target: 'http://localhost:3300',
             changeOrigin: true,
             pathRewrite: {
                 '^': '',
