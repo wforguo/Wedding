@@ -102,12 +102,14 @@ const TableList = () => {
             render: (_, record) => (
                 <Avatar size="small" src={record.avatar} onClick={() => {
                     Modal.confirm({
+                        width: '750px',
                         centered: true,
                         okText: '关闭',
                         okCancel: false,
+                        maskClosable: true,
                         content: <img src={record.avatar} alt={record.avatar} style={
                             {
-                                display: "block", margin: '0 auto'}
+                                display: "block", margin: '0 auto', width: '100%'}
                         }
                         />
                     })

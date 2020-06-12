@@ -93,7 +93,7 @@ export default defineConfig({
                         },
                         {
                             name: '个人中心',
-                            icon: 'UserOutlined',
+                            icon: 'SettingOutlined',
                             path: '/Account',
                             component: './Account/Profile',
                             authority: ['admin'],
@@ -108,7 +108,7 @@ export default defineConfig({
                                 {
                                     path: '/Account/ResetPwd',
                                     name: '修改密码',
-                                    icon: 'KeyOutlined',
+                                    icon: 'SafetyCertificateOutlined',
                                     component: './Account/ResetPwd',
                                     authority: ['admin'],
                                 },

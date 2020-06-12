@@ -66,7 +66,7 @@ router.post('/login', async (ctx, next) => {
 
     let param = {
         userName,
-        userPwd
+        userPwd: md5(userPwd)
     };
 
     let res = await User.findOne(param).catch(error => {
@@ -138,6 +138,7 @@ router.get('/info', async (ctx, next) => {
             userTime: res.userTime,
             userAvatar: res.userAvatar,
             userRoles: res.userRoles,
+            currentAuthority: res.currentAuthority
         };
         ctx.body = {
             code: 0,
@@ -223,7 +224,7 @@ router.post('/add', async (ctx, next) => {
         lastLoginIp: ip.address(),
         lastLoginTime: createTime,
         createTime,
-        userAvatar: 'userAvatar',
+        userAvatar: 'https://avatar.csdnimg.cn/0/E/9/2_weiguo19951107_1572850039.jpg',
         userRoles: ['admin'],
         userStatus: 1,
         currentAuthority: 'admin'

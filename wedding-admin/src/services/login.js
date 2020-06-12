@@ -5,6 +5,7 @@ export async function fakeAccountLogin({ userName, userPwd }) {
         userName,
         userPwd
     };
+    console.log(data);
     return request('/api/user/login', {
         method: 'post',
         data

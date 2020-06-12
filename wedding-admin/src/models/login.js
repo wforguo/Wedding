@@ -13,7 +13,7 @@ const Model = {
     effects: {
         * login({payload}, {call, put}) {
             message.loading({
-                content: '登录中',
+                content: '登录中...',
                 duration: 0
             });
             const response = yield call(fakeAccountLogin, payload);
@@ -28,6 +28,9 @@ const Model = {
                     type: 'changeLoginStatus',
                     payload: response.data,
                 });
+                console.log(response.data);
+                localStorage.setItem('userId', response.data.userId);
+                message.success('登录成功');
                 if (redirect) {
                     const redirectUrlParams = new URL(redirect);
 
@@ -52,6 +55,7 @@ const Model = {
             const {redirect} = getPageQuery(); // Note: There may be security issues, please note
 
             if (window.location.pathname !== '/Login' && !redirect) {
+                localStorage.clear();
                 history.replace({
                     pathname: '/Login',
                     search: stringify({
