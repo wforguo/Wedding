@@ -72,7 +72,7 @@ const Login = props => {
                         忘记密码
                     </a>
                 </div>
-                <Submit loading={submitting}>登录</Submit>
+                <Submit loading={submitting}>{submitting ? '登录中...' : '登录'}</Submit>
                 <div className={styles.other}>
                     <Link className={styles.register} to="/user/register">
                         注册账户

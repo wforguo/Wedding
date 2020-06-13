@@ -53,7 +53,7 @@ export default defineConfig({
                             path: '/Welcome',
                             name: '欢迎',
                             icon: 'smile',
-                            component: './Welcome/Welcome',
+                            component: './Welcome',
                         },
                         {
                             name: '甜蜜相册',
@@ -95,7 +95,6 @@ export default defineConfig({
                             name: '个人中心',
                             icon: 'SettingOutlined',
                             path: '/Account',
-                            component: './Account/Profile',
                             authority: ['admin'],
                             routes: [
                                 {

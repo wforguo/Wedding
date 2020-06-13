@@ -1,41 +1,36 @@
-import React from 'react';
-import { HeartTwoTone, SmileTwoTone } from '@ant-design/icons';
-import { Card, Typography, Alert } from 'antd';
-import { PageHeaderWrapper } from '@ant-design/pro-layout';
+import React, { Component } from 'react';
+import { connect } from 'umi';
+import { GridContent } from '@ant-design/pro-layout';
+import BaseView from './components/base';
+import styles from './style.less';
 
-export default () => (
-  <PageHeaderWrapper content="个人资料">
-    <Card>
-      <Alert
-        message="umi ui 现已发布，欢迎使用 npm run ui 启动体验。"
-        type="success"
-        showIcon
-        banner
-        style={{
-          margin: -12,
-          marginBottom: 48,
-        }}
-      />
-      <Typography.Title
-        level={2}
-        style={{
-          textAlign: 'center',
-        }}
-      >
-        <SmileTwoTone /> Ant Design Pro <HeartTwoTone twoToneColor="#eb2f96" /> You
-      </Typography.Title>
-    </Card>
-    <p
-      style={{
-        textAlign: 'center',
-        marginTop: 24,
-      }}
-    >
-      Want to add more pages? Please refer to{' '}
-      <a href="https://pro.ant.design/docs/block-cn" target="_blank" rel="noopener noreferrer">
-        use block
-      </a>
-      。
-    </p>
-  </PageHeaderWrapper>
-);
+class Profile extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+        };
+    }
+
+    render() {
+        const { currentUser } = this.props;
+
+        if (!currentUser.userId) {
+            return '';
+        }
+
+        return (
+            <GridContent className={styles.main}>
+                <div className={styles.right}>
+                    <div className={styles.title}>个人资料</div>
+                    <BaseView />
+                </div>
+            </GridContent>
+        );
+    }
+}
+
+export default connect(
+    ({user}) => ({
+        currentUser: user.currentUser,
+    })
+)(Profile);

@@ -17,6 +17,7 @@ const Model = {
                 duration: 0
             });
             const response = yield call(fakeAccountLogin, payload);
+            console.log(response);
             // Login successfully
             message.destroy();
             if (response.code === 200) {

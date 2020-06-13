@@ -17,9 +17,13 @@ const GlobalHeaderRight = props => {
     if (theme === 'dark' && layout === 'topmenu') {
         className = `${styles.right}  ${styles.dark}`;
     }
-
+    const now = new Date();
+    const time = `${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日`;
     return (
         <div className={className}>
+            <div style={{
+                'marginRight': '10px'
+            }}>{time}</div>
             <Avatar menu />
             {REACT_APP_ENV && (
                 <span>
