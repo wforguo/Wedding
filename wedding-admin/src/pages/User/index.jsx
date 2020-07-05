@@ -13,23 +13,18 @@ import { queryUser, updateUser, addUser, removeUser } from './service';
  */
 
 const handleAdd = async fields => {
-    const hide = message.loading('正在添加');
-
+    message.loading('正在添加...');
     try {
-        let res = await addUser({...fields});
-        console.log(res);
-        hide();
+        const res = await addUser({...fields});
+        message.destroy();
         if (res.code !== 200) {
             message.warning(res.message || '添加失败，请重试');
-            return false;
         } else {
             message.success('添加成功');
-            return true;
         }
     } catch (error) {
-        hide();
+        message.destroy();
         message.error('添加失败请重试！');
-        return false;
     }
 };
 /**
@@ -38,20 +33,19 @@ const handleAdd = async fields => {
  */
 
 const handleUpdate = async fields => {
-    const hide = message.loading('正在配置');
-
+    message.loading('保存中...');
     try {
         await updateUser({
             name: fields.name,
             desc: fields.desc,
             key: fields.key,
         });
-        hide();
-        message.success('配置成功');
+        message.destroy();
+        message.success('保存成功');
         return true;
     } catch (error) {
-        hide();
-        message.error('配置失败请重试！');
+        message.destroy();
+        message.error('保存失败请重试！');
         return false;
     }
 };

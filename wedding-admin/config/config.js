@@ -92,14 +92,14 @@ export default defineConfig({
                             component: './User',
                         },
                         {
-                            name: '个人中心',
+                            name: '个人页',
                             icon: 'SettingOutlined',
                             path: '/Account',
                             authority: ['admin'],
                             routes: [
                                 {
                                     path: '/Account/Profile',
-                                    name: '个人资料',
+                                    name: '个人设置',
                                     icon: 'SolutionOutlined',
                                     component: './Account/Profile',
                                     authority: ['admin'],

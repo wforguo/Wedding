@@ -1,4 +1,4 @@
-let mongoose = require('mongoose')
+let mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 
 let userSchema = new Schema({
@@ -11,9 +11,11 @@ let userSchema = new Schema({
     lastLoginIp: String,
     lastLoginTime: String,
     createTime: String,
+    updateTime: String,
     userAvatar: String,
     userRoles: Array,
     userStatus: Number,
+    userDesc: String,
     currentAuthority: String
 });
 

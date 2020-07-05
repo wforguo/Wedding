@@ -36,11 +36,11 @@ const menuDataRender = menuList =>
 
 const defaultFooterDom = (
     <DefaultFooter
-        copyright="2019 forguo"
+        copyright="2020 wedding"
         links={[
             {
                 key: 'forguo',
-                title: 'forguo',
+                title: 'wedding',
                 href: 'https://forguo.com',
                 blankTarget: true,
             }

@@ -37,7 +37,7 @@ class AvatarDropdown extends React.Component {
                 {menu && (
                     <Menu.Item key="Profile">
                         <UserOutlined />
-                        个人资料
+                        个人设置
                     </Menu.Item>
                 )}
                 {menu && (

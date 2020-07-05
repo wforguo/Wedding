@@ -30,7 +30,10 @@ const Model = {
                     payload: response.data,
                 });
                 console.log(response.data);
-                localStorage.setItem('userId', response.data.userId);
+                yield put({
+                    type: 'user/saveCurrentUser',
+                    payload: response.data,
+                });
                 message.success('登录成功');
                 if (redirect) {
                     const redirectUrlParams = new URL(redirect);
@@ -57,6 +60,7 @@ const Model = {
 
             if (window.location.pathname !== '/Login' && !redirect) {
                 localStorage.clear();
+                sessionStorage.clear();
                 history.replace({
                     pathname: '/Login',
                     search: stringify({

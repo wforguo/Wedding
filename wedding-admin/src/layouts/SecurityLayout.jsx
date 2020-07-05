@@ -13,12 +13,15 @@ class SecurityLayout extends React.Component {
         this.setState({
             isReady: true,
         });
-        const {dispatch} = this.props;
 
-        if (dispatch) {
-            dispatch({
-                type: 'user/fetchCurrent',
-            });
+        if (window.location.pathname !== '/Login') {
+            const {dispatch} = this.props;
+
+            if (dispatch) {
+                dispatch({
+                    type: 'user/fetchCurrent',
+                });
+            }
         }
     }
 

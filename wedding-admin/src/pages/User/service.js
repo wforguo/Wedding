@@ -22,7 +22,7 @@ export async function addUser(params) {
 }
 
 export async function updateUser(params) {
-    return request('/api/rule/update', {
+    return request('/api/user/update', {
         method: 'POST',
         data: {...params},
     });

@@ -14,7 +14,6 @@ require('../../util/util');
 
 // 数据库连接字符串
 const dbStr = `mongodb://${config.database.user}:${config.database.pwd}@${config.database.url}:${config.database.port}/${config.database.name}?authSource=admin`;
-console.log(dbStr);
 
 // 连接MongoDB数据库
 mongoose.connect(dbStr, {useNewUrlParser: true});
@@ -31,6 +30,8 @@ mongoose.connection.on("error", function () {
 mongoose.connection.on("disconnected", function () {
     console.log("MongoDB connected disconnected.")
 });
+
+const DEFAULT_IMG = 'https://forguo-1302175274.cos.ap-shanghai.myqcloud.com/wedding/user/love-you.jpg';
 
 // 添加路由前缀
 router.prefix('/api/user');
@@ -87,19 +88,11 @@ router.post('/login', async (ctx, next) => {
             message: '用户名或密码错误',
         };
     } else {
-        const user = {
-            userId: res.userId,
-            userName: res.userName,
-            userTime: res.userTime,
-            userAvatar: res.userAvatar,
-            userRoles: res.userRoles,
-            currentAuthority: res.currentAuthority
-        };
         ctx.body = {
             code: 200,
             success: true,
             message: 'ok',
-            data: user
+            data: res
         };
     }
 });
@@ -109,7 +102,6 @@ router.post('/login', async (ctx, next) => {
  */
 router.get('/info', async (ctx, next) => {
     let query = ctx.request.query;
-    console.log(query);
     let userId = query.userId || '10001';
     if (!userId || userId.length === 0) {
         ctx.body = {
@@ -138,20 +130,11 @@ router.get('/info', async (ctx, next) => {
             message: '改用户不存在',
         };
     } else {
-        console.log(res);
-        const user = {
-            userId: res.userId,
-            userName: res.userName,
-            userTime: res.userTime,
-            userAvatar: res.userAvatar,
-            userRoles: res.userRoles,
-            currentAuthority: res.currentAuthority
-        };
         ctx.body = {
             code: 200,
             success: true,
             message: 'ok',
-            data: user
+            data: res
         };
     }
 });
@@ -172,11 +155,9 @@ router.get('/list', async (ctx, next) => {
             message: error.message
         };
     });
-    console.log(res);
     ctx.body = {
         code: 0,
         message: 'ok',
-        success: true,
         data: res,
         "total": res.length,
         "success": true,
@@ -203,6 +184,7 @@ router.post('/add', async (ctx, next) => {
         userEmail,
         userMobile,
         userPwd,
+        userAvatar
     } = body;
     if (!userName || userName.length === 0) {
         ctx.body = {
@@ -237,9 +219,11 @@ router.post('/add', async (ctx, next) => {
         lastLoginIp: ip.address(),
         lastLoginTime: createTime,
         createTime,
-        userAvatar: 'https://avatar.csdnimg.cn/0/E/9/2_weiguo19951107_1572850039.jpg',
+        updateTime: createTime,
+        userAvatar: userAvatar || '',
         userRoles: ['admin'],
         userStatus: 1,
+        userDesc: '',
         currentAuthority: 'admin'
     });
     let res = await user.save().catch(error => {
@@ -258,11 +242,71 @@ router.post('/add', async (ctx, next) => {
 });
 
 /**
+ * 修改用户信息
+ */
+router.post('/update', async (ctx, next) => {
+    if (!ctx.request.body || ctx.request.body.length === 0) {
+        ctx.body = {
+            code: 10001,
+            success: false,
+            message: '参数不能为空',
+        };
+        return false;
+    }
+    const { body } = ctx.request;
+    let {
+        userId,
+        userAvatar,
+        userName,
+        userEmail,
+        userMobile,
+        userDesc,
+    } = body;
+    if (!userName || userName.length === 0) {
+        ctx.body = {
+            code: 10000,
+            success: false,
+            message: '用户名不能为空',
+        };
+        return false;
+    }
+    let updateTime = new Date().Format('yyyy/MM/dd hh:mm:ss');
+    let res = await User.update({
+        userId
+    }, {
+        $set: {
+            userName,
+            userEmail,
+            userMobile,
+            userDesc,
+            userIp: ip.address(),
+            lastLoginIp: ip.address(),
+            lastLoginTime: updateTime,
+            updateTime,
+            userAvatar: userAvatar || DEFAULT_IMG
+        }
+    }).catch(error => {
+        ctx.body = {
+            code: 10086,
+            success: false,
+            message: error.message
+        };
+    });
+    console.log(res);
+    ctx.body = {
+        code: 200,
+        success: false,
+        message: 'ok',
+        data: res
+    };
+});
+
+/**
  * 删除用户
  */
-router.post('/del', async (ctx, next) => {
+router.get('/del', async (ctx, next) => {
 
-    let userId = ctx.request.body.userId || '';
+    let userId = ctx.request.query.userId || '';
 
     if (!userId || userId.length === 0) {
         ctx.body = {
@@ -272,7 +316,7 @@ router.post('/del', async (ctx, next) => {
         return false;
     }
 
-    let res = await User.deleteOne({'_id': userId}).catch(error => {
+    let res = await User.findByIdAndRemove(userId).catch(error => {
         ctx.body = {
             code: 10086,
             message: error.message

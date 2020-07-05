@@ -39,7 +39,7 @@ router.get('/', async (ctx, next) => {
     await ctx.render('photo.js', {
         title: 'Welcome Wedding!'
     })
-})
+});
 
 /**
  * 获取照片列表（post方式）
@@ -57,7 +57,10 @@ router.post('/list', async (ctx, next) => {
             message: error.message
         };
     });
-    console.log(res);
+    res.map((item) => {
+        item.createdAt = new Date(item.createdAt).Format('yyyy/MM/dd hh:mm:ss');
+        item.updateAt = new Date(item.createdAt).Format('yyyy/MM/dd hh:mm:ss');
+    });
     ctx.body = {
         code: 200,
         message: 'ok',
@@ -67,7 +70,7 @@ router.post('/list', async (ctx, next) => {
         "pageSize": pageSize || 10,
         "current": pageNum || 1
     };
-})
+});
 
 /**
  * 获取照片列表（get方式）
@@ -85,7 +88,10 @@ router.get('/list', async (ctx, next) => {
             message: error.message
         };
     });
-    console.log(res);
+    res.map((item) => {
+        item.createdAt = new Date(item.createdAt).Format('yyyy/MM/dd hh:mm:ss');
+        item.updateAt = new Date(item.createdAt).Format('yyyy/MM/dd hh:mm:ss');
+    });
     ctx.body = {
         code: 200,
         message: 'ok',
@@ -148,7 +154,7 @@ router.post('/add', async (ctx, next) => {
         message: 'ok',
         data: res
     };
-})
+});
 
 /**
  * 删除照片
@@ -168,6 +174,6 @@ router.post('/del', async (ctx, next) => {
             res: res
         }
     };
-})
+});
 
-module.exports = router
+module.exports = router;

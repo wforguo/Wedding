@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'umi';
-import { GridContent } from '@ant-design/pro-layout';
+import { PageHeaderWrapper, GridContent } from '@ant-design/pro-layout';
 import BaseView from './components/base';
 import styles from './style.less';
 
@@ -19,12 +19,14 @@ class Profile extends Component {
         }
 
         return (
-            <GridContent className={styles.main}>
-                <div className={styles.right}>
-                    <div className={styles.title}>个人资料</div>
-                    <BaseView />
-                </div>
-            </GridContent>
+            <PageHeaderWrapper>
+                <GridContent className={styles.main}>
+                    <div className={styles.right}>
+                        <div className={styles.title}>基本设置</div>
+                        <BaseView />
+                    </div>
+                </GridContent>
+            </PageHeaderWrapper>
         );
     }
 }
