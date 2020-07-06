@@ -8,15 +8,10 @@ const UserModel = {
     },
     effects: {
         * fetchCurrent(_, {call, put, select}) {
-            console.clear();
             const currentUser = yield select(state => state.user.currentUser);
-            const {
-                userId
-            } = currentUser;
-
-            if (currentUser || userId) {
+            if (currentUser && currentUser.userId) {
                 const response = yield call(queryCurrent, {
-                    userId
+                    userId: currentUser.userId
                 });
                 yield put({
                     type: 'saveCurrentUser',

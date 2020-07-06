@@ -8,7 +8,6 @@ const logger = require('koa-logger')
 
 const managePhoto = require('./routes/manage/photo')
 const manageUser = require('./routes/manage/user')
-// const users = require('./routes/wxapp')
 
 // error handler
 onerror(app)
@@ -41,7 +40,6 @@ app.use(async (ctx, next) => {
 // routes
 app.use(managePhoto.routes(), managePhoto.allowedMethods())
 app.use(manageUser.routes(), manageUser.allowedMethods())
-// app.use(users.routes(), users.allowedMethods())
 
 // error-handling
 app.on('error', (err, ctx) => {

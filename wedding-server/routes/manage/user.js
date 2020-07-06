@@ -9,7 +9,7 @@ const mongoose = require('mongoose');
 const md5 = require('md5');
 const ip = require('ip');
 const config = require('../../config');
-const User = require('../../models/user');
+const User = require('../../models/User');
 require('../../util/util');
 
 // 数据库连接字符串
