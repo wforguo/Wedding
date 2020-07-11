@@ -1,3 +1,8 @@
+/**
+ * @Description: 管理用户
+ * @author: forguo
+ * @date: 2020/7/11
+ */
 let mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 

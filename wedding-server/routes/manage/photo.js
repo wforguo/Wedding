@@ -29,6 +29,7 @@ mongoose.connection.on("error", function () {
 mongoose.connection.on("disconnected", function () {
     console.log("MongoDB connected disconnected.")
 });
+
 // 添加路由前缀
 router.prefix('/api/photo');
 
@@ -57,10 +58,6 @@ router.post('/list', async (ctx, next) => {
             message: error.message
         };
     });
-    res.map((item) => {
-        item.createdAt = new Date(item.createdAt).Format('yyyy/MM/dd hh:mm:ss');
-        item.updateAt = new Date(item.createdAt).Format('yyyy/MM/dd hh:mm:ss');
-    });
     ctx.body = {
         code: 200,
         message: 'ok',
@@ -87,10 +84,6 @@ router.get('/list', async (ctx, next) => {
             code: 10086,
             message: error.message
         };
-    });
-    res.map((item) => {
-        item.createdAt = new Date(item.createdAt).Format('yyyy/MM/dd hh:mm:ss');
-        item.updateAt = new Date(item.createdAt).Format('yyyy/MM/dd hh:mm:ss');
     });
     ctx.body = {
         code: 200,
@@ -141,7 +134,8 @@ router.post('/add', async (ctx, next) => {
         id: id,
         url: url,
         desc: desc,
-        time: createTime
+        createTime,
+        updateTime: createTime,
     });
     let res = await photo.save().catch(error => {
         ctx.body = {

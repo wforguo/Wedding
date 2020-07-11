@@ -8,7 +8,7 @@ router.get('/', async (ctx, next) => {
         success: true,
         msg: '上传成功',
     };
-})
+});
 
 /**
  * 图片上传
@@ -27,6 +27,6 @@ router.post('/upload', async (ctx, next) => {
             msg: '上传成功',
         };
     }
-})
+});
 
-module.exports = router
+module.exports = router;

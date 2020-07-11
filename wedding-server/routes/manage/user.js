@@ -209,7 +209,7 @@ router.post('/add', async (ctx, next) => {
 
     let sysDate = new Date().Format('yyyyMMddhhmmss');
     let id = platform + r1 + sysDate + r2;
-    let user = new User({
+    let user = {
         userId: id,
         userName,
         userEmail,
@@ -225,8 +225,8 @@ router.post('/add', async (ctx, next) => {
         userStatus: 1,
         userDesc: '',
         currentAuthority: 'admin'
-    });
-    let res = await user.save().catch(error => {
+    };
+    let res = await User.create(user).catch(error => {
         ctx.body = {
             code: 10086,
             success: false,
