@@ -7,11 +7,10 @@ let mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 
 let Photo = new Schema({
-  id: String,
-  avatar: String,
-  desc: String,
-  createTime: String,
-  updateTime: String,
+    id: String,
+    url: String,
+    desc: String,
+    createTime: String,
 });
 
 module.exports = mongoose.model('Photo', Photo, 'wedd_photos');

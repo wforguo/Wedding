@@ -19,16 +19,16 @@ const dbStr = `mongodb://${config.database.user}:${config.database.pwd}@${config
 mongoose.connect(dbStr, {useNewUrlParser: true});
 
 // mongodb://admin:2333!@106.12.182.39:27019/wedding?readPreference=primary&appname=MongoDB%20Compass&ssl=false
-mongoose.connection.on("connected", function () {
-    console.log("MongoDB connected success.")
+mongoose.connection.on('connected', function () {
+    console.log('MongoDB connected success.')
 });
 
-mongoose.connection.on("error", function () {
-    console.log("MongoDB connected fail.")
+mongoose.connection.on('error', function () {
+    console.log('MongoDB connected fail.')
 });
 
-mongoose.connection.on("disconnected", function () {
-    console.log("MongoDB connected disconnected.")
+mongoose.connection.on('disconnected', function () {
+    console.log('MongoDB connected disconnected.')
 });
 
 const DEFAULT_IMG = 'https://forguo.bj.bcebos.com/icon2596901555144121.jpg';
@@ -144,9 +144,9 @@ router.get('/info', async (ctx, next) => {
  */
 router.get('/list', async (ctx, next) => {
     let query = ctx.request.query; // if nothing to pass just return a {}
-    let pageNum = query.pageNum || 1;
+    let current = query.current || 1;
     let pageSize = query.pageSize || 10;
-    let skip = (pageNum - 1) * pageSize;
+    let skip = (current - 1) * pageSize;
     // 条件检索
     let params = {
         ...query
@@ -166,10 +166,10 @@ router.get('/list', async (ctx, next) => {
         code: 0,
         message: 'ok',
         data: res,
-        "total": res.length,
-        "success": true,
-        "pageSize": pageSize || 10,
-        "current": pageNum || 1
+        'total': res.length,
+        'success': true,
+        'pageSize': pageSize || 10,
+        'current': current || 1
     };
 });
 
@@ -311,11 +311,11 @@ router.post('/update', async (ctx, next) => {
 /**
  * 删除用户
  */
-router.get('/del', async (ctx, next) => {
+router.get('/remove', async (ctx, next) => {
 
-    let userId = ctx.request.query.userId || '';
+    let _id = ctx.request.query._id || '';
 
-    if (!userId || userId.length === 0) {
+    if (!_id || _id.length === 0) {
         ctx.body = {
             code: 10000,
             message: '用户不存在',
@@ -323,7 +323,7 @@ router.get('/del', async (ctx, next) => {
         return false;
     }
 
-    let res = await User.findByIdAndRemove(userId).catch(error => {
+    let res = await User.findByIdAndRemove(_id).catch(error => {
         ctx.body = {
             code: 10086,
             message: error.message
@@ -333,6 +333,7 @@ router.get('/del', async (ctx, next) => {
         code: 200,
         message: 'ok',
         data: {
+            _id,
             res: res
         }
     };
