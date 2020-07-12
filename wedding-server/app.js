@@ -1,28 +1,29 @@
-const Koa = require('koa')
-const app = new Koa()
-const views = require('koa-views')
-const json = require('koa-json')
-const onerror = require('koa-onerror')
-const bodyparser = require('koa-bodyparser')
-const logger = require('koa-logger')
+const Koa = require('koa');
+const app = new Koa();
+const views = require('koa-views');
+const json = require('koa-json');
+const onerror = require('koa-onerror');
+const bodyparser = require('koa-bodyparser');
+const logger = require('koa-logger');
 
-const managePhoto = require('./routes/manage/photo')
-const manageUser = require('./routes/manage/user')
+const managePhoto = require('./routes/manage/photo');
+const manageUser = require('./routes/manage/user');
+const manageMsg = require('./routes/manage/msg');
 
 // error handler
-onerror(app)
+onerror(app);
 
 // middlewares
 app.use(bodyparser({
     enableTypes: ['json', 'form', 'text']
-}))
-app.use(json())
-app.use(logger())
-app.use(require('koa-static')(__dirname + '/public'))
+}));
+app.use(json());
+app.use(logger());
+app.use(require('koa-static')(__dirname + '/public'));
 
 app.use(views(__dirname + '/views', {
     extension: 'pug'
-}))
+}));
 
 // logger
 app.use(async (ctx, next) => {
@@ -32,18 +33,19 @@ app.use(async (ctx, next) => {
     ctx.set('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
     ctx.set('Access-Control-Allow-Credentials', 'true');
     const start = new Date();
-    await next()
-    const ms = new Date() - start
+    await next();
+    const ms = new Date() - start;
     console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
-})
+});
 
 // routes
-app.use(managePhoto.routes(), managePhoto.allowedMethods())
-app.use(manageUser.routes(), manageUser.allowedMethods())
+app.use(managePhoto.routes(), managePhoto.allowedMethods());
+app.use(manageUser.routes(), manageUser.allowedMethods());
+app.use(manageMsg.routes(), manageMsg.allowedMethods());
 
 // error-handling
 app.on('error', (err, ctx) => {
     console.error('server error', err, ctx)
 });
 
-module.exports = app
+module.exports = app;

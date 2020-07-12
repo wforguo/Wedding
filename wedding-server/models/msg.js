@@ -16,8 +16,8 @@ let userSchema = new Schema({
     avatarUrl: String,
     nickName: String,
     userAvatar: String,
-    message: String,
-    updateTime: String,
+    userMsg: String,
+    createTime: String,
 });
 
 module.exports = mongoose.model('Msg', userSchema, 'wedd_msgs');

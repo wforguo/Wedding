@@ -1,5 +1,5 @@
 /**
- * @Description 管理系统相关接口
+ * @Description 账号
  * @Author forguo
  * @Date 2019/12/14
  */

@@ -1,5 +1,5 @@
 /**
- * @Description 相册
+ * @Description 留言祝福
  * @Author forguo
  * @Date 2019/12/14
  */
@@ -7,7 +7,7 @@
 const router = require('koa-router')();
 const config = require('../../config');
 const mongoose = require('mongoose');
-const Photo = require('../../models/Photo');
+const Msg = require('../../models/Msg');
 require('../../util/util');
 
 // 数据库连接字符串
@@ -31,19 +31,19 @@ mongoose.connection.on('disconnected', function () {
 });
 
 // 添加路由前缀
-router.prefix('/api/photo');
+router.prefix('/api/msg');
 
 /**
  * /
  */
 router.get('/', async (ctx, next) => {
-    await ctx.render('photo.js', {
+    await ctx.render('msg.js', {
         title: 'Welcome Wedding!'
     })
 });
 
 /**
- * 获取照片列表（get方式）
+ * 获取祝福列表（get方式）
  */
 router.get('/list', async (ctx, next) => {
     let query = ctx.request.query; // if nothing to pass just return a {}
@@ -60,7 +60,7 @@ router.get('/list', async (ctx, next) => {
     delete params.sorter;
     delete params._timestamp;
 
-    let res = await Photo.find(params).skip(Number(skip)).limit(Number(pageSize)).catch(error => {
+    let res = await Msg.find(params).skip(Number(skip)).limit(Number(pageSize)).catch(error => {
         ctx.body = {
             success: false,
             code: 10086,
@@ -79,7 +79,7 @@ router.get('/list', async (ctx, next) => {
 });
 
 /**
- * 添加照片
+ * 添加祝福
  */
 router.post('/add', async (ctx, next) => {
     if (!ctx.request.body || ctx.request.body.length === 0) {
@@ -121,7 +121,7 @@ router.post('/add', async (ctx, next) => {
         desc: desc,
         createTime,
     };
-    let res = await Photo.create(photo).catch(error => {
+    let res = await Msg.create(photo).catch(error => {
         ctx.body = {
             code: 10086,
             success: false,
@@ -137,20 +137,20 @@ router.post('/add', async (ctx, next) => {
 });
 
 /**
- * 删除照片
+ * 删除祝福
  */
 router.get('/remove', async (ctx, next) => {
     let _id = ctx.request.query._id || '';
     if (!_id) {
         ctx.body = {
             code: 10000,
-            message: '照片不存在',
+            message: '祝福不存在',
         };
         return false;
     }
     console.log('_id ===>', _id);
     // deleteOne({_id});
-    let res = await Photo.findByIdAndRemove(_id).catch(error => {
+    let res = await Msg.findByIdAndRemove(_id).catch(error => {
         ctx.body = {
             code: 10086,
             message: error.message
