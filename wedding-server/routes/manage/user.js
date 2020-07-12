@@ -31,7 +31,7 @@ mongoose.connection.on("disconnected", function () {
     console.log("MongoDB connected disconnected.")
 });
 
-const DEFAULT_IMG = 'https://forguo-1302175274.cos.ap-shanghai.myqcloud.com/wedding/user/love-you.jpg';
+const DEFAULT_IMG = 'https://forguo.bj.bcebos.com/icon2596901555144121.jpg';
 
 // 添加路由前缀
 router.prefix('/api/user');
@@ -140,14 +140,21 @@ router.get('/info', async (ctx, next) => {
 });
 
 /**
- * 获取用户列表）
+ * 获取用户列表
  */
 router.get('/list', async (ctx, next) => {
     let query = ctx.request.query; // if nothing to pass just return a {}
     let pageNum = query.pageNum || 1;
     let pageSize = query.pageSize || 10;
     let skip = (pageNum - 1) * pageSize;
-    let params = {};
+    // 条件检索
+    let params = {
+        ...query
+    };
+    delete params.current;
+    delete params.pageSize;
+    delete params.sorter;
+    delete params._timestamp;
     let res = await User.find(params).skip(Number(skip)).limit(Number(pageSize)).catch(error => {
         ctx.body = {
             code: 10086,
