@@ -35,11 +35,7 @@ const handleAdd = async fields => {
 const handleUpdate = async fields => {
     message.loading('保存中...');
     try {
-        await updateUser({
-            name: fields.name,
-            desc: fields.desc,
-            key: fields.key,
-        });
+        await updateUser(fields);
         message.destroy();
         message.success('保存成功');
         return true;
@@ -60,7 +56,7 @@ const handleRemove = async selectedRows => {
 
     try {
         await removeUser({
-            key: selectedRows.map(row => row.key),
+            _id: selectedRows._id
         });
         hide();
         message.success('删除成功，即将刷新');
@@ -72,14 +68,15 @@ const handleRemove = async selectedRows => {
     }
 };
 
-const TableList = () => {
+const UserList = () => {
     const [sorter, setSorter] = useState('');
     const [createModalVisible, handleModalVisible] = useState(false);
     const [updateModalVisible, handleUpdateModalVisible] = useState(false);
-    const [stepFormValues, setStepFormValues] = useState({});
+    const [formValues, setFormValues] = useState({});
     const actionRef = useRef();
     const columns = [
         {
+            required: true,
             title: '用户名',
             dataIndex: 'userName',
             valueType: 'input',
@@ -88,6 +85,7 @@ const TableList = () => {
             align: 'center',
         },
         {
+            required: true,
             title: 'E-mail',
             dataIndex: 'userEmail',
             valueType: 'input',
@@ -96,6 +94,7 @@ const TableList = () => {
             align: 'center'
         },
         {
+            required: true,
             title: '手机',
             dataIndex: 'userMobile',
             maxLength: 11,
@@ -103,6 +102,7 @@ const TableList = () => {
             align: 'center'
         },
         {
+            required: true,
             title: '密码',
             dataIndex: 'userPwd',
             valueType: 'password',
@@ -140,31 +140,29 @@ const TableList = () => {
             align: 'center'
         },
         {
-            title: '创建时间',
-            dataIndex: 'createTime',
-            hideInSearch: true,
-            hideInForm: true,
-            align: 'center'
-        },
-        {
             title: '操作',
             dataIndex: 'option',
             valueType: 'option',
             align: 'center',
             render: (_, record) => (
                 <>
-                    <a
+                    <Button type='link'
                         onClick={() => {
-                            console.log(record);
+                            handleUpdateModalVisible(true);
+                            setFormValues(record);
                         }}
-                    >
-                        编辑
-                    </a>
+                    >编辑
+                    </Button>
                     <Divider type="vertical"/>
-                    <a onClick={() => {
-                           console.log(record);
-                       }}
-                    >删除</a>
+                    <Button type='link' danger onClick={async () => {
+                        const success = await handleRemove(record);
+                        if (success) {
+                            if (actionRef.current) {
+                                actionRef.current.reload();
+                            }
+                        }
+                    }}
+                    >删除</Button>
                 </>
             ),
         },
@@ -172,9 +170,9 @@ const TableList = () => {
     return (
         <PageHeaderWrapper>
             <ProTable
-                headerTitle="用户列表"
+                headerTitle="账号列表"
                 actionRef={actionRef}
-                rowKey="userName"
+                rowKey="_id"
                 options={{ density: false}}
                 onChange={(_, _filter, _sorter) => {
                     const sorterResult = _sorter;
@@ -189,23 +187,13 @@ const TableList = () => {
                 search={{
                     collapsed: false
                 }}
-                toolBarRender={(action, {selectedRows}) => [
+                toolBarRender={() => [
                     <Button type="primary" onClick={() => handleModalVisible(true)}>
                         <PlusOutlined/> 新增
                     </Button>,
-                    selectedRows && selectedRows.length > 0 && (
-                        <Button type="primary"
-                                onClick={async () => {
-                                    await handleRemove(selectedRows);
-                                    action.reload();
-                                }}>
-                            <PlusOutlined/> 批量删除
-                        </Button>
-                    ),
                 ]}
                 request={params => queryUser(params)}
                 columns={columns}
-                rowSelection={{}}
             />
             <CreateForm onCancel={() => handleModalVisible(false)} modalVisible={createModalVisible}>
                 <ProTable
@@ -220,20 +208,19 @@ const TableList = () => {
                             }
                         }
                     }}
-                    rowKey="userName"
+                    rowKey="_id"
                     type="form"
                     columns={columns}
-                    rowSelection={{}}
                 />
             </CreateForm>
-            {stepFormValues && Object.keys(stepFormValues).length ? (
+            {formValues && Object.keys(formValues).length ? (
                 <UpdateForm
                     onSubmit={async value => {
                         const success = await handleUpdate(value);
 
                         if (success) {
                             handleUpdateModalVisible(false);
-                            setStepFormValues({});
+                            setFormValues({});
 
                             if (actionRef.current) {
                                 actionRef.current.reload();
@@ -242,14 +229,14 @@ const TableList = () => {
                     }}
                     onCancel={() => {
                         handleUpdateModalVisible(false);
-                        setStepFormValues({});
+                        setFormValues({});
                     }}
                     updateModalVisible={updateModalVisible}
-                    values={stepFormValues}
+                    values={formValues}
                 />
             ) : null}
         </PageHeaderWrapper>
     );
 };
 
-export default TableList;
+export default UserList;

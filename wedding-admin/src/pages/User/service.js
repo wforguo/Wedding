@@ -8,7 +8,7 @@ export async function queryUser(params) {
 }
 
 export async function removeUser(params) {
-    return request('/api/user/del', {
+    return request('/api/user/remove', {
         method: 'get',
         params
     });

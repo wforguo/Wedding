@@ -62,16 +62,16 @@ export default defineConfig({
                             component: './Photo',
                         },
                         {
-                            name: '视频管理',
+                            name: '视频展示',
                             icon: 'PlaySquareOutlined',
                             path: '/Video',
-                            redirect: '/Video',
+                            component: './Video',
                         },
                         {
-                            name: '酒席举办',
+                            name: '婚礼举办',
                             icon: 'EnvironmentOutlined',
-                            path: '/Location',
-                            redirect: '/Location',
+                            path: '/Invite',
+                            component: './Invite',
                         },
                         {
                             name: '留言祝福',
@@ -86,13 +86,13 @@ export default defineConfig({
                             component: './Attend',
                         },
                         {
-                            name: '用户管理',
+                            name: '账号管理',
                             icon: 'UserOutlined',
                             path: '/User',
                             component: './User',
                         },
                         {
-                            name: '个人页',
+                            name: '个人中心',
                             icon: 'SettingOutlined',
                             path: '/Account',
                             authority: ['admin'],

@@ -1,274 +1,135 @@
-import { DownOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Divider, Dropdown, Menu, message, Input } from 'antd';
-import React, { useState, useRef } from 'react';
-import { PageHeaderWrapper } from '@ant-design/pro-layout';
+import {Avatar, Button, message, Modal} from 'antd';
+import React, {useState, useRef} from 'react';
+import {PageHeaderWrapper} from '@ant-design/pro-layout';
 import ProTable from '@ant-design/pro-table';
-import CreateForm from './components/CreateForm';
-import UpdateForm from './components/UpdateForm';
-import { queryRule, updateRule, addRule, removeRule } from './service';
-/**
- * 添加节点
- * @param fields
- */
-
-const handleAdd = async fields => {
-  const hide = message.loading('正在添加');
-
-  try {
-    await addRule({ ...fields });
-    hide();
-    message.success('添加成功');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('添加失败请重试！');
-    return false;
-  }
-};
-/**
- * 更新节点
- * @param fields
- */
-
-const handleUpdate = async fields => {
-  const hide = message.loading('正在配置');
-
-  try {
-    await updateRule({
-      name: fields.name,
-      desc: fields.desc,
-      key: fields.key,
-    });
-    hide();
-    message.success('配置成功');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('配置失败请重试！');
-    return false;
-  }
-};
+import { queryMsg, removeMsg } from './service';
 /**
  *  删除节点
  * @param selectedRows
  */
 
 const handleRemove = async selectedRows => {
-  const hide = message.loading('正在删除');
-  if (!selectedRows) return true;
+    const hide = message.loading('正在删除');
+    if (!selectedRows) return true;
 
-  try {
-    await removeRule({
-      key: selectedRows.map(row => row.key),
-    });
-    hide();
-    message.success('删除成功，即将刷新');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('删除失败，请重试');
-    return false;
-  }
+    try {
+        await removeMsg({
+            _id: selectedRows._id
+        });
+        hide();
+        message.success('删除成功，即将刷新');
+        return true;
+    } catch (error) {
+        hide();
+        message.error('删除失败，请重试');
+        return false;
+    }
 };
 
-const TableList = () => {
-  const [sorter, setSorter] = useState('');
-  const [createModalVisible, handleModalVisible] = useState(false);
-  const [updateModalVisible, handleUpdateModalVisible] = useState(false);
-  const [stepFormValues, setStepFormValues] = useState({});
-  const actionRef = useRef();
-  const columns = [
-    {
-      title: '规则名称',
-      dataIndex: 'name',
-      rules: [
+const MsgList = () => {
+    const [sorter, setSorter] = useState('');
+    const [previewImage, serPreviewImage] = useState('');
+    const [previewTitle, serPreviewTitle] = useState('');
+    const [previewVisible, setPreviewVisible] = useState(false);
+
+    const actionRef = useRef();
+    const columns = [
         {
-          required: true,
-          message: '规则名称为必填项',
+            required: true,
+            title: '昵称',
+            dataIndex: 'nickName',
+            valueType: 'input',
+            maxLength: 16,
+            hideInForm: false,
+            align: 'center',
         },
-      ],
-    },
-    {
-      title: '描述',
-      dataIndex: 'desc',
-      valueType: 'textarea',
-    },
-    {
-      title: '服务调用次数',
-      dataIndex: 'callNo',
-      sorter: true,
-      hideInForm: true,
-      renderText: val => `${val} 万`,
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      hideInForm: true,
-      valueEnum: {
-        0: {
-          text: '关闭',
-          status: 'Default',
+        {
+            required: true,
+            title: '头像',
+            dataIndex: 'avatarUrl',
+            maxLength: 11,
+            hideInSearch: true,
+            hideInForm: true,
+            align: 'center',
+            render: (_, record) => (
+                <Avatar size="small" src={record.avatarUrl} onClick={() => {
+                    serPreviewImage(record.avatarUrl);
+                    serPreviewTitle(record.nickName);
+                    setPreviewVisible(true);
+                }}
+                />
+            )
         },
-        1: {
-          text: '运行中',
-          status: 'Processing',
+        {
+            required: true,
+            title: '留言',
+            dataIndex: 'userMsg',
+            valueType: 'input',
+            maxLength: 16,
+            hideInForm: false,
+            align: 'center'
         },
-        2: {
-          text: '已上线',
-          status: 'Success',
+        {
+            title: '留言时间',
+            dataIndex: 'createTime',
+            hideInSearch: true,
+            hideInForm: true,
+            align: 'center'
         },
-        3: {
-          text: '异常',
-          status: 'Error',
+        {
+            title: '操作',
+            dataIndex: 'option',
+            valueType: 'option',
+            align: 'center',
+            render: (_, record) => (
+                <>
+                    <Button type='link' danger onClick={async () => {
+                        const success = await handleRemove(record);
+                        if (success) {
+                            if (actionRef.current) {
+                                actionRef.current.reload();
+                            }
+                        }
+                    }}
+                    >删除</Button>
+                </>
+            ),
         },
-      },
-    },
-    {
-      title: '上次调度时间',
-      dataIndex: 'updatedAt',
-      sorter: true,
-      valueType: 'dateTime',
-      hideInForm: true,
-      renderFormItem: (item, { defaultRender, ...rest }, form) => {
-        const status = form.getFieldValue('status');
+    ];
+    return (
+        <PageHeaderWrapper>
+            <ProTable
+                headerTitle="留言列表"
+                actionRef={actionRef}
+                rowKey="_openid"
+                options={{ density: false}}
+                onChange={(_, _filter, _sorter) => {
+                    const sorterResult = _sorter;
 
-        if (`${status}` === '0') {
-          return false;
-        }
-
-        if (`${status}` === '3') {
-          return <Input {...rest} placeholder="请输入异常原因！" />;
-        }
-
-        return defaultRender(item);
-      },
-    },
-    {
-      title: '操作',
-      dataIndex: 'option',
-      valueType: 'option',
-      render: (_, record) => (
-        <>
-          <a
-            onClick={() => {
-              handleUpdateModalVisible(true);
-              setStepFormValues(record);
-            }}
-          >
-            配置
-          </a>
-          <Divider type="vertical" />
-          <a href="">订阅警报</a>
-        </>
-      ),
-    },
-  ];
-  return (
-    <PageHeaderWrapper>
-      <ProTable
-        headerTitle="查询表格"
-        actionRef={actionRef}
-        rowKey="key"
-        onChange={(_, _filter, _sorter) => {
-          const sorterResult = _sorter;
-
-          if (sorterResult.field) {
-            setSorter(`${sorterResult.field}_${sorterResult.order}`);
-          }
-        }}
-        params={{
-          sorter,
-        }}
-        toolBarRender={(action, { selectedRows }) => [
-          <Button type="primary" onClick={() => handleModalVisible(true)}>
-            <PlusOutlined /> 新建
-          </Button>,
-          selectedRows && selectedRows.length > 0 && (
-            <Dropdown
-              overlay={
-                <Menu
-                  onClick={async e => {
-                    if (e.key === 'remove') {
-                      await handleRemove(selectedRows);
-                      action.reload();
+                    if (sorterResult.field) {
+                        setSorter(`${sorterResult.field}_${sorterResult.order}`);
                     }
-                  }}
-                  selectedKeys={[]}
-                >
-                  <Menu.Item key="remove">批量删除</Menu.Item>
-                  <Menu.Item key="approval">批量审批</Menu.Item>
-                </Menu>
-              }
+                }}
+                params={{
+                    sorter,
+                }}
+                search={{
+                    collapsed: false
+                }}
+                request={params => queryMsg(params)}
+                columns={columns}
+            />
+
+            <Modal
+                visible={previewVisible}
+                title={previewTitle}
+                footer={null}
+                onCancel={() => setPreviewVisible(false)}
             >
-              <Button>
-                批量操作 <DownOutlined />
-              </Button>
-            </Dropdown>
-          ),
-        ]}
-        tableAlertRender={({ selectedRowKeys, selectedRows }) => (
-          <div>
-            已选择{' '}
-            <a
-              style={{
-                fontWeight: 600,
-              }}
-            >
-              {selectedRowKeys.length}
-            </a>{' '}
-            项&nbsp;&nbsp;
-            <span>
-              服务调用次数总计 {selectedRows.reduce((pre, item) => pre + item.callNo, 0)} 万
-            </span>
-          </div>
-        )}
-        request={params => queryRule(params)}
-        columns={columns}
-        rowSelection={{}}
-      />
-      <CreateForm onCancel={() => handleModalVisible(false)} modalVisible={createModalVisible}>
-        <ProTable
-          onSubmit={async value => {
-            const success = await handleAdd(value);
-
-            if (success) {
-              handleModalVisible(false);
-
-              if (actionRef.current) {
-                actionRef.current.reload();
-              }
-            }
-          }}
-          rowKey="key"
-          type="form"
-          columns={columns}
-          rowSelection={{}}
-        />
-      </CreateForm>
-      {stepFormValues && Object.keys(stepFormValues).length ? (
-        <UpdateForm
-          onSubmit={async value => {
-            const success = await handleUpdate(value);
-
-            if (success) {
-              handleUpdateModalVisible(false);
-              setStepFormValues({});
-
-              if (actionRef.current) {
-                actionRef.current.reload();
-              }
-            }
-          }}
-          onCancel={() => {
-            handleUpdateModalVisible(false);
-            setStepFormValues({});
-          }}
-          updateModalVisible={updateModalVisible}
-          values={stepFormValues}
-        />
-      ) : null}
-    </PageHeaderWrapper>
-  );
+                <img alt="example" style={{ width: '100%' }} src={previewImage} />
+            </Modal>
+        </PageHeaderWrapper>
+    );
 };
 
-export default TableList;
+export default MsgList;

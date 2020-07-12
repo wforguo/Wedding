@@ -13,7 +13,6 @@ const AuthComponent = ({
        },
        user,
    }) => {
-    console.log(user);
     const {currentUser} = user;
     const {routes = []} = route;
     const isLogin = currentUser && currentUser.name;
