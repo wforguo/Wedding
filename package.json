@@ -1,0 +1,32 @@
+{
+  "name": "wedding",
+  "version": "1.0.0",
+  "description": "wedding",
+  "main": "index.js",
+  "scripts": {
+    "version": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wforguo/Wedding.git"
+  },
+  "keywords": [
+    "wedding"
+  ],
+  "author": "forguo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wforguo/Wedding/issues"
+  },
+  "homepage": "https://github.com/wforguo/Wedding#readme",
+  "devDependencies": {
+    "conventional-changelog": "^3.1.21",
+    "cz-conventional-changelog": "^3.2.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}

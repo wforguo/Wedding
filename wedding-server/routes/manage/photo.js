@@ -7,7 +7,7 @@
 const router = require('koa-router')();
 const config = require('../../config');
 const mongoose = require('mongoose');
-const Photo = require('../../models/photo');
+const Photo = require('../../models/Photo');
 require('../../util/util');
 
 // 数据库连接字符串
