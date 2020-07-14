@@ -5,31 +5,9 @@
  */
 
 const router = require('koa-router')();
-const mongoose = require('mongoose');
 const md5 = require('md5');
 const ip = require('ip');
-const config = require('../../config');
 const User = require('../../models/User');
-require('../../util/util');
-
-// 数据库连接字符串
-const dbStr = `mongodb://${config.database.user}:${config.database.pwd}@${config.database.url}:${config.database.port}/${config.database.name}?authSource=admin`;
-
-// 连接MongoDB数据库
-mongoose.connect(dbStr, {useNewUrlParser: true});
-
-// mongodb://admin:2333!@106.12.182.39:27019/wedding?readPreference=primary&appname=MongoDB%20Compass&ssl=false
-mongoose.connection.on('connected', function () {
-    console.log('MongoDB connected success.')
-});
-
-mongoose.connection.on('error', function () {
-    console.log('MongoDB connected fail.')
-});
-
-mongoose.connection.on('disconnected', function () {
-    console.log('MongoDB connected disconnected.')
-});
 
 const DEFAULT_IMG = 'https://forguo.bj.bcebos.com/icon2596901555144121.jpg';
 

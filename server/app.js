@@ -1,3 +1,8 @@
+/**
+ * @Description: 入口
+ * @author: forguo
+ * @date: 2020/7/14
+*/
 const Koa = require('koa');
 const app = new Koa();
 const views = require('koa-views');
@@ -5,6 +10,36 @@ const json = require('koa-json');
 const onerror = require('koa-onerror');
 const bodyparser = require('koa-bodyparser');
 const logger = require('koa-logger');
+const mongoose = require('mongoose');
+const config = require('./config');
+
+/******************
+ * 数据库连接 Start
+ * ***************/
+
+// 数据库连接字符串
+const dbStr = `mongodb://${config.dataBase.user}:${config.dataBase.pwd}@${config.dataBase.url}:${config.dataBase.port}/${config.dataBase.name}?authSource=admin`;
+console.log(dbStr);
+
+// 连接MongoDB数据库
+mongoose.connect(dbStr, {useNewUrlParser: true});
+
+// mongodb://admin:2333!@106.12.182.39:27019/wedding?readPreference=primary&appname=MongoDB%20Compass&ssl=false
+mongoose.connection.on('connected', function () {
+    console.log('MongoDB connected success.')
+});
+
+mongoose.connection.on('error', function () {
+    console.log('MongoDB connected fail.')
+});
+
+mongoose.connection.on('disconnected', function () {
+    console.log('MongoDB connected disconnected.')
+});
+
+/******************
+ * 数据库连接 End
+ * ***************/
 
 const managePhoto = require('./routes/manage/photo');
 const manageUser = require('./routes/manage/user');

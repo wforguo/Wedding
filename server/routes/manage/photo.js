@@ -6,41 +6,10 @@
 
 const router = require('koa-router')();
 const config = require('../../config');
-const mongoose = require('mongoose');
 const Photo = require('../../models/Photo');
-require('../../util/util');
-
-// 数据库连接字符串
-const dbStr = `mongodb://${config.database.user}:${config.database.pwd}@${config.database.url}:${config.database.port}/${config.database.name}?authSource=admin`;
-console.log(dbStr);
-
-// 连接MongoDB数据库
-mongoose.connect(dbStr, {useNewUrlParser: true});
-
-// mongodb://admin:2333!@106.12.182.39:27019/wedding?readPreference=primary&appname=MongoDB%20Compass&ssl=false
-mongoose.connection.on('connected', function () {
-    console.log('MongoDB connected success.')
-});
-
-mongoose.connection.on('error', function () {
-    console.log('MongoDB connected fail.')
-});
-
-mongoose.connection.on('disconnected', function () {
-    console.log('MongoDB connected disconnected.')
-});
 
 // 添加路由前缀
 router.prefix('/api/photo');
-
-/**
- * /
- */
-router.get('/', async (ctx, next) => {
-    await ctx.render('photo.js', {
-        title: 'Welcome Wedding!'
-    })
-});
 
 /**
  * 获取照片列表（get方式）

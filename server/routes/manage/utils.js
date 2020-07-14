@@ -1,14 +1,10 @@
+/**
+ * @Description: 工具类
+ * @author: forguo
+ * @date: 2020/7/14
+*/
 const router = require('koa-router')();
-const config = require('../../config');
 const fs = require('fs');
-
-router.get('/', async (ctx, next) => {
-    return ctx.body = {
-        code: 0,
-        success: true,
-        msg: '上传成功',
-    };
-});
 
 /**
  * 图片上传

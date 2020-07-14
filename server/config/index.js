@@ -4,7 +4,7 @@ const config = {
         SECRET: '36150865d5fe6410bd58790bbbffa0d8',
     },
     // 本地
-    // database: {
+    // dataBase: {
     //     user: 'admin',
     //     pwd: 'root',
     //     url: 'shop-p0l56.gcp.mongodb.net',
@@ -12,7 +12,7 @@ const config = {
     //     name: 'wedding',
     // },
     // 线上
-    database: {
+    dataBase: {
         user: 'admin',
         pwd: '2333!',
         url: '106.12.182.39',
