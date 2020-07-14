@@ -280,7 +280,7 @@ router.post('/update', async (ctx, next) => {
     console.log(res);
     ctx.body = {
         code: 200,
-        success: false,
+        success: true,
         message: 'ok',
         data: res
     };

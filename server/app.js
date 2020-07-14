@@ -41,9 +41,10 @@ mongoose.connection.on('disconnected', function () {
  * 数据库连接 End
  * ***************/
 
-const managePhoto = require('./routes/manage/photo');
 const manageUser = require('./routes/manage/user');
+const managePhoto = require('./routes/manage/photo');
 const manageMsg = require('./routes/manage/msg');
+const manageInvite = require('./routes/manage/invite');
 
 // error handler
 onerror(app);
@@ -74,9 +75,10 @@ app.use(async (ctx, next) => {
 });
 
 // routes
-app.use(managePhoto.routes(), managePhoto.allowedMethods());
 app.use(manageUser.routes(), manageUser.allowedMethods());
+app.use(managePhoto.routes(), managePhoto.allowedMethods());
 app.use(manageMsg.routes(), manageMsg.allowedMethods());
+app.use(manageInvite.routes(), manageInvite.allowedMethods());
 
 // error-handling
 app.on('error', (err, ctx) => {

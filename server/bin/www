@@ -85,8 +85,8 @@ function onListening() {
     let addr = server.address();
     let host = addr.address;
     let port = addr.port;
-    console.log(ip.address() + ':' + port);
-    console.log('应用实例，访问地址为： http://%s:%s', host, port)
+    console.log('访问地址为： http://%s:%s', ip.address(), port);
+    console.log('访问地址为： http://%s:%s', host, port);
     let bind = typeof addr === 'string'
         ? 'pipe ' + addr
         : 'port ' + addr.port;

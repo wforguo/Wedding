@@ -5,7 +5,6 @@
  */
 
 const router = require('koa-router')();
-const config = require('../../config');
 const Photo = require('../../models/Photo');
 
 // 添加路由前缀
