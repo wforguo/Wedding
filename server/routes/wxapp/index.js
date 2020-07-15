@@ -1,8 +1,8 @@
 const router = require('koa-router')();
 const config = require('../../config');
 const wxApp = config.wxApp;
-const getRunData  = require('./../getRunData');
-const koa2Req = require('koa2-request');
+const getRunData  = require('./../util/getRunData');
+const koa2Req = require('koa2-request'); // 第三方http请求
 
 // 添加路由前缀
 router.prefix('/wxapp');
@@ -23,9 +23,10 @@ const wxAuth = async (req) => {
 router.post('/getRunData', async (ctx, next) => {
     let res = getRunData(ctx.request.body);
     ctx.body = {
-        errcode: 0,
-        msg: '登录成功',
-        result: res
+        code: 200,
+        success: true,
+        message: 'ok',
+        data: res
     };
 });
 
