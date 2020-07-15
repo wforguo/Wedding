@@ -17,7 +17,7 @@ const handleRemove = async selectedRows => {
             _id: selectedRows._id
         });
         hide();
-        message.success('删除成功，即将刷新');
+        message.success('删除成功');
         return true;
     } catch (error) {
         hide();
@@ -101,7 +101,7 @@ const MsgList = () => {
             <ProTable
                 headerTitle="留言列表"
                 actionRef={actionRef}
-                rowKey="_openid"
+                rowKey="_id"
                 options={{ density: false}}
                 onChange={(_, _filter, _sorter) => {
                     const sorterResult = _sorter;

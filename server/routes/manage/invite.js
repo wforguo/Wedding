@@ -24,7 +24,7 @@ router.get('/info', async (ctx, next) => {
     ctx.body = {
         code: 200,
         message: 'ok',
-        data: res,
+        data: res[0],
         'success': true,
     };
 });
@@ -42,7 +42,7 @@ router.post('/add', async (ctx, next) => {
     }
     const { body: params } = ctx.request;
     let createTime = new Date().Format('yyyy/MM/dd hh:mm:ss');
-    let platform = 'photo';
+    let platform = 'invite';
     let r1 = Math.floor(Math.random() * 10);
     let r2 = Math.floor(Math.random() * 10);
 
@@ -70,27 +70,41 @@ router.post('/add', async (ctx, next) => {
  */
 router.post('/update', async (ctx, next) => {
     let _id = ctx.request.body._id || '';
-    if (!_id) {
-        ctx.body = {
-            code: 10000,
-            message: '记录不存在',
-        };
-        return false;
-    }
     const { body: params } = ctx.request;
-    console.log('_id ===>', _id, params);
-    params.updateTime = new Date().Format('yyyy/MM/dd hh:mm:ss');
-    let res = await Invite.update({
-        _id
-    }, {
-        $set: params
-    }).catch(error => {
-        ctx.body = {
-            code: 10086,
-            success: false,
-            message: error.message
-        };
-    });
+    let res = null;
+    console.log(params);
+    if (!_id) {
+        delete params._id;
+        let createTime = new Date().Format('yyyy/MM/dd hh:mm:ss');
+        let platform = 'invite';
+        let r1 = Math.floor(Math.random() * 10);
+        let r2 = Math.floor(Math.random() * 10);
+    
+        let sysDate = new Date().Format('yyyyMMddhhmmss');
+        params.id = platform + r1 + sysDate + r2;
+        params.createTime = createTime;
+        params.updateTime = createTime;
+        res = await Invite.create(params).catch(error => {
+            ctx.body = {
+                code: 10086,
+                success: false,
+                message: error.message
+            };
+        });
+    } else {
+        params.updateTime = new Date().Format('yyyy/MM/dd hh:mm:ss');
+        res = await Invite.update({
+            _id
+        }, {
+            $set: params
+        }).catch(error => {
+            ctx.body = {
+                code: 10086,
+                success: false,
+                message: error.message
+            };
+        });
+    }
     ctx.body = {
         code: 200,
         success: true,
