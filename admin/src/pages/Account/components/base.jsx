@@ -133,7 +133,7 @@ class BaseView extends Component {
                         >
                             <Input.TextArea
                                 placeholder='请输入个人简介'
-                                rows={4}
+                                rows={3}
                                 maxLength={300}
                             />
                         </Form.Item>
@@ -150,7 +150,7 @@ class BaseView extends Component {
                             <Input placeholder='请输入手机号' type='tel' maxLength={11}/>
                         </Form.Item>
                         <Form.Item>
-                            <Button htmlType="submit" size='large' style={{
+                            <Button htmlType="submit" style={{
                                 width: '100%'
                             }} type="primary" loading={loading}>
                                 保存

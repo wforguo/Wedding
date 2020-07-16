@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { PageHeaderWrapper } from "@ant-design/pro-layout";
+import {EnvironmentOutlined} from '@ant-design/icons';
 import {
     Card,
     Form,
@@ -10,6 +11,7 @@ import {
     message
 } from 'antd';
 import { getInvite, updateInvite } from './service';
+import ChoseLocation from './components/ChoseLocation';
 
 const { RangePicker } = DatePicker;
 const dateFormat = 'YYYY/MM/DD HH';
@@ -20,10 +22,12 @@ const FormSizeDemo = () => {
     
     useEffect(() => {
         getInviteInfo();
+        var map = new AMap.Map('choseLocation');
+        console.log(document.getElementById('choseLocation'));
     }, []);
 
-    const [formVals, setFormVals] = useState({
-    });
+    const [formVals, setFormVals] = useState({});
+    const [modalVisible, handleModalVisible] = useState(false);
     const [form] = Form.useForm();
 
     const handleSubmit = async () => {
@@ -78,17 +82,26 @@ const FormSizeDemo = () => {
         }
     };
 
+    const handleChosetLcation = (data) => {
+        console.log(data);
+    };
+
     return (
         <>
             <PageHeaderWrapper>
                 <Card bordered={false}>
+                    <div style={{width: 600,height: 450}} id='choseLocation'></div>
                     <Form
+                        style={{ marginTop: 8 }}
                         form={form}
                         labelCol={{
-                            span: 4,
-                        }}
+                            xs: { span: 24 },
+                            sm: { span: 7 },
+                          }}
                         wrapperCol={{
-                            span: 14,
+                            xs: { span: 24 },
+                            sm: { span: 12 },
+                            md: { span: 12 },
                         }}
                         layout="horizontal"
                         initialValues={formVals}
@@ -110,10 +123,16 @@ const FormSizeDemo = () => {
                             }
                         ]}>
                             <RangePicker
+                                style={{ width: '100%' }}
                                 showTime={{ format: 'HH' }}
                                 format="YYYY/MM/DD HH"
                             />
                         </Form.Item>
+
+                        <Form.Item label="举办地" name='location0'>
+                            <Button onClick={(e) => handleModalVisible(true)}><EnvironmentOutlined />请选择</Button>
+                        </Form.Item>
+                    
                         <Form.Item label="地点" name='location'>
                             <Input maxLength={15} placeholder='请输入'/>
                         </Form.Item>
@@ -130,16 +149,23 @@ const FormSizeDemo = () => {
                             <Input maxLength={11} placeholder='请输入'/>
                         </Form.Item>
                         <Form.Item label="致辞" name='speech'>
-                            <Input.TextArea maxLength='300' placeholder='请输入致辞' />
+                            <Input.TextArea rows={3} maxLength='300' placeholder='请输入致辞' />
                         </Form.Item>
 
-                        <Form.Item wrapperCol={{ ...{ span: 14 }, offset: 4 }}>
-                            <Button style={{width: '100%'}} size='large' type="primary" htmlType="submit">
+                        <Form.Item style={{ marginTop: 32 }} wrapperCol={{
+                            xs: { span: 24, offset: 0 },
+                            sm: { span: 12, offset: 7 },
+                        }}>
+                            <Button style={{width: '100%'}} type="primary" htmlType="submit">
                                 提交
                             </Button>
                         </Form.Item>
                     </Form>
                 </Card>
+                <ChoseLocation
+                    modalVisible={modalVisible} 
+                    onSubmit={(data) => handleChosetLcation(data)} 
+                    onCancel={() => handleModalVisible(false)} />
             </PageHeaderWrapper>
         </>
     );

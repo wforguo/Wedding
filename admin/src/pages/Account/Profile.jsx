@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'umi';
 import { PageHeaderWrapper, GridContent } from '@ant-design/pro-layout';
-import BaseView from './components/base';
+import BaseView from './components/Base';
 import styles from './style.less';
 
 class Profile extends Component {
