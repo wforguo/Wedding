@@ -52,7 +52,7 @@ class Index extends Component {
                 <Button className='dec_btn' onClick={this.props.asyncAdd}>async</Button>
                 <View><Text>{this.props.counter.num}</Text></View>
                 <View><Text>Hello, World</Text></View>
-                <Button onClick={this.handleSendMessage.bind(this)}>发送模板消息</Button>
+                <Button className='send-btn' onClick={this.handleSendMessage.bind(this)}>发送模板消息</Button>
             </View>
         )
     }

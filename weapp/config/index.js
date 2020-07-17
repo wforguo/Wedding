@@ -18,9 +18,15 @@ const config = {
     framework: 'react',
     mini: {
         postcss: {
-            pxtransform: {
+            autoprefixer: {
                 enable: true,
-                config: {}
+                config: {
+                    browsers: [
+                        'last 3 versions',
+                        'Android >= 4.1',
+                        'ios >= 8'
+                    ]
+                }
             },
             url: {
                 enable: true,
