@@ -1,4 +1,4 @@
-import {Avatar, Card, Col, List, Skeleton, Row, Statistic} from 'antd';
+import {Avatar, Card, Col, List, Row, Skeleton, Statistic} from 'antd';
 import React, {Component} from 'react';
 import {connect} from 'umi';
 import {PageHeaderWrapper} from '@ant-design/pro-layout';

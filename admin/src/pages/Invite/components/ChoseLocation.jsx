@@ -1,14 +1,15 @@
-import React, {useState, useEffect} from 'react';
-import {Form, Input, Modal} from 'antd';
+import React, {useEffect, useState} from 'react';
+import {Form, Modal} from 'antd';
 import styles from './styles.less';
+
 const ChoseLocation = props => {
     const [formVals, setFormVals] = useState(props.values);
     useEffect(() => {
         console.log('did');
-        var map = new AMap.Map('choseLocation');
+        const map = new window.AMap.Map('choseLocation');
         console.log(document.getElementById('choseLocation'));
         console.log(map);
-    }, [])
+    }, []);
     const [form] = Form.useForm();
     const {
         onSubmit: handleUpdate,
@@ -18,8 +19,8 @@ const ChoseLocation = props => {
 
     const handleSubmit = async () => {
         const fieldsValue = await form.validateFields();
-        setFormVals({ ...formVals, ...fieldsValue });
-        handleUpdate({ ...formVals, ...fieldsValue });
+        setFormVals({...formVals, ...fieldsValue});
+        handleUpdate({...formVals, ...fieldsValue});
     };
 
     const renderContent = () => {

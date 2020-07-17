@@ -40,7 +40,7 @@ router.post('/add', async (ctx, next) => {
         };
         return false;
     }
-    const { body: params } = ctx.request;
+    const {body: params} = ctx.request;
     let createTime = new Date().Format('yyyy/MM/dd hh:mm:ss');
     let platform = 'photo';
     let r1 = Math.floor(Math.random() * 10);
@@ -77,7 +77,7 @@ router.post('/update', async (ctx, next) => {
         };
         return false;
     }
-    const { body: params } = ctx.request;
+    const {body: params} = ctx.request;
     console.log('_id ===>', _id, params);
     params.updateTime = new Date().Format('yyyy/MM/dd hh:mm:ss');
     let res = await Video.update({

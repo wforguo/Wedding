@@ -2,7 +2,7 @@
  * @Description: 入口
  * @author: forguo
  * @date: 2020/7/14
-*/
+ */
 const Koa = require('koa');
 const app = new Koa();
 const views = require('koa-views');

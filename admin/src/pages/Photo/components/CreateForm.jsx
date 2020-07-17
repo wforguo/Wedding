@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Form, Input, Modal, Upload} from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import {PlusOutlined} from '@ant-design/icons';
 
 const FormItem = Form.Item;
 const formLayout = {
@@ -42,19 +42,21 @@ const CreateForm = props => {
     } = props;
     const handleSubmit = async () => {
         const fieldsValue = await form.validateFields();
-        handleAdd({...fieldsValue, ... {
-            url: fileList[0].url
-        }});
+        handleAdd({
+            ...fieldsValue, ...{
+                url: fileList[0].url
+            }
+        });
     };
 
-    const handleChange = ( {fileList} ) => {
-        console.log({ fileList});
-        setFileList(fileList )
+    const handleChange = ({fileList}) => {
+        console.log({fileList});
+        setFileList(fileList)
     };
 
     const uploadButton = (
         <div>
-            <PlusOutlined />
+            <PlusOutlined/>
             <div className="ant-upload-text">点击上传</div>
         </div>
     );
@@ -93,7 +95,7 @@ const CreateForm = props => {
                 footer={null}
                 onCancel={() => setPreviewVisible(false)}
             >
-                <img alt="example" style={{ width: '100%' }} src={previewImage} />
+                <img alt="example" style={{width: '100%'}} src={previewImage}/>
             </Modal>
         </>
     );
@@ -114,7 +116,7 @@ const CreateForm = props => {
                 >
                     <Input maxLength={20} placeholder="请输入照片描述"/>
                 </FormItem>
-                <UploadPhoto />
+                <UploadPhoto/>
             </>
         );
     };

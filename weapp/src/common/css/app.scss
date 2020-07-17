@@ -1,0 +1,25 @@
+/**
+ * @Description: app.scss
+ * @author: forguo
+ * @date: 2020/7/17
+*/
+
+// 自定义主题
+$color-brand: #FF1D1D;
+
+// 引入所需的组件样式 - 方式三
+//【所有的样式文件】https://github.com/NervJS/taro-ui/tree/dev/src/style/components
+@import "~taro-ui/dist/style/variables/default";
+@import "~taro-ui/dist/style/mixins/index";
+@import "~taro-ui/dist/style/components/icon";
+@import "~taro-ui/dist/style/components/flex";
+@import "~taro-ui/dist/style/components/button";
+@import "~taro-ui/dist/style/components/checkbox";
+@import "~taro-ui/dist/style/components/form";
+@import "~taro-ui/dist/style/components/grid";
+@import "~taro-ui/dist/style/components/input-number";
+@import "~taro-ui/dist/style/components/input";
+@import "~taro-ui/dist/style/components/load-more";
+@import "~taro-ui/dist/style/components/activity-indicator";
+@import "~taro-ui/dist/style/components/loading";
+@import "~taro-ui/dist/style/components/modal";

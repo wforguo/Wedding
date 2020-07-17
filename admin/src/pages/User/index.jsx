@@ -1,11 +1,11 @@
 import {PlusOutlined} from '@ant-design/icons';
 import {Button, Divider, message} from 'antd';
-import React, {useState, useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import {PageHeaderWrapper} from '@ant-design/pro-layout';
 import ProTable from '@ant-design/pro-table';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
-import { queryUser, updateUser, addUser, removeUser } from './service';
+import {addUser, queryUser, removeUser, updateUser} from './service';
 
 /**
  * 添加节点
@@ -147,10 +147,10 @@ const UserList = () => {
             render: (_, record) => (
                 <>
                     <Button type='link'
-                        onClick={() => {
-                            handleUpdateModalVisible(true);
-                            setFormValues(record);
-                        }}
+                            onClick={() => {
+                                handleUpdateModalVisible(true);
+                                setFormValues(record);
+                            }}
                     >编辑
                     </Button>
                     <Divider type="vertical"/>
@@ -173,7 +173,7 @@ const UserList = () => {
                 headerTitle="账号列表"
                 actionRef={actionRef}
                 rowKey="_id"
-                options={{ density: false}}
+                options={{density: false}}
                 onChange={(_, _filter, _sorter) => {
                     const sorterResult = _sorter;
 

@@ -1,18 +1,17 @@
-import React, { Component } from 'react';
-import { connect } from 'umi';
-import { PageHeaderWrapper, GridContent } from '@ant-design/pro-layout';
+import React, {Component} from 'react';
+import {connect} from 'umi';
+import {GridContent, PageHeaderWrapper} from '@ant-design/pro-layout';
 import BaseView from './components/Base';
 import styles from './style.less';
 
 class Profile extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-        };
+        this.state = {};
     }
 
     render() {
-        const { currentUser } = this.props;
+        const {currentUser} = this.props;
 
         if (!currentUser.userId) {
             return '';
@@ -23,7 +22,7 @@ class Profile extends Component {
                 <GridContent className={styles.main}>
                     <div className={styles.right}>
                         <div className={styles.title}>基本设置</div>
-                        <BaseView />
+                        <BaseView/>
                     </div>
                 </GridContent>
             </PageHeaderWrapper>

@@ -1,12 +1,12 @@
-import { Alert, Checkbox } from 'antd';
-import React, { useState } from 'react';
-import { Link, connect } from 'umi';
+import {Alert, Checkbox} from 'antd';
+import React, {useState} from 'react';
+import {connect, Link} from 'umi';
 import LoginForm from './components/Login';
 import styles from './style.less';
 
-const { Tab, UserName, Password, Submit } = LoginForm;
+const {Tab, UserName, Password, Submit} = LoginForm;
 
-const LoginMessage = ({ content }) => (
+const LoginMessage = ({content}) => (
     <Alert
         style={{
             marginBottom: 24,
@@ -18,16 +18,16 @@ const LoginMessage = ({ content }) => (
 );
 
 const Login = props => {
-    const { userLogin = {}, submitting } = props;
-    const { status, type: loginType } = userLogin;
+    const {userLogin = {}, submitting} = props;
+    const {status, type: loginType} = userLogin;
     const [autoLogin, setAutoLogin] = useState(true);
     const [type, setType] = useState('account');
 
     const handleSubmit = values => {
-        const { dispatch } = props;
+        const {dispatch} = props;
         dispatch({
             type: 'login/login',
-            payload: { ...values, type },
+            payload: {...values, type},
         });
     };
 
@@ -36,7 +36,7 @@ const Login = props => {
             <LoginForm activeKey={type} onTabChange={setType} onSubmit={handleSubmit}>
                 <Tab key="account" tab="账户密码登录">
                     {status === 'error' && loginType === 'account' && !submitting && (
-                        <LoginMessage content="账户或密码错误（admin/ant.design）" />
+                        <LoginMessage content="账户或密码错误（admin/ant.design）"/>
                     )}
 
                     <UserName
@@ -83,7 +83,7 @@ const Login = props => {
     );
 };
 
-export default connect(({ login, loading }) => ({
+export default connect(({login, loading}) => ({
     userLogin: login,
     submitting: loading.effects['login/login'],
 }))(Login);

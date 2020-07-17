@@ -1,25 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import moment from 'moment';
-import { PageHeaderWrapper } from "@ant-design/pro-layout";
+import {PageHeaderWrapper} from "@ant-design/pro-layout";
 import {EnvironmentOutlined} from '@ant-design/icons';
-import {
-    Card,
-    Form,
-    Input,
-    DatePicker,
-    Button,
-    message
-} from 'antd';
-import { getInvite, updateInvite } from './service';
+import {Button, Card, DatePicker, Form, Input, message} from 'antd';
+import {getInvite, updateInvite} from './service';
 import ChoseLocation from './components/ChoseLocation';
 
-const { RangePicker } = DatePicker;
+const {RangePicker} = DatePicker;
 const dateFormat = 'YYYY/MM/DD HH';
 
 const FormSizeDemo = () => {
 
     let _id = '';
-    
+
     useEffect(() => {
         getInviteInfo();
         var map = new AMap.Map('choseLocation');
@@ -36,7 +29,7 @@ const FormSizeDemo = () => {
             ...formVals
         };
         params.startTime = moment(holdTime[0]).format(dateFormat);
-        params.endTime =  moment(holdTime[1]).format(dateFormat);
+        params.endTime = moment(holdTime[1]).format(dateFormat);
         params._id = _id;
         handleUpdate(params);
     };
@@ -53,7 +46,7 @@ const FormSizeDemo = () => {
                     ...res.data
                 };
                 _id = res.data._id;
-                formData.holdTime = [moment(formData.startTime, dateFormat), moment(formData.endTime, dateFormat)]
+                formData.holdTime = [moment(formData.startTime, dateFormat), moment(formData.endTime, dateFormat)];
                 form.setFieldsValue(formData);
             }
             message.destroy();
@@ -90,49 +83,49 @@ const FormSizeDemo = () => {
         <>
             <PageHeaderWrapper>
                 <Card bordered={false}>
-                    <div style={{width: 600,height: 450}} id='choseLocation'></div>
+                    <div style={{width: 600, height: 450}} id='choseLocation'></div>
                     <Form
-                        style={{ marginTop: 8 }}
+                        style={{marginTop: 8}}
                         form={form}
                         labelCol={{
-                            xs: { span: 24 },
-                            sm: { span: 7 },
-                          }}
+                            xs: {span: 24},
+                            sm: {span: 7},
+                        }}
                         wrapperCol={{
-                            xs: { span: 24 },
-                            sm: { span: 12 },
-                            md: { span: 12 },
+                            xs: {span: 24},
+                            sm: {span: 12},
+                            md: {span: 12},
                         }}
                         layout="horizontal"
                         initialValues={formVals}
                         onFinish={handleSubmit}
                     >
-                        <Form.Item label="主题" name='theme'    
-                            rules={[
-                                {
-                                required: true,
-                                message: '请输入主题！',
-                            },
-                        ]}>
+                        <Form.Item label="主题" name='theme'
+                                   rules={[
+                                       {
+                                           required: true,
+                                           message: '请输入主题！',
+                                       },
+                                   ]}>
                             <Input maxLength={15} placeholder='请输入主题'/>
                         </Form.Item>
                         <Form.Item label="时间" name='holdTime'
-                            rules={[{
-                                required: true,
-                                message: '请选择时间！',
-                            }
-                        ]}>
+                                   rules={[{
+                                       required: true,
+                                       message: '请选择时间！',
+                                   }
+                                   ]}>
                             <RangePicker
-                                style={{ width: '100%' }}
-                                showTime={{ format: 'HH' }}
+                                style={{width: '100%'}}
+                                showTime={{format: 'HH'}}
                                 format="YYYY/MM/DD HH"
                             />
                         </Form.Item>
 
                         <Form.Item label="举办地" name='location0'>
-                            <Button onClick={(e) => handleModalVisible(true)}><EnvironmentOutlined />请选择</Button>
+                            <Button onClick={(e) => handleModalVisible(true)}><EnvironmentOutlined/>请选择</Button>
                         </Form.Item>
-                    
+
                         <Form.Item label="地点" name='location'>
                             <Input maxLength={15} placeholder='请输入'/>
                         </Form.Item>
@@ -149,12 +142,12 @@ const FormSizeDemo = () => {
                             <Input maxLength={11} placeholder='请输入'/>
                         </Form.Item>
                         <Form.Item label="致辞" name='speech'>
-                            <Input.TextArea rows={3} maxLength='300' placeholder='请输入致辞' />
+                            <Input.TextArea rows={3} maxLength='300' placeholder='请输入致辞'/>
                         </Form.Item>
 
-                        <Form.Item style={{ marginTop: 32 }} wrapperCol={{
-                            xs: { span: 24, offset: 0 },
-                            sm: { span: 12, offset: 7 },
+                        <Form.Item style={{marginTop: 32}} wrapperCol={{
+                            xs: {span: 24, offset: 0},
+                            sm: {span: 12, offset: 7},
                         }}>
                             <Button style={{width: '100%'}} type="primary" htmlType="submit">
                                 提交
@@ -163,9 +156,9 @@ const FormSizeDemo = () => {
                     </Form>
                 </Card>
                 <ChoseLocation
-                    modalVisible={modalVisible} 
-                    onSubmit={(data) => handleChosetLcation(data)} 
-                    onCancel={() => handleModalVisible(false)} />
+                    modalVisible={modalVisible}
+                    onSubmit={(data) => handleChosetLcation(data)}
+                    onCancel={() => handleModalVisible(false)}/>
             </PageHeaderWrapper>
         </>
     );

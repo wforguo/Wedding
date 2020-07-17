@@ -8,7 +8,7 @@ export default () => (
         <GridContent className={styles.main}>
             <div className={styles.right}>
                 <div className={styles.title}>修改密码</div>
-                <Pwd />
+                <Pwd/>
             </div>
         </GridContent>
     </PageHeaderWrapper>

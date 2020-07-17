@@ -22,8 +22,8 @@ const UpdateForm = props => {
 
     const handleSubmit = async () => {
         const fieldsValue = await form.validateFields();
-        setFormVals({ ...formVals, ...fieldsValue });
-        handleUpdate({ ...formVals, ...fieldsValue });
+        setFormVals({...formVals, ...fieldsValue});
+        handleUpdate({...formVals, ...fieldsValue});
     };
 
     const renderContent = () => {

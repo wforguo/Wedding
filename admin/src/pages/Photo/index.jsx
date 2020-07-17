@@ -1,10 +1,11 @@
 import {PlusOutlined} from '@ant-design/icons';
-import {Button, message, Avatar, Modal} from 'antd';
-import React, {useState, useRef} from 'react';
+import {Avatar, Button, message, Modal} from 'antd';
+import React, {useRef, useState} from 'react';
 import {PageHeaderWrapper} from '@ant-design/pro-layout';
 import ProTable from '@ant-design/pro-table';
 import CreateForm from './components/CreateForm';
-import { queryPhotoList, addPhoto, removePhoto} from './service';
+import {addPhoto, queryPhotoList, removePhoto} from './service';
+
 /**
  * 添加节点
  * @param fields
@@ -97,13 +98,13 @@ const TableList = () => {
             render: (_, record) => (
                 <>
                     <Button type='link' danger onClick={async () => {
-                           const success = await handleRemove(record);
-                           if (success) {
-                               if (actionRef.current) {
-                                   actionRef.current.reload();
-                               }
-                           }
-                       }}
+                        const success = await handleRemove(record);
+                        if (success) {
+                            if (actionRef.current) {
+                                actionRef.current.reload();
+                            }
+                        }
+                    }}
                     >删除</Button>
                 </>
             ),
@@ -115,7 +116,7 @@ const TableList = () => {
                 headerTitle="相册列表"
                 actionRef={actionRef}
                 rowKey="_id"
-                options={{ density: false}}
+                options={{density: false}}
                 onChange={(_, _filter, _sorter) => {
                     const sorterResult = _sorter;
 
@@ -159,7 +160,7 @@ const TableList = () => {
                 footer={null}
                 onCancel={() => setPreviewVisible(false)}
             >
-                <img alt="example" style={{ width: '100%' }} src={previewImage} />
+                <img alt="example" style={{width: '100%'}} src={previewImage}/>
             </Modal>
         </PageHeaderWrapper>
     );

@@ -1,8 +1,9 @@
 import {Avatar, Button, message, Modal} from 'antd';
-import React, {useState, useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import {PageHeaderWrapper} from '@ant-design/pro-layout';
 import ProTable from '@ant-design/pro-table';
-import { queryMsg, removeMsg } from './service';
+import {queryMsg, removeMsg} from './service';
+
 /**
  *  删除节点
  * @param selectedRows
@@ -102,7 +103,7 @@ const MsgList = () => {
                 headerTitle="留言列表"
                 actionRef={actionRef}
                 rowKey="_id"
-                options={{ density: false}}
+                options={{density: false}}
                 onChange={(_, _filter, _sorter) => {
                     const sorterResult = _sorter;
 
@@ -126,7 +127,7 @@ const MsgList = () => {
                 footer={null}
                 onCancel={() => setPreviewVisible(false)}
             >
-                <img alt="example" style={{ width: '100%' }} src={previewImage} />
+                <img alt="example" style={{width: '100%'}} src={previewImage}/>
             </Modal>
         </PageHeaderWrapper>
     );

@@ -1,18 +1,18 @@
 import React from 'react';
-import {Redirect, connect} from 'umi';
+import {connect, Redirect} from 'umi';
 import Authorized from '@/utils/Authorized';
 import {getRouteAuthority} from '@/utils/utils';
 
 const AuthComponent = ({
-       children,
-       route = {
-           routes: [],
-       },
-       location = {
-           pathname: '',
-       },
-       user,
-   }) => {
+                           children,
+                           route = {
+                               routes: [],
+                           },
+                           location = {
+                               pathname: '',
+                           },
+                           user,
+                       }) => {
     const {currentUser} = user;
     const {routes = []} = route;
     const isLogin = currentUser && currentUser.name;

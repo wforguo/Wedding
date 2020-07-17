@@ -1,7 +1,7 @@
 const router = require('koa-router')();
 const config = require('../../config');
 const wxApp = config.wxApp;
-const getRunData  = require('./../util/getRunData');
+const getRunData = require('./../util/getRunData');
 const koa2Req = require('koa2-request'); // 第三方http请求
 
 // 添加路由前缀

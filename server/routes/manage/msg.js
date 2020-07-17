@@ -58,7 +58,7 @@ router.post('/add', async (ctx, next) => {
         };
         return false;
     }
-    const { body } = ctx.request;
+    const {body} = ctx.request;
     let {
         desc,
         url,

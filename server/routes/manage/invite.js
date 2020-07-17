@@ -40,7 +40,7 @@ router.post('/add', async (ctx, next) => {
         };
         return false;
     }
-    const { body: params } = ctx.request;
+    const {body: params} = ctx.request;
     let createTime = new Date().Format('yyyy/MM/dd hh:mm:ss');
     let platform = 'invite';
     let r1 = Math.floor(Math.random() * 10);
@@ -70,7 +70,7 @@ router.post('/add', async (ctx, next) => {
  */
 router.post('/update', async (ctx, next) => {
     let _id = ctx.request.body._id || '';
-    const { body: params } = ctx.request;
+    const {body: params} = ctx.request;
     let res = null;
     console.log(params);
     if (!_id) {
@@ -79,7 +79,7 @@ router.post('/update', async (ctx, next) => {
         let platform = 'invite';
         let r1 = Math.floor(Math.random() * 10);
         let r2 = Math.floor(Math.random() * 10);
-    
+
         let sysDate = new Date().Format('yyyyMMddhhmmss');
         params.id = platform + r1 + sysDate + r2;
         params.createTime = createTime;

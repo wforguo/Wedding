@@ -1,4 +1,4 @@
-import {Button, Input, Form, message} from 'antd';
+import {Button, Form, Input, message} from 'antd';
 import {connect} from 'umi';
 import React, {Component} from 'react';
 import styles from './BaseView.less';
