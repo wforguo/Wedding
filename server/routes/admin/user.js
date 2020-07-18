@@ -7,6 +7,7 @@
 const router = require('koa-router')();
 const md5 = require('md5');
 const ip = require('ip');
+const jwt = require('jsonwebtoken');
 const User = require('../../models/User');
 
 const DEFAULT_IMG = 'https://forguo.bj.bcebos.com/icon2596901555144121.jpg';
@@ -61,17 +62,23 @@ router.post('/login', async (ctx, next) => {
     });
 
     if (!res || res.length === 0) {
-        ctx.body = {
-            success: false,
-            code: 10086,
-            message: '用户名或密码错误',
-            data: res
-        };
+        ctx.throw(401, 'Bad Authorization header format. Format is "Authorization: Bearer <token>"');
+        // ctx.body = {
+        //     success: false,
+        //     code: 10086,
+        //     message: '用户名或密码错误',
+        //     data: res
+        // };
     } else {
+        const token = jwt.sign({
+            name: res.userName,
+            _id: res.userId
+        }, 'token', { expiresIn: '2h' });
         ctx.body = {
             code: 200,
             success: true,
             message: 'ok',
+            token,
             data: res
         };
     }

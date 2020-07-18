@@ -6,7 +6,11 @@
 
 ## 1. 后台：Node
 
-框架：koa2
+<img src="/static/logo.png" alt="Koa middleware framework for nodejs"/>
+
+ [![gitter][gitter-image]][gitter-url]
+ [![NPM version][npm-image]][npm-url]
+ [![build status][travis-image]][travis-url]
 
 ## 2. 数据库：Mongo
 

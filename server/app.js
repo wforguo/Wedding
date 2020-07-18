@@ -8,7 +8,7 @@ const app = new Koa();
 const views = require('koa-views');
 const json = require('koa-json');
 const onerror = require('koa-onerror');
-const bodyparser = require('koa-bodyparser');
+const bodyParser = require('koa-bodyparser');
 const logger = require('koa-logger');
 const mongoose = require('mongoose');
 const config = require('./config');
@@ -44,16 +44,16 @@ mongoose.connection.on('disconnected', function () {
  * 数据库连接 End
  * ***************/
 
-const manageUser = require('./routes/manage/user');
-const managePhoto = require('./routes/manage/photo');
-const manageMsg = require('./routes/manage/msg');
-const manageInvite = require('./routes/manage/invite');
+const manageUser = require('./routes/admin/user');
+const managePhoto = require('./routes/admin/photo');
+const manageMsg = require('./routes/admin/msg');
+const manageInvite = require('./routes/admin/invite');
 
 // error handler
 onerror(app);
 
 // middlewares
-app.use(bodyparser({
+app.use(bodyParser({
     enableTypes: ['json', 'form', 'text']
 }));
 app.use(json());
