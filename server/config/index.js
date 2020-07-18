@@ -5,18 +5,20 @@ const config = {
     },
     // 本地
     // dataBase: {
+    //     pre: 'mongodb://',
     //     user: 'admin',
-    //     pwd: 'root',
-    //     url: 'shop-p0l56.gcp.mongodb.net',
-    //     port: '27017',
+    //     pwd: '2333!',
+    //     url: '106.12.182.39',
+    //     port: '27019',
     //     name: 'wedding',
     // },
-    // 线上
     dataBase: {
+        // dbStr: 'mongodb+srv://admin:root2333@forguo.kqpcs.gcp.mongodb.net/wedding?retryWrites=true&w=majority&authSource=admin&ssl=true'
+        pre: 'mongodb+srv://',
         user: 'admin',
-        pwd: '2333!',
-        url: '106.12.182.39',
-        port: '27019',
+        pwd: 'root2333', // root2333
+        url: 'forguo.kqpcs.gcp.mongodb.net',
+        port: '27017',
         name: 'wedding',
     },
 };

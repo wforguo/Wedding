@@ -1,35 +1,35 @@
 import React, {useEffect, useState} from 'react';
 import moment from 'moment';
 import {PageHeaderWrapper} from "@ant-design/pro-layout";
-import {EnvironmentOutlined} from '@ant-design/icons';
-import {Button, Card, DatePicker, Form, Input, message} from 'antd';
+import {Button, Card, DatePicker, Form, Input, message, Collapse } from 'antd';
 import {getInvite, updateInvite} from './service';
 import ChoseLocation from './components/ChoseLocation';
+
+const { Panel } = Collapse;
 
 const {RangePicker} = DatePicker;
 const dateFormat = 'YYYY/MM/DD HH';
 
 const FormSizeDemo = () => {
 
-    let _id = '';
+    // eslint-disable-next-line no-underscore-dangle
+    let _id = null;
 
     useEffect(() => {
         getInviteInfo();
-        var map = new AMap.Map('choseLocation');
-        console.log(document.getElementById('choseLocation'));
     }, []);
 
-    const [formVals, setFormVals] = useState({});
-    const [modalVisible, handleModalVisible] = useState(false);
+    const [formVals] = useState({});
     const [form] = Form.useForm();
 
     const handleSubmit = async () => {
-        const formVals = await form.validateFields();
-        let params = {
-            ...formVals
+        const formData = await form.validateFields();
+        const params = {
+            ...formData
         };
-        params.startTime = moment(holdTime[0]).format(dateFormat);
-        params.endTime = moment(holdTime[1]).format(dateFormat);
+        params.startTime = moment(params.holdTime[0]).format(dateFormat);
+        params.endTime = moment(params.holdTime[1]).format(dateFormat);
+        // eslint-disable-next-line no-underscore-dangle
         params._id = _id;
         handleUpdate(params);
     };
@@ -40,11 +40,12 @@ const FormSizeDemo = () => {
             duration: 0
         });
         try {
-            let res = await getInvite();
+            const res = await getInvite();
             if (res && res.data) {
-                let formData = {
+                const formData = {
                     ...res.data
                 };
+                // eslint-disable-next-line no-underscore-dangle,prefer-destructuring
                 _id = res.data._id;
                 formData.holdTime = [moment(formData.startTime, dateFormat), moment(formData.endTime, dateFormat)];
                 form.setFieldsValue(formData);
@@ -75,7 +76,7 @@ const FormSizeDemo = () => {
         }
     };
 
-    const handleChosetLcation = (data) => {
+    const handleChoseLocation = (data) => {
         console.log(data);
     };
 
@@ -83,13 +84,12 @@ const FormSizeDemo = () => {
         <>
             <PageHeaderWrapper>
                 <Card bordered={false}>
-                    <div style={{width: 600, height: 450}} id='choseLocation'></div>
                     <Form
                         style={{marginTop: 8}}
                         form={form}
                         labelCol={{
                             xs: {span: 24},
-                            sm: {span: 7},
+                            sm: {span: 6},
                         }}
                         wrapperCol={{
                             xs: {span: 24},
@@ -123,7 +123,13 @@ const FormSizeDemo = () => {
                         </Form.Item>
 
                         <Form.Item label="举办地" name='location0'>
-                            <Button onClick={(e) => handleModalVisible(true)}><EnvironmentOutlined/>请选择</Button>
+                            <Collapse ghost>
+                                <Panel forceRender header="请选择" key="1">
+                                    <ChoseLocation
+                                        onSubmit={(data) => handleChoseLocation(data)}
+                                    />
+                                </Panel>
+                            </Collapse>
                         </Form.Item>
 
                         <Form.Item label="地点" name='location'>
@@ -147,7 +153,7 @@ const FormSizeDemo = () => {
 
                         <Form.Item style={{marginTop: 32}} wrapperCol={{
                             xs: {span: 24, offset: 0},
-                            sm: {span: 12, offset: 7},
+                            sm: {span: 12, offset: 6},
                         }}>
                             <Button style={{width: '100%'}} type="primary" htmlType="submit">
                                 提交
@@ -155,10 +161,6 @@ const FormSizeDemo = () => {
                         </Form.Item>
                     </Form>
                 </Card>
-                <ChoseLocation
-                    modalVisible={modalVisible}
-                    onSubmit={(data) => handleChosetLcation(data)}
-                    onCancel={() => handleModalVisible(false)}/>
             </PageHeaderWrapper>
         </>
     );

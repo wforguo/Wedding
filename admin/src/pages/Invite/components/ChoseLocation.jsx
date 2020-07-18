@@ -1,20 +1,16 @@
 import React, {useEffect, useState} from 'react';
-import {Form, Modal} from 'antd';
+import {Form, Button} from 'antd';
 import styles from './styles.less';
+import {EnvironmentOutlined} from '@ant-design/icons';
 
 const ChoseLocation = props => {
     const [formVals, setFormVals] = useState(props.values);
     useEffect(() => {
-        console.log('did');
         const map = new window.AMap.Map('choseLocation');
-        console.log(document.getElementById('choseLocation'));
-        console.log(map);
     }, []);
     const [form] = Form.useForm();
     const {
         onSubmit: handleUpdate,
-        onCancel: handleModalVisible,
-        modalVisible,
     } = props;
 
     const handleSubmit = async () => {
@@ -26,31 +22,17 @@ const ChoseLocation = props => {
     const renderContent = () => {
         return (
             <>
-                <div id='choseLocation' className={styles.choseLocation}>
-
-                </div>
+                <div id='choseLocation' className={styles.choseLocation} />
             </>
         );
     };
 
     return (
         <div className='location-modal'>
-            <Modal
-                width={640}
-                bodyStyle={{
-                    padding: '32px 40px 48px',
-                }}
-                title="选择地址"
-                visible={modalVisible}
-                onOk={handleSubmit}
-                onCancel={() => handleModalVisible()}
-                okText='提交'
-            >
-                <div>
-                    {renderContent()}
-                </div>
-
-            </Modal>
+            <div>
+                <Button style={{marginBottom: 15}} type='primary'><EnvironmentOutlined /> 重新定位</Button>
+                {renderContent()}
+            </div>
         </div>
     );
 };

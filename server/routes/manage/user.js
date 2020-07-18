@@ -55,7 +55,8 @@ router.post('/login', async (ctx, next) => {
         ctx.body = {
             code: 10086,
             success: false,
-            message: error.message
+            message: error.message,
+            data: userName
         };
     });
 
@@ -64,6 +65,7 @@ router.post('/login', async (ctx, next) => {
             success: false,
             code: 10086,
             message: '用户名或密码错误',
+            data: res
         };
     } else {
         ctx.body = {

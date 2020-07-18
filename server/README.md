@@ -1,33 +1,31 @@
-# shop-server（小程序）
+# server（服务端）
 
 > 小程序后台（Node）
 
 # 环境
 
-1. 后台语言：node
+## 1. 后台：Node
 
 框架：koa2
 
-2. 数据库：mongo
+## 2. 数据库：Mongo
 
 - 谷歌开源MongoDB平台
 
-https://cloud.mongodb.com/v2/5d1dfca49ccf640ee938f51e#clusters
-
-# 数据库
-
-> MongoDB
+> [https://cloud.mongodb.com](https://cloud.mongodb.com/)
 
 - 表设计
 
-wedd_photos：甜蜜相册
+wedd_attend：好友出席
 
-wedd_video：视频展示
+wedd_invite：婚礼信息
 
-wedd_location：婚礼举办
+wedd_location：位置信息
 
 wedd_msgs：留言祝福
 
-wedd_attend：好友出席
+wedd_photos：相册
 
-wedd_users：后台管理用户
+wedd_users：管理员
+
+wedd_video：视频

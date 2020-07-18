@@ -21,7 +21,7 @@ const config = {
             autoprefixer: {
                 enable: true,
                 config: {
-                    browsers: [
+                    Browserslist: [
                         'last 3 versions',
                         'Android >= 4.1',
                         'ios >= 8'
@@ -46,7 +46,7 @@ const config = {
     h5: {
         publicPath: '/',
         staticDirectory: 'static',
-        esnextModules: ['taro-ui'],
+        esnextModules: ['taro-ui', 'taro-skeleton'],
         postcss: {
             autoprefixer: {
                 enable: true,

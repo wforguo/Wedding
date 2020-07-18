@@ -17,14 +17,17 @@ const config = require('./config');
  * 数据库连接 Start
  * ***************/
 
+// 数据库配置
+const dataBase = config.dataBase;
+
 // 数据库连接字符串
-const dbStr = `mongodb://${config.dataBase.user}:${config.dataBase.pwd}@${config.dataBase.url}:${config.dataBase.port}/${config.dataBase.name}?authSource=admin`;
+// const dbStr = `mongodb://${config.dataBase.user}:${config.dataBase.pwd}@${config.dataBase.url}:${config.dataBase.port}/${config.dataBase.name}?authSource=admin`;
+const dbStr = `${dataBase.pre}${dataBase.user}:${dataBase.pwd}@${dataBase.url}/${dataBase.name}?retryWrites=true&w=majority&authSource=admin&ssl=true`;
 console.log(dbStr);
 
 // 连接MongoDB数据库
-mongoose.connect(dbStr, {useNewUrlParser: true});
+mongoose.connect(dbStr, { useNewUrlParser: true, useUnifiedTopology: true });
 
-// mongodb://admin:2333!@106.12.182.39:27019/wedding?readPreference=primary&appname=MongoDB%20Compass&ssl=false
 mongoose.connection.on('connected', function () {
     console.log('MongoDB connected success.')
 });

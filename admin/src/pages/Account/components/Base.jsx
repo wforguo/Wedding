@@ -98,6 +98,18 @@ class BaseView extends Component {
                         hideRequiredMark
                     >
                         <Form.Item
+                            name="userName"
+                            label='用户名'
+                            rules={[
+                                {
+                                    required: true,
+                                    message: '请输入用户名'
+                                },
+                            ]}
+                        >
+                            <Input placeholder='用户名不可修改' disabled maxLength={20}/>
+                        </Form.Item>
+                        <Form.Item
                             name="userEmail"
                             label='邮箱'
                             rules={[
@@ -108,18 +120,6 @@ class BaseView extends Component {
                             ]}
                         >
                             <Input placeholder='请输入邮箱' maxLength={20}/>
-                        </Form.Item>
-                        <Form.Item
-                            name="userName"
-                            label='用户名'
-                            rules={[
-                                {
-                                    required: true,
-                                    message: '请输入用户名'
-                                },
-                            ]}
-                        >
-                            <Input placeholder='请输入昵称' maxLength={20}/>
                         </Form.Item>
                         <Form.Item
                             name="userDesc"
