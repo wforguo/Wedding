@@ -26,3 +26,4 @@ yarn-error.log*
 *.sw*
 
 build/env.js
+/server/config/
