@@ -8,7 +8,8 @@ const app = new Koa();
 const views = require('koa-views');
 const json = require('koa-json');
 const onerror = require('koa-onerror');
-const bodyParser = require('koa-bodyparser');
+const koaBodyParser = require('koa-bodyparser');
+const koaBody = require('koa-body');
 const logger = require('koa-logger');
 const mongoose = require('mongoose');
 const config = require('./config');
@@ -44,18 +45,32 @@ mongoose.connection.on('disconnected', function () {
  * 数据库连接 End
  * ***************/
 
+// admin
 const manageUser = require('./routes/admin/user');
 const managePhoto = require('./routes/admin/photo');
 const manageMsg = require('./routes/admin/msg');
 const manageInvite = require('./routes/admin/invite');
 
+// common
+const common = require('./routes/common/common');
+
 // error handler
 onerror(app);
 
 // middlewares
-app.use(bodyParser({
+app.use(koaBodyParser({
     enableTypes: ['json', 'form', 'text']
 }));
+
+app.use(koaBody({
+    multipart: true,
+    encoding: 'gzip',
+    formidable:{
+        maxFieldsSize: 2 * 1024 * 1024,
+        multipart: true
+    }
+}));
+
 app.use(json());
 app.use(logger());
 app.use(require('koa-static')(__dirname + '/public'));
@@ -70,7 +85,7 @@ app.use(async (ctx, next) => {
     ctx.set('Access-Control-Allow-Origin', '*');
     ctx.set('Access-Control-Allow-Headers', 'X-Auth-Token, Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild');
     ctx.set('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
-    ctx.set('Access-Control-Allow-Credentials', 'true');
+    // ctx.set('Access-Control-Allow-Credentials', 'true');
     const start = new Date();
     await next();
     const ms = new Date() - start;
@@ -82,6 +97,8 @@ app.use(manageUser.routes(), manageUser.allowedMethods());
 app.use(managePhoto.routes(), managePhoto.allowedMethods());
 app.use(manageMsg.routes(), manageMsg.allowedMethods());
 app.use(manageInvite.routes(), manageInvite.allowedMethods());
+
+app.use(common.routes(), common.allowedMethods());
 
 // error-handling
 app.on('error', (err, ctx) => {

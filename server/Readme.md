@@ -6,11 +6,7 @@
 
 ## 1. 后台：Node
 
-<img src="/static/logo.png" alt="Koa middleware framework for nodejs"/>
-
- [![gitter][gitter-image]][gitter-url]
- [![NPM version][npm-image]][npm-url]
- [![build status][travis-image]][travis-url]
+<img width="66%" src="https://forguo-1302175274.cos.ap-shanghai.myqcloud.com/wedding/assets/img/koa-logo.png" alt="Koa middleware framework for nodejs"/>
 
 ## 2. 数据库：Mongo
 

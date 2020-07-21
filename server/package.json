@@ -9,6 +9,7 @@
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "dependencies": {
+        "cos-nodejs-sdk-v5": "^2.6.2",
         "debug": "^4.1.1",
         "ip": "latest",
         "jsonwebtoken": "^8.5.1",
@@ -24,7 +25,8 @@
         "koa2-request": "^1.0.4",
         "md5": "^2.2.1",
         "mongoose": "^5.6.3",
-        "pug": "^2.0.3"
+        "pug": "^2.0.3",
+        "koa-body": "latest"
     },
     "devDependencies": {
         "nodemon": "^1.19.1"
