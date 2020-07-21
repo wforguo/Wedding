@@ -6,9 +6,7 @@
 
 const router = require('koa-router')();
 const fs = require('fs');
-const path = require('path');
 const ip = require('ip');
-const util = require('./util');
 const config = require('../../config');
 const cosConfig = config.cosConfig;
 
@@ -28,50 +26,62 @@ const cos = new COS({
 // 添加路由前缀
 router.prefix('/api/common');
 
+// COS上传
+function putObject (file) {
+    const fileName = file.name;
+    const fileSize = file.size;
+    const body = fs.createReadStream(file.path);	// 创建可读流
+    return new Promise((resolve, reject) => {
+        cos.putObject({
+            Bucket: cosConfig.COS_BUCKET, /* 必须 */
+            Region: cosConfig.COS_REGION, /* 必须 */
+            Key: fileName,                /* 必须 */
+            StorageClass: 'STANDARD',
+            // 格式1. 传入文件内容
+            // Body: fs.readFileSync(filepath),
+            // 格式2. 传入文件流，必须需要传文件大小
+            Body: body, // 上传文件对象
+            ContentLength: fileSize,
+            onTaskReady: function (tid) {
+                // console.log('TaskId', tid);
+                // TaskId = tid;
+            },
+            onProgress: function (progressData) {
+                // console.log('progressData', JSON.stringify(progressData));
+            },
+        }, function (err, data) {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(data)
+            }
+        });
+    });
+};
+
 /**
  * 图片上传 COS方式
  * */
 router.post('/imgUpload', async (ctx, next) => {
-    const file = ctx.request.files.file;	// 获取上传文件
-    console.log(file);
-    const filename = file.name;
-    const body = fs.createReadStream(file.path);	// 创建可读流
-    cos.putObject({
-        Bucket: cosConfig.COS_BUCKET, /* 必须 */
-        Region: cosConfig.COS_REGION, /* 必须 */
-        Key: filename,                /* 必须 */
-        StorageClass: 'STANDARD',
-        // 格式1. 传入文件内容
-        // Body: fs.readFileSync(filepath),
-        // 格式2. 传入文件流，必须需要传文件大小
-        Body: body, // 上传文件对象
-        ContentLength: file.size,
-        Key: filename, /* 必须 */
-        onTaskReady: function (tid) {
-            console.log('TaskId', tid);
-            // TaskId = tid;
-        },
-        onProgress: function (progressData) {
-            console.log('progressData', JSON.stringify(progressData));
-        },
-    }, (err, data) => {
-        console.log(err || data);
-        if (data) {
-            return ctx.body = {
-                code: 200,
-                success: true,
-                message: 'ok',
-                data: data
-            };
-        } else {
-            return ctx.body = {
-                code: 10086,
-                success: false,
-                message: 'fail',
-                data: err
-            };
-        }
-    });
+    const file = ctx.request.files.file; // 获取上传文件
+    try {
+        let res = await putObject(file);
+        console.log(res);
+        ctx.body = {
+            code: 200,
+            success: true,
+            message: 'ok',
+            data: res
+        };
+    } catch (err) {
+        console.log(err);
+        ctx.body = {
+            code: 10086,
+            success: false,
+            message: 'fail',
+            data: err
+        };
+    }
 });
 
 /**
