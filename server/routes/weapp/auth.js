@@ -10,7 +10,7 @@ const getRunData = require('./../util/getRunData');
 const koa2Req = require('koa2-request'); // 第三方http请求
 
 // 添加路由前缀
-router.prefix('/api/weapp');
+router.prefix('/weapp/auth');
 
 // 获取微信登录信息
 const wxAuth = async (req) => {
@@ -36,20 +36,15 @@ router.post('/getRunData', async (ctx, next) => {
 });
 
 /*
- *
+ * 登录
  * */
-router.post('/auth', async (ctx, next) => {
+router.post('/login', async (ctx, next) => {
     let res = await wxAuth(ctx.request.body);
-    console.log('res', JSON.parse(res.body));
     ctx.body = {
         code: 0,
         message: '登录成功',
         data: JSON.parse(res.body)
     };
-    // ctx.body = {
-    //     errcode: 10000,
-    //     msg: 'auth fail',
-    // };
 });
 
 module.exports = router;

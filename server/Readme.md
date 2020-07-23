@@ -6,7 +6,7 @@
 
 ## 1. 后台：Node
 
-<img width="66%" src="https://forguo-1302175274.cos.ap-shanghai.myqcloud.com/wedding/assets/img/koa-logo.png" alt="Koa middleware framework for nodejs"/>
+<img width="45%" src="https://forguo-1302175274.cos.ap-shanghai.myqcloud.com/wedding/assets/img/koa-logo.png" alt="Koa middleware framework for nodejs"/>
 
 ## 2. 数据库：Mongo
 

@@ -4,14 +4,12 @@
  * @date: 2020/7/22
 */
 import { USER_INFO, LOGIN } from "../constants/account";
+import request from '../request';
 
 // 用户授权登录
 export const dispatchUserAuth = () => {
-    return (dispatch) => {
-        dispatch({
-            type: LOGIN,
-            accessToken: '10086'
-        })
+    return async () => {
+        await request.login();
     };
 };
 

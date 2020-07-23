@@ -1,6 +1,7 @@
 import Taro from '@tarojs/taro'
 import React, {Component} from 'react'
 import { Button, Text, View } from '@tarojs/components'
+import './index.scss'
 
 class Photo extends Component {
     state = {

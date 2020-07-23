@@ -54,6 +54,9 @@ const manageInvite = require('./routes/admin/invite');
 // common
 const common = require('./routes/common/common');
 
+// weapp
+const auth = require('./routes/weapp/auth');
+
 // error handler
 onerror(app);
 
@@ -99,6 +102,8 @@ app.use(manageMsg.routes(), manageMsg.allowedMethods());
 app.use(manageInvite.routes(), manageInvite.allowedMethods());
 
 app.use(common.routes(), common.allowedMethods());
+
+app.use(auth.routes(), auth.allowedMethods());
 
 // error-handling
 app.on('error', (err, ctx) => {
