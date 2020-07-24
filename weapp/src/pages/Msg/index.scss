@@ -2,6 +2,31 @@
     flex-direction: column;
     width: 100%;
 }
+
 .send-btn {
     margin-top: 100px;
+}
+
+.weui-media-box__hd {
+    margin-right: .8em;
+    width: 60px * 2;
+    height: 60px * 2;
+    line-height: 60px * 2;
+    text-align: center;
+}
+
+.weui-media-box_appmsg .weui-media-box__bd {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    min-width: 0
+}
+
+.msg-item {
+    margin-bottom: 22px;
+}
+.mes-info {
+    padding-top: 20px;
+    border-top: 1PX solid #f7f7f7;
 }

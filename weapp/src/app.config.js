@@ -49,5 +49,8 @@ export default {
                 selectedIconPath: 'common/tab/msg-active.png'
             },
         ]
+    },
+    useExtendedLib: {
+        'weui': true
     }
 }
