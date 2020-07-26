@@ -1,5 +1,5 @@
 {
-    "name": "shop",
+    "name": "wedding",
     "version": "0.1.0",
     "private": true,
     "scripts": {
@@ -14,9 +14,11 @@
         "ip": "latest",
         "jsonwebtoken": "^8.5.1",
         "koa": "^2.7.0",
+        "koa-body": "latest",
         "koa-bodyparser": "^4.2.1",
         "koa-convert": "^1.2.0",
         "koa-json": "^2.0.2",
+        "koa-jwt": "^4.0.0",
         "koa-logger": "^3.2.0",
         "koa-onerror": "^4.1.0",
         "koa-router": "^7.4.0",
@@ -25,8 +27,7 @@
         "koa2-request": "^1.0.4",
         "md5": "^2.2.1",
         "mongoose": "^5.6.3",
-        "pug": "^2.0.3",
-        "koa-body": "latest"
+        "pug": "^2.0.3"
     },
     "devDependencies": {
         "nodemon": "^1.19.1"

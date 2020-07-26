@@ -20,3 +20,20 @@ Page {
     overflow: hidden;
     overflow-y: auto;
 }
+
+.placeholder-style {
+    color: #CFCFCF;
+}
+
+/*
+ * 修改weUi样式
+ */
+// loadMore
+.weui-loadmore_line {
+    border: none;
+    margin-top: 1.5em;
+}
+.weui-loadmore__tips_in-line {
+    background: transparent;
+    top: 0;
+}

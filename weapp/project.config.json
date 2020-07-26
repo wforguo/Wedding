@@ -27,7 +27,7 @@
 			"outputPath": ""
 		},
 		"useIsolateContext": true,
-		"useCompilerModule": true,
+		"useCompilerModule": false,
 		"userConfirmedUseCompilerModuleSwitch": false
 	},
 	"compileType": "miniprogram",
@@ -58,9 +58,10 @@
 			"current": -1,
 			"list": [
 				{
-					"id": -1,
-					"name": "pages/Msg/index",
-					"pathName": "pages/Msg/index",
+					"id": 0,
+					"name": "pages/Bless/index",
+					"pathName": "pages/Bless/index",
+					"query": "",
 					"scene": null
 				}
 			]

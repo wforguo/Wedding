@@ -1,32 +1,65 @@
-.moment {
-    flex-direction: column;
+Page {
+    background: #fff;
+}
+
+.msg {
     width: 100%;
-}
 
-.send-btn {
-    margin-top: 100px;
-}
 
-.weui-media-box__hd {
-    margin-right: .8em;
-    width: 60px * 2;
-    height: 60px * 2;
-    line-height: 60px * 2;
-    text-align: center;
-}
+    .msg-item {
+        padding: 15px 0 10px 25px;
+        margin-bottom: 5px;
+        display: flex;
+        justify-content: start;
+        &__user-avatar {
+            width: 88px;
+            height: 88px;
+            overflow: hidden;
+            border-radius: 50%;
+            margin-right: 32px;
+        }
+        &__user-avatar-img {
+            width: 88px;
+            height: 88px;
+            overflow: hidden;
+            border-radius: 50%;
+        }
+        &__desc {
+            flex: 1;
+            overflow: hidden;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #eee;
+        }
+        &__user-info {
+            overflow: auto;
+        }
+        &__user-name {
+            margin-top: 5px;
+            font-size: 28px;
+            color: rgba(0,0,0,0.5);
+            width: auto;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        &__msg-time {
+            margin-top: 6px;
+            padding-bottom: 6px;
+            font-size: 26px;
+            color: rgba(0,0,0,0.3);
+            list-style: none;
+            overflow: hidden;
+        }
+        &__msg-text {
+            padding-right: 10px;
+            color: rgba(0,0,0,0.6);
+            font-size: 30px;
+            padding-top: 8px;
+            line-height: 50px;
+            word-wrap: break-word;
+            word-break: break-all;
+            white-space: pre-line;
+        }
+    }
 
-.weui-media-box_appmsg .weui-media-box__bd {
-    -webkit-box-flex: 1;
-    -webkit-flex: 1;
-    -ms-flex: 1;
-    flex: 1;
-    min-width: 0
-}
-
-.msg-item {
-    margin-bottom: 22px;
-}
-.mes-info {
-    padding-top: 20px;
-    border-top: 1PX solid #f7f7f7;
 }

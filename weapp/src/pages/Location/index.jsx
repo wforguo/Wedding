@@ -1,17 +1,24 @@
 import Taro from '@tarojs/taro'
 import React, {Component} from 'react'
-import { Button, Text, View, Map } from '@tarojs/components'
+import { Button, Text, Image, View, Map } from '@tarojs/components'
 import './index.scss'
-import iconNav from './icon-nav.png';
+import callHe from '../../common/img/call-he.png';
+import callShe from '../../common/img/call-she.png';
 
 class Location extends Component {
     state = {
         latitude: 36.730922,
         longitude: 104.792082,
-        address: '甘肃省白银市平川区世纪大道'
+        address: '甘肃省白银市平川区世纪大道',
+        navBarTop: 44 + 36 + 6 + 45
     };
 
-    componentWillUnmount() {
+    onTabItemTap() {
+        Taro.vibrateShort();
+    }
+
+    componentDidMount() {
+        this.getSystemInfo();
     }
 
     componentDidShow() {
@@ -19,6 +26,14 @@ class Location extends Component {
 
     componentDidHide() {
     }
+
+    getSystemInfo = () => {
+        let systemInfo = Taro.systemInfo;
+        let menuButtonInfo = Taro.menuButtonInfo;
+        this.setState({
+            navBarTop: (systemInfo.statusBarHeight || 44) + (menuButtonInfo.height || 32) + 6 + 20
+        });
+    };
 
     handleMapNav = () => {
         const {
@@ -41,11 +56,18 @@ class Location extends Component {
         })
     };
 
+    handlePhoneCall = (phone) => {
+        Taro.makePhoneCall({
+            phoneNumber: phone
+        })
+    };
+
     render() {
         const {
             latitude,
             longitude,
-            address
+            address,
+            navBarTop
         } = this.state;
         return (
             <View className='page location'>
@@ -62,22 +84,34 @@ class Location extends Component {
                          callout: {
                              content: address,
                              color: '#fff',
-                             bgColor: '#297EE3',
-                             fontSize: 17,
+                             bgColor: '#ff4c91',
+                             fontSize: 14,
                              textAlign: 'center',
-                             padding: 10,
-                             borderRadius: 8,
+                             padding: 6,
+                             borderRadius: 6,
                              display: 'ALWAYS',
                          },
                          width: 28,
-                         height: 32,
-                         iconPath: iconNav
+                         height: 28,
+                         iconPath: 'https://forguo-1302175274.cos.ap-shanghai.myqcloud.com/wedding/assets/img/icon-nav.png'
                      }]}
                   show-location
                   style='width: 100%; height: 100%;'
                 />
-                <View className='location-tool'>
-                    <View className='location_nav-btn' onClick={this.handleMapNav.bind(this)}>一键导航</View>
+                <Button className='location__nav-btn' style={{
+                    top: `${navBarTop}px`
+                }} onClick={this.handleMapNav.bind(this)}>一键导航</Button>
+                <View className='location__tool'>
+                    <View className='location__tool-btn'>
+                        <View className='location__tool-call' onClick={this.handlePhoneCall.bind(this, '17609491107')}>
+                            <Image src={callHe} className='location__tool-call-img' />
+                            <Text className='location__tool-call-txt'>呼叫新郎</Text>
+                        </View>
+                        <View className='location__tool-call' onClick={this.handlePhoneCall.bind(this, '17609491107')}>
+                            <Image src={callShe} className='location__tool-call-img' />
+                            <Text className='location__tool-call-txt'>呼叫新娘</Text>
+                        </View>
+                    </View>
                 </View>
             </View>
         )

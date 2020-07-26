@@ -4,7 +4,7 @@
  * @date: 2020/7/14
  */
 const Koa = require('koa');
-const app = new Koa();
+const JWT = require('koa-jwt');
 const views = require('koa-views');
 const json = require('koa-json');
 const onerror = require('koa-onerror');
@@ -13,6 +13,9 @@ const koaBody = require('koa-body');
 const logger = require('koa-logger');
 const mongoose = require('mongoose');
 const config = require('./config');
+const errHandle = require('./routes/util/ErrHandle');
+
+const app = new Koa();
 
 /******************
  * 数据库连接 Start
@@ -60,7 +63,15 @@ const auth = require('./routes/weapp/auth');
 // error handler
 onerror(app);
 
-// middlewares
+/**
+ *  定义公共的路径，不需要jwt鉴权
+ */
+const jwt = JWT({
+    secret: config.JWT_SECRET
+}).unless({
+    path: [/^\/public/, /^\/api\/user/]
+});
+
 app.use(koaBodyParser({
     enableTypes: ['json', 'form', 'text']
 }));
@@ -81,6 +92,11 @@ app.use(require('koa-static')(__dirname + '/public'));
 app.use(views(__dirname + '/views', {
     extension: 'pug'
 }));
+
+// jwt
+// app.use(errHandle); // 错误鉴权处理
+// app.use(jwt); // jwt鉴权
+// jwt
 
 // logger
 app.use(async (ctx, next) => {

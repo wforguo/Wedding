@@ -13,3 +13,14 @@
 [WeUi](https://developers.weixin.qq.com/miniprogram/dev/extended/weui/)
 
 [Demo](https://github.com/wechat-miniprogram/weui-miniprogram/tree/master/tools/demo)
+
+
+## Slot
+
+- 使用
+
+> 在 React 中使用 <slot name="slotName" />（首字母小写），在 Vue 中使用 <slot-view name="slotName" />（由于 slot 在 Vue 中是内置组件）。
+
+```jsx harmony
+    <slot name="slotName" />
+```

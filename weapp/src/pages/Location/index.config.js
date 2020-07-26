@@ -1,3 +1,4 @@
 export default {
-    navigationBarTitleText: '导航'
+    navigationBarTitleText: '导航',
+    navigationStyle: 'custom'
 }

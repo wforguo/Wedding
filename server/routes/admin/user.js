@@ -7,7 +7,6 @@
 const router = require('koa-router')();
 const md5 = require('md5');
 const ip = require('ip');
-const jwt = require('jsonwebtoken');
 const User = require('../../models/User');
 
 const DEFAULT_IMG = 'https://forguo.bj.bcebos.com/icon2596901555144121.jpg';
@@ -19,6 +18,9 @@ router.prefix('/api/user');
  * 管理员登录
  */
 router.post('/login', async (ctx, next) => {
+    // 接受用户数据
+    // 验证用户账号、密码是否正确
+    // 返回token
     if (!ctx.request.body || ctx.request.body.length === 0) {
         ctx.body = {
             code: 10009,
@@ -70,15 +72,10 @@ router.post('/login', async (ctx, next) => {
         //     data: res
         // };
     } else {
-        const token = jwt.sign({
-            name: res.userName,
-            _id: res.userId
-        }, 'token', { expiresIn: '2h' });
         ctx.body = {
             code: 200,
             success: true,
             message: 'ok',
-            token,
             data: res
         };
     }

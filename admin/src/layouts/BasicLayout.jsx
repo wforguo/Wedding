@@ -10,7 +10,7 @@ import {Result, Button} from 'antd';
 import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import {getAuthorityFromRouter} from '@/utils/utils';
-import logo from '../assets/logo.jpg';
+import logo from '../assets/logo.png';
 
 const noMatch = (
     <Result

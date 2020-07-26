@@ -9,6 +9,7 @@ const store = configStore();
 // app中的生命周期只会执行一次
 class App extends Component {
     componentWillMount() {
+        this.getSystemInfo();
         this.checkVersion();
     }
 
@@ -24,6 +25,18 @@ class App extends Component {
 
     componentDidCatchError() {
     }
+
+    // 获取系统信息
+    getSystemInfo = () => {
+        let systemInfo = Taro.getSystemInfoSync() || {};
+        let menuButtonInfo = Taro.getMenuButtonBoundingClientRect ? Taro.getMenuButtonBoundingClientRect() : null;
+        if (!systemInfo.statusBarHeight) {
+            systemInfo.statusBarHeight = systemInfo.screenHeight - systemInfo.windowHeight - 20;
+        }
+        Taro.systemInfo = systemInfo;
+        Taro.menuButtonInfo = menuButtonInfo || {};
+        return systemInfo;
+    };
 
     // 版本管理
     checkVersion = () => {

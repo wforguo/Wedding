@@ -7,22 +7,22 @@ export default {
         'pages/Msg/index',
     ],
     window: {
-        backgroundTextStyle: 'light',
+        backgroundTextStyle: 'dark',
         navigationBarBackgroundColor: '#fff',
         navigationBarTitleText: '趣婚礼',
         navigationBarTextStyle: 'black'
     },
     tabBar: {
-        color: '#ccc',
+        color: '#7F8389',
         selectedColor: '#ff4c91',
         borderStyle: 'white',
         backgroundColor: '#ffffff',
         list: [
             {
                 pagePath: 'pages/Index/index',
-                text: '邀请函',
-                iconPath: 'common/tab/home.png',
-                selectedIconPath: 'common/tab/home-active.png'
+                text: '邀请',
+                iconPath: 'common/tab/invite.png',
+                selectedIconPath: 'common/tab/invite-active.png'
             },
             {
                 pagePath: 'pages/Photo/index',
@@ -38,7 +38,7 @@ export default {
             },
             {
                 pagePath: 'pages/Bless/index',
-                text: '祝福列表',
+                text: '祝福',
                 iconPath: 'common/tab/bless.png',
                 selectedIconPath: 'common/tab/bless-active.png'
             },

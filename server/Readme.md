@@ -29,3 +29,13 @@ wedd_photos：相册
 wedd_users：管理员
 
 wedd_video：视频
+
+## 登录鉴权
+
+### koa-jwt
+
+> Koa middleware for validating JSON Web Tokens. 
+> 用于验证JSON Web令牌的Koa中间件。
+
+
+
