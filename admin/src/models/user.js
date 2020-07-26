@@ -1,9 +1,11 @@
 import {queryCurrent} from '@/services/user';
 
+const accessToken = window.localStorage.getItem('accessToken'); // 授权后的token
 const currentUserDefault = JSON.parse(window.localStorage.getItem('currentUser'));
 const UserModel = {
     namespace: 'user',
     state: {
+        accessToken: accessToken || null,
         currentUser: currentUserDefault || null,
     },
     effects: {
@@ -21,10 +23,14 @@ const UserModel = {
         },
     },
     reducers: {
+        saveAccessToken(state, action) {
+            window.localStorage.setItem('accessToken', action.payload || '');
+            return {...state, accessToken: action.payload || {}};
+        },
         saveCurrentUser(state, action) {
             window.localStorage.setItem('currentUser', JSON.stringify({
                 ...state.currentUser,
-                ...action.payload,
+                ...action.payload,  // 参数合并
             }));
             return {...state, currentUser: action.payload || {}};
         },

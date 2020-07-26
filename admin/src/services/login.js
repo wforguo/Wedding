@@ -5,13 +5,8 @@ export async function fakeAccountLogin({ userName, userPwd }) {
         userName,
         userPwd
     };
-    console.log(data);
-    return request('/api/user/login', {
+    return request('/api/auth/login', {
         method: 'post',
         data
     })
-}
-
-export async function getFakeCaptcha(mobile) {
-  return request(`/api/login/captcha?mobile=${mobile}`);
 }

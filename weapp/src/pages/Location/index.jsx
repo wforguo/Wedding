@@ -12,11 +12,6 @@ class Location extends Component {
         address: '甘肃省白银市平川区世纪大道',
         navBarTop: 44 + 36 + 6 + 45
     };
-
-    onTabItemTap() {
-        Taro.vibrateShort();
-    }
-
     componentDidMount() {
         this.getSystemInfo();
     }

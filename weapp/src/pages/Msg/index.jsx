@@ -10,10 +10,6 @@ class Msg extends Component {
         loadingStatus: 'loading'
     };
 
-    onTabItemTap() {
-        Taro.vibrateShort();
-    }
-
     componentWillMount() {
         this.getList();
     }

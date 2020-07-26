@@ -17,7 +17,6 @@ const Model = {
                 duration: 0
             });
             const response = yield call(fakeAccountLogin, payload);
-            console.log(response);
             // Login successfully
             message.destroy();
             if (response.code === 200) {
@@ -29,10 +28,14 @@ const Model = {
                     type: 'changeLoginStatus',
                     payload: response.data,
                 });
-                console.log(response.data);
+                console.log('登录成功 ===>', response.data);
                 yield put({
                     type: 'user/saveCurrentUser',
                     payload: response.data,
+                });
+                yield put({
+                    type: 'user/saveAccessToken',
+                    payload: response.data.token,
                 });
                 message.success('登录成功');
                 if (redirect) {

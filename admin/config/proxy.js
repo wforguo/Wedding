@@ -24,7 +24,7 @@ export default {
     },
     test: {
         '/api/': {
-            target: 'https://preview.pro.ant.design',
+            target: 'https://wedding-weapp.herokuapp.com/',
             changeOrigin: true,
             pathRewrite: {
                 '^': '',
@@ -33,7 +33,7 @@ export default {
     },
     pre: {
         '/api/': {
-            target: 'your pre url',
+            target: 'https://wedding-weapp.herokuapp.com/',
             changeOrigin: true,
             pathRewrite: {
                 '^': '',

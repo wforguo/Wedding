@@ -1,7 +1,9 @@
-.index {
-    flex-direction: column;
+.invite {
     width: 100%;
-}
-.send-btn {
-    margin-top: 100px;
+    height: 100vh;
+    overflow: hidden;
+    &-img {
+        width: 100%;
+        height: 100%;
+    }
 }

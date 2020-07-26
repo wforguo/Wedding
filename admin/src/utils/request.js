@@ -4,6 +4,9 @@
  */
 import { extend } from 'umi-request';
 import { notification } from 'antd';
+import {getPageQuery} from "@/utils/utils";
+import {history} from "umi";
+import {stringify} from "querystring";
 
 const codeMessage = {
     200: '服务器成功返回请求的数据。',
@@ -42,6 +45,26 @@ const errorHandler = (error) => {
         const err = new Error(errorText);
         err.name = response.status;
         err.response = response;
+        if (response.status === 401) {
+            // toDo 使用dispatch方式
+            // dispatch({
+            //     type: 'login/logout',
+            // });
+            //
+            // token失效，退出登录
+            const {redirect} = getPageQuery(); // Note: There may be security issues, please note
+
+            if (window.location.pathname !== '/Login' && !redirect) {
+                localStorage.clear();
+                sessionStorage.clear();
+                history.replace({
+                    pathname: '/Login',
+                    search: stringify({
+                        redirect: window.location.href,
+                    }),
+                });
+            }
+        }
         throw err;
     } else if (!response) {
         notification.error({
@@ -59,9 +82,28 @@ const errorHandler = (error) => {
 /**
  * 配置request请求时的默认参数
  */
+// const currentUser = yield select(state => state.user.currentUser);
+
 const request = extend({
+    timeout: 1000,
     errorHandler, // 默认错误处理
     credentials: 'include', // 默认请求是否带上cookie
 });
+
+// request 拦截器
+request.interceptors.request.use((url, options) => {
+    const accessToken = window.localStorage.getItem('accessToken') || '';
+    return {
+        url: `${url}`,
+        options: {
+            ...options,
+            headers: {
+                "Authorization": `Bearer ${accessToken}`
+            }
+        },
+    }
+});
+
+// toDo response 拦截器
 
 export default request;

@@ -49,16 +49,17 @@ mongoose.connection.on('disconnected', function () {
  * ***************/
 
 // admin
-const manageUser = require('./routes/admin/user');
-const managePhoto = require('./routes/admin/photo');
-const manageMsg = require('./routes/admin/msg');
-const manageInvite = require('./routes/admin/invite');
+const adminAuth = require('./routes/admin/auth');
+const adminUser = require('./routes/admin/user');
+const adminPhoto = require('./routes/admin/photo');
+const adminMsg = require('./routes/admin/msg');
+const adminInvite = require('./routes/admin/invite');
 
 // common
 const common = require('./routes/common/common');
 
 // weapp
-const auth = require('./routes/weapp/auth');
+const weAuth = require('./routes/weapp/auth');
 
 // error handler
 onerror(app);
@@ -69,21 +70,21 @@ onerror(app);
 const jwt = JWT({
     secret: config.JWT_SECRET
 }).unless({
-    path: [/^\/public/, /^\/api\/user/]
+    path: [/^\/public/, /^\/api\/auth/] // 该prefix下的不做校验
 });
 
 app.use(koaBodyParser({
     enableTypes: ['json', 'form', 'text']
 }));
 
-app.use(koaBody({
-    multipart: true,
-    encoding: 'gzip',
-    formidable:{
-        maxFileSize: 2000 * 1024 * 1024,    // 设置上传文件大小最大限制，默认2M
-        multipart: true
-    }
-}));
+// app.use(koaBody({
+//     multipart: true,
+//     encoding: 'gzip',
+//     formidable:{
+//         maxFileSize: 2000 * 1024 * 1024,    // 设置上传文件大小最大限制，默认2M
+//         multipart: true
+//     }
+// }));
 
 app.use(json());
 app.use(logger());
@@ -94,8 +95,8 @@ app.use(views(__dirname + '/views', {
 }));
 
 // jwt
-// app.use(errHandle); // 错误鉴权处理
-// app.use(jwt); // jwt鉴权
+app.use(errHandle); // 错误鉴权处理
+app.use(jwt); // jwt鉴权
 // jwt
 
 // logger
@@ -112,14 +113,15 @@ app.use(async (ctx, next) => {
 });
 
 // routes
-app.use(manageUser.routes(), manageUser.allowedMethods());
-app.use(managePhoto.routes(), managePhoto.allowedMethods());
-app.use(manageMsg.routes(), manageMsg.allowedMethods());
-app.use(manageInvite.routes(), manageInvite.allowedMethods());
+app.use(adminAuth.routes(), adminAuth.allowedMethods());
+app.use(adminUser.routes(), adminUser.allowedMethods());
+app.use(adminPhoto.routes(), adminPhoto.allowedMethods());
+app.use(adminMsg.routes(), adminMsg.allowedMethods());
+app.use(adminInvite.routes(), adminInvite.allowedMethods());
 
 app.use(common.routes(), common.allowedMethods());
 
-app.use(auth.routes(), auth.allowedMethods());
+app.use(weAuth.routes(), weAuth.allowedMethods());
 
 // error-handling
 app.on('error', (err, ctx) => {

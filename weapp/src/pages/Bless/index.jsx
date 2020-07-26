@@ -65,10 +65,6 @@ class Bless extends Component {
         ]
     };
 
-    onTabItemTap() {
-        Taro.vibrateShort();
-    }
-
     componentWillUnmount() {
     }
 

@@ -25,11 +25,6 @@ class Photo extends Component {
 
         ]
     };
-
-    onTabItemTap() {
-        Taro.vibrateShort();
-    }
-
     render() {
         const {
             list
