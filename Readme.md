@@ -1,4 +1,4 @@
-<img width="240px" style="margin: 20px auto;display: block;" src="https://forguo-1302175274.cos.ap-shanghai.myqcloud.com/wedding/assets/img/logo.png" alt="wedding"/>
+![趣婚礼](https://forguo-1302175274.cos.ap-shanghai.myqcloud.com/wedding/assets/img/logo.png)
 
 # 婚礼邀请函小程序
 
