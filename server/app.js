@@ -4,22 +4,24 @@
  * @date: 2020/7/14
  */
 const Koa = require('koa');
-const JWT = require('koa-jwt');
 const views = require('koa-views');
 const json = require('koa-json');
+const helmet = require("koa-helmet");
 const onerror = require('koa-onerror');
 const koaBodyParser = require('koa-bodyparser');
 const koaBody = require('koa-body');
 const logger = require('koa-logger');
 const mongoose = require('mongoose');
 const config = require('./config');
-const errHandle = require('./routes/util/ErrHandle');
+const cors = require('./middleWares/cors');
+const jwt = require('./middleWares/jwt');
+const errHandle = require('./middleWares/eErrHandle');
 
 const app = new Koa();
 
 /******************
  * 数据库连接 Start
- * ***************/
+* ***************/
 
 // 数据库配置
 const dataBase = config.dataBase;
@@ -64,15 +66,6 @@ const weAuth = require('./routes/weapp/auth');
 // error handler
 onerror(app);
 
-/**
- *  定义公共的路径，不需要jwt鉴权
- */
-const jwt = JWT({
-    secret: config.JWT_SECRET
-}).unless({
-    path: [/^\/public/, /^\/api\/auth/] // 该prefix下的不做校验
-});
-
 app.use(koaBodyParser({
     enableTypes: ['json', 'form', 'text']
 }));
@@ -94,23 +87,15 @@ app.use(views(__dirname + '/views', {
     extension: 'pug'
 }));
 
-// jwt
+// Helmet
+app.use(helmet());
+
+// logger
+app.use(cors);
+
 app.use(errHandle); // 错误鉴权处理
 app.use(jwt); // jwt鉴权
 // jwt
-
-// logger
-app.use(async (ctx, next) => {
-    // 设置跨域
-    ctx.set('Access-Control-Allow-Origin', '*');
-    ctx.set('Access-Control-Allow-Headers', 'X-Auth-Token, Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild');
-    ctx.set('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
-    // ctx.set('Access-Control-Allow-Credentials', 'true');
-    const start = new Date();
-    await next();
-    const ms = new Date() - start;
-    console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
-});
 
 // routes
 app.use(adminAuth.routes(), adminAuth.allowedMethods());

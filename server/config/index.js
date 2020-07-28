@@ -1,4 +1,5 @@
 const config = {
+    port: '3333', // 服务端口
     JWT_SECRET: '7b7ae37c-ae51-4d4f-b4bd-ffbe4c119664', // uuid
     /**
      * 数据库配置

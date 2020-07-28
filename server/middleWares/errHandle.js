@@ -2,7 +2,7 @@
  * @Description: jwt 错误鉴权处理
  * @author: forguo
  * @date: 2020/7/25
-*/
+ */
 function ErrHandle(ctx, next) {
     // 拦截用户非法请求
     return next().catch(err => {

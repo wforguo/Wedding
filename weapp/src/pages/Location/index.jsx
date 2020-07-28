@@ -95,7 +95,8 @@ class Location extends Component {
                 />
                 <Button className='location__nav-btn' style={{
                     top: `${navBarTop}px`
-                }} onClick={this.handleMapNav.bind(this)}>一键导航</Button>
+                }} onClick={this.handleMapNav.bind(this)}
+                >一键导航</Button>
                 <View className='location__tool'>
                     <View className='location__tool-btn'>
                         <View className='location__tool-call' onClick={this.handlePhoneCall.bind(this, '17609491107')}>
