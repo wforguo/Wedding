@@ -12,7 +12,7 @@ let userSchema = new Schema({
     desc: String,
     createTime: String,
     updateTime: String,
-    barrage: Array
+    barrage: Array //弹幕列表
 });
 
 module.exports = mongoose.model('Video', userSchema, 'wedd_video');
