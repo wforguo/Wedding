@@ -42,15 +42,6 @@ const weAuth = require('./routes/weapp/auth');
 // error handler
 onerror(app);
 
-// app.use(koaBody({
-//     multipart: true,
-//     encoding: 'gzip',
-//     formidable:{
-//         maxFileSize: 2000 * 1024 * 1024,    // 设置上传文件大小最大限制，默认2M
-//         multipart: true
-//     }
-// }));
-
 if (process.env.NODE_ENV === 'production') {
     app.use(compress())
 }
