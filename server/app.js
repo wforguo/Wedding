@@ -4,51 +4,27 @@
  * @date: 2020/7/14
  */
 const Koa = require('koa');
-const views = require('koa-views');
-const json = require('koa-json');
-const helmet = require("koa-helmet");
 const onerror = require('koa-onerror');
-const koaBodyParser = require('koa-bodyparser');
-const koaBody = require('koa-body');
-const logger = require('koa-logger');
-const mongoose = require('mongoose');
-const config = require('./config');
-const cors = require('./middleWares/cors');
-const jwt = require('./middleWares/jwt');
-const errHandle = require('./middleWares/eErrHandle');
+const compress = require('koa-compress');
+const chalk = require('chalk');
+const figlet = require('figlet');
+const middleWares = require('./middleWares');
+const dbConnect = require('./util/dbConnect');
+
+// console.log(chalk.yellow.bold('------------- Wedding Server ------------- \n'));
+figlet('Wedding  Server', function(err, data) {
+    if (err) {
+        console.log('Something went wrong...');
+        console.dir(err); // 打印出该对象的所有属性和属性值.
+        return;
+    }
+    data && console.log(chalk.yellow(data));
+});
 
 const app = new Koa();
 
-/******************
- * 数据库连接 Start
-* ***************/
-
-// 数据库配置
-const dataBase = config.dataBase;
-
-// 数据库连接字符串
-// const dbStr = `mongodb://${config.dataBase.user}:${config.dataBase.pwd}@${config.dataBase.url}:${config.dataBase.port}/${config.dataBase.name}?authSource=admin`;
-const dbStr = `${dataBase.pre}${dataBase.user}:${dataBase.pwd}@${dataBase.url}/${dataBase.name}?retryWrites=true&w=majority&authSource=admin&ssl=true`;
-console.log(dbStr);
-
-// 连接MongoDB数据库
-mongoose.connect(dbStr, { useNewUrlParser: true, useUnifiedTopology: true });
-
-mongoose.connection.on('connected', function () {
-    console.log('MongoDB connected success.')
-});
-
-mongoose.connection.on('error', function () {
-    console.log('MongoDB connected fail.')
-});
-
-mongoose.connection.on('disconnected', function () {
-    console.log('MongoDB connected disconnected.')
-});
-
-/******************
- * 数据库连接 End
- * ***************/
+// 连接数据库
+dbConnect();
 
 // admin
 const adminAuth = require('./routes/admin/auth');
@@ -66,10 +42,6 @@ const weAuth = require('./routes/weapp/auth');
 // error handler
 onerror(app);
 
-app.use(koaBodyParser({
-    enableTypes: ['json', 'form', 'text']
-}));
-
 // app.use(koaBody({
 //     multipart: true,
 //     encoding: 'gzip',
@@ -79,23 +51,11 @@ app.use(koaBodyParser({
 //     }
 // }));
 
-app.use(json());
-app.use(logger());
-app.use(require('koa-static')(__dirname + '/public'));
+if (process.env.NODE_ENV === 'production') {
+    app.use(compress())
+}
 
-app.use(views(__dirname + '/views', {
-    extension: 'pug'
-}));
-
-// Helmet
-app.use(helmet());
-
-// logger
-app.use(cors);
-
-app.use(errHandle); // 错误鉴权处理
-app.use(jwt); // jwt鉴权
-// jwt
+app.use(middleWares);
 
 // routes
 app.use(adminAuth.routes(), adminAuth.allowedMethods());

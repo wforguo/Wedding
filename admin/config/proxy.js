@@ -7,15 +7,8 @@
  */
 export default {
     dev: {
-        // '/api/': {
-        //     //   target: 'https://preview.pro.ant.design',
-        //     //   changeOrigin: true,
-        //     //   pathRewrite: {
-        //     //     '^': '',
-        //     //   },
-        //     // },
         '/api/': {
-            target: 'http://localhost:3300',
+            target: 'http://127.0.0.1:3333',
             changeOrigin: true,
             pathRewrite: {
                 '^': '',
@@ -24,7 +17,7 @@ export default {
     },
     test: {
         '/api/': {
-            target: 'https://wedding-weapp.herokuapp.com/',
+            target: 'https://wedding-weapp-t.herokuapp.com/',
             changeOrigin: true,
             pathRewrite: {
                 '^': '',

@@ -3,7 +3,9 @@
         "_id": {
             "$oid": "5f12be46aed6152ef8f2ed9e"
         },
-        "userRoles": ["admin"],
+        "userRoles": [
+            "admin"
+        ],
         "userId": "user3202005281807513",
         "userName": "admin",
         "userEmail": "wforguo@qq.com",

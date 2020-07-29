@@ -10,8 +10,6 @@ const jsonWebToken = require('jsonwebtoken');
 const config = require('../../config');
 const User = require('../../models/User');
 
-const DEFAULT_IMG = 'https://forguo.bj.bcebos.com/icon2596901555144121.jpg';
-
 // 添加路由前缀
 router.prefix('/api/auth');
 

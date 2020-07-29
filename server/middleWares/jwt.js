@@ -5,6 +5,7 @@
 */
 
 const JWT = require('koa-jwt');
+const config = require('../config');
 /**
  *  定义公共的路径，不需要jwt鉴权
  */

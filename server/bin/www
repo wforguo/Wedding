@@ -9,6 +9,7 @@ let debug = require('debug')('demo:server');
 let http = require('http');
 let ip = require('ip');
 let config = require('../config');
+
 /**
  * Get port from environment and store in Express.
  */
