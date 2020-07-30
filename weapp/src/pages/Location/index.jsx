@@ -2,8 +2,8 @@ import Taro from '@tarojs/taro'
 import React, {Component} from 'react'
 import { Button, Text, Image, View, Map } from '@tarojs/components'
 import './index.scss'
-import callHe from '../../common/img/call-he.png';
-import callShe from '../../common/img/call-she.png';
+import callHe from '../../common/img/icon-call-he.png';
+import callShe from '../../common/img/icon-call-she.png';
 
 class Location extends Component {
     state = {

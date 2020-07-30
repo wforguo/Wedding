@@ -1,3 +1,4 @@
+@import "../../common/css/theme";
 .location {
     flex-direction: column;
     width: 100%;
@@ -18,7 +19,7 @@
         font-size: 28px;
         width: 200px;
         color: #fff;
-        background: #ff4c91;
+        background: $color-brand;
     }
     &__tool {
         position: absolute;

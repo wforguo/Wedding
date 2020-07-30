@@ -12,6 +12,13 @@ class Index extends Component {
             </View>
         )
     }
+    onShareAppMessage () {
+        return {
+            title: '诚邀您参加XXX的婚礼',
+            // path: '/page/user?id=123',
+            // imageUrl: ''
+        }
+    }
 }
 
 export default Index

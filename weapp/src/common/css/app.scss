@@ -4,8 +4,8 @@
  * @date: 2020/7/17
 */
 
-// 自定义主题
-$color-brand: #ff4c91;
+// 主题相关
+@import "theme";
 
 // 引入所需的组件样式 - 方式三
 //【所有的样式文件】https://github.com/NervJS/taro-ui/tree/dev/src/style/components
