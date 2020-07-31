@@ -7,10 +7,26 @@ import callShe from '../../common/img/icon-call-she.png';
 
 class Location extends Component {
     state = {
-        latitude: 36.731502,
-        longitude: 104.813263,
-        address: '甘肃省白银市平川区兴平路街道晶虹嘉园5号楼',
-        navBarTop: 44 + 36 + 6 + 45
+        navBarTop: 44 + 36 + 6 + 45,
+        brideMobile: "18866666666",
+        groomMobile: "17666666666",
+        location: {
+            "address": "兴平路街道晶虹嘉园5号楼",
+            "adjCode": [
+                "620000",
+                "620400",
+                "620403"
+            ],
+            "city": "白银市",
+            "district": "平川区",
+            "province": "甘肃省",
+            "fullAddress": "甘肃省白银市平川区兴平路街道晶虹嘉园5号楼",
+            "areaId": "620403",
+            "provinceId": "620000",
+            "cityId": "620400",
+            "longitude": 104.813263,
+            "latitude": 36.731502
+        }
     };
     componentDidMount() {
         this.getSystemInfo();
@@ -32,10 +48,13 @@ class Location extends Component {
 
     handleMapNav = () => {
         const {
+            location,
+        } = this.state;
+        const {
             latitude,
             longitude,
-            address
-        } = this.state;
+            fullAddress: address,
+        } = location;
         Taro.openLocation({
             latitude,
             longitude,
@@ -59,11 +78,16 @@ class Location extends Component {
 
     render() {
         const {
+            location,
+            navBarTop,
+            brideMobile,
+            groomMobile
+        } = this.state;
+        const {
             latitude,
             longitude,
             address,
-            navBarTop
-        } = this.state;
+        } = location;
         return (
             <View className='page location'>
                 <Map id='map'
@@ -99,11 +123,11 @@ class Location extends Component {
                 >一键导航</Button>
                 <View className='location__tool'>
                     <View className='location__tool-btn'>
-                        <View className='location__tool-call' onClick={this.handlePhoneCall.bind(this, '17609491107')}>
+                        <View className='location__tool-call' onClick={this.handlePhoneCall.bind(this, brideMobile)}>
                             <Image src={callHe} className='location__tool-call-img' />
                             <Text className='location__tool-call-txt'>呼叫新郎</Text>
                         </View>
-                        <View className='location__tool-call' onClick={this.handlePhoneCall.bind(this, '17609491107')}>
+                        <View className='location__tool-call' onClick={this.handlePhoneCall.bind(this, groomMobile)}>
                             <Image src={callShe} className='location__tool-call-img' />
                             <Text className='location__tool-call-txt'>呼叫新娘</Text>
                         </View>

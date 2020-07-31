@@ -1,71 +1,85 @@
 import Taro from '@tarojs/taro'
 import React, {Component} from 'react'
-import { Button, Text,Textarea, View, Video } from '@tarojs/components'
+import {Button, Textarea, Video, View} from '@tarojs/components'
 import './index.scss'
+import {getRandomColor} from "../../util";
+
+const danmuList = [
+    {
+        text: '第 1s 零点的温度',
+        color: '#ff0000',
+        time: 1
+    }, {
+        text: '第 3s 恭喜恭喜',
+        color: '#ff00ff',
+        time: 3
+    },
+    {
+        text: '第 1s 新婚快乐',
+        color: '#ff0000',
+        time: 6
+    }, {
+        text: '第 3s 雨中',
+        color: '#ff00ff',
+        time: 9
+    },
+    {
+        text: '第 1s 清水无形',
+        color: '#ff0000',
+        time: 11
+    }, {
+        text: '第 3s 百年好合',
+        color: '#ff00ff',
+        time: 13
+    },
+    {
+        text: '第 1s 零点的温度',
+        color: '#ff0000',
+        time: 1
+    }, {
+        text: '第 3s 恭喜恭喜',
+        color: '#ff00ff',
+        time: 3
+    },
+    {
+        text: '第 1s 新婚快乐',
+        color: '#ff0000',
+        time: 6
+    }, {
+        text: '第 3s 雨中',
+        color: '#ff00ff',
+        time: 9
+    },
+    {
+        text: '第 1s 清水无形',
+        color: '#ff0000',
+        time: 11
+    }, {
+        text: '第 3s 百年好合',
+        color: '#ff00ff',
+        time: 13
+    }
+];
+
+let videoContext = null;
 
 class Bless extends Component {
     state = {
-        msg: '',
+        video: {
+            src: 'https://666f-forguo-0979a1-1251886253.tcb.qcloud.la/wxapp/wedding/static/girl.mp4?sign=82606071afbc37ec98646dd632b8675c&t=1562941106',
+            poster: 'https://forguo-1302175274.cos.ap-shanghai.myqcloud.com/wedding/assets/img/marry.jpg',
+            desc: ''
+        },
         showShare: false,
-        list: [
-            {
-                text: '第 1s 零点的温度',
-                color: '#ff0000',
-                time: 1
-            }, {
-                text: '第 3s 恭喜恭喜',
-                color: '#ff00ff',
-                time: 3
-            },
-            {
-                text: '第 1s 新婚快乐',
-                color: '#ff0000',
-                time: 6
-            }, {
-                text: '第 3s 雨中',
-                color: '#ff00ff',
-                time: 9
-            },
-            {
-                text: '第 1s 清水无形',
-                color: '#ff0000',
-                time: 11
-            }, {
-                text: '第 3s 百年好合',
-                color: '#ff00ff',
-                time: 13
-            },
-            {
-                text: '第 1s 零点的温度',
-                color: '#ff0000',
-                time: 1
-            }, {
-                text: '第 3s 恭喜恭喜',
-                color: '#ff00ff',
-                time: 3
-            },
-            {
-                text: '第 1s 新婚快乐',
-                color: '#ff0000',
-                time: 6
-            }, {
-                text: '第 3s 雨中',
-                color: '#ff00ff',
-                time: 9
-            },
-            {
-                text: '第 1s 清水无形',
-                color: '#ff0000',
-                time: 11
-            }, {
-                text: '第 3s 百年好合',
-                color: '#ff00ff',
-                time: 13
-            }
-        ]
+        list: danmuList
     };
 
+    componentDidMount() {
+        videoContext = Taro.createVideoContext('video')
+    }
+
     componentWillUnmount() {
+        videoContext = null;
     }
 
     componentDidShow() {
@@ -75,7 +89,6 @@ class Bless extends Component {
     }
 
     handleInput = (state, e) => {
-        console.log(e);
         this.setState({
             [state]: e.detail.value
         })
@@ -97,14 +110,19 @@ class Bless extends Component {
                 mask: true
             });
             setTimeout(() => {
-               Taro.hideLoading();
-               Taro.showToast({
-                   title: '留言成功~',
-               });
-               this.setState({
-                   msg: ''
-               })
-            }, 800);
+                // 发送弹幕
+                videoContext.sendDanmu({
+                    text: msg,
+                    color: getRandomColor()
+                });
+                Taro.hideLoading();
+                Taro.showToast({
+                    title: '留言成功~',
+                });
+                this.setState({
+                    msg: ''
+                })
+            }, 100);
         }
     };
 
@@ -116,10 +134,18 @@ class Bless extends Component {
     };
 
     // 关闭分享
-    handleCloseShare = (e)=>  {
+    handleCloseShare = (e) => {
         console.log(e);
         this.setState({
             showShare: false
+        })
+    };
+
+    handleVideoError = (e) => {
+        console.log(e);
+        Taro.showToast({
+            title: e.detail.errMsg || '播放出错，请重新进入！',
+            icon: 'none'
         })
     };
 
@@ -131,6 +157,7 @@ class Bless extends Component {
     render() {
         const {
             list,
+            video,
             msg,
             showShare
         } = this.state;
@@ -140,10 +167,10 @@ class Bless extends Component {
                 <View className='bless-media'>
                     <Video
                       className='bless-media__video'
-                      src='https://666f-forguo-0979a1-1251886253.tcb.qcloud.la/wxapp/wedding/static/girl.mp4?sign=82606071afbc37ec98646dd632b8675c&t=1562941106'
+                      src={video.src}
                       controls
                       autoplay={false}
-                      poster='https://forguo-1302175274.cos.ap-shanghai.myqcloud.com/wedding/assets/img/marry.jpg'
+                      poster={video.poster}
                       initialTime='0'
                       id='video'
                       loop={false}
@@ -151,6 +178,7 @@ class Bless extends Component {
                       danmuList={list}
                       enableDanmu
                       danmuBtn
+                      onError={this.handleVideoError.bind(this)}
                     />
                 </View>
                 {/* 留言板 */}
@@ -179,19 +207,19 @@ class Bless extends Component {
                       desc='分享给好友，将直接发送给好友~'
                       tips='分享朋友圈，将会生产一张海报~'
                       buttons={[
-                          {
-                              type: 'default',
-                              className: 'bless-share-moment',
-                              text: '辅助操作',
-                              value: 0,
-                          },
-                          {
-                              type: 'default',
-                              className: 'bless-share-partner',
-                              text: '主操作',
-                              value: 1
-                          }
-                      ]}
+                            {
+                                type: 'default',
+                                className: 'bless-share-moment',
+                                text: '辅助操作',
+                                value: 0,
+                            },
+                            {
+                                type: 'default',
+                                className: 'bless-share-partner',
+                                text: '主操作',
+                                value: 1
+                            }
+                        ]}
                     />
                 </View>
             </View>

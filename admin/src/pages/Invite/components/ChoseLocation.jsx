@@ -45,8 +45,8 @@ const ChoseLocation = (props) => {
                     areaId: districtId,
                     provinceId,
                     cityId,
-                    lng: lngLat.lng,
-                    lat: lngLat.lat
+                    longitude: lngLat.lng,
+                    latitude: lngLat.lat
                 };
                 setLocation(locationData);
                 props.getLocationData(locationData);
@@ -92,8 +92,8 @@ const ChoseLocation = (props) => {
                 areaId: districtId,
                 provinceId,
                 cityId,
-                lng,
-                lat
+                longitude: lng,
+                latitude: lat
             };
             setLocation(locationData);
             props.getLocationData(locationData);

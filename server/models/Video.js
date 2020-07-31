@@ -8,7 +8,7 @@ let Schema = mongoose.Schema;
 
 let userSchema = new Schema({
     id: String,
-    url: String,
+    src: String,
     desc: String,
     createTime: String,
     updateTime: String,

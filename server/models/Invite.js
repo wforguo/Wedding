@@ -8,6 +8,7 @@ let Schema = mongoose.Schema;
 
 let userSchema = new Schema({
     theme: String, // 婚礼注意
+    banner: String, // 婚礼封面图
     startTime: String, // 开始时间
     endTime: String, // 结束时间
     location: Object, // 位置信息

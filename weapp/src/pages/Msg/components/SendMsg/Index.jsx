@@ -1,6 +1,6 @@
 import Taro from '@tarojs/taro'
 import React, {Component} from 'react'
-import { Image, Text, Textarea, View } from '@tarojs/components';
+import { Image, Textarea, View } from '@tarojs/components';
 import iconBack from "../../../../common/img/icon-msg-back.png";
 import iconSend from "../../../../common/img/icon-msg-send.png";
 import './index.scss'
@@ -16,10 +16,36 @@ class SendMsg extends Component {
         this.props.onHandleCloseMsg();
     };
 
-    handleSendMsg = () => {
-        Taro.showToast({
-            title: '发送成功~',
+    handleInput = (state, e) => {
+        this.setState({
+            [state]: e.detail.value
         })
+    };
+
+    handleSendMsg = () => {
+        const {
+            msg
+        } = this.state;
+        if (!msg) {
+            Taro.showToast({
+                title: '请输入留言内容!',
+                icon: 'none'
+            });
+        } else {
+            Taro.showLoading({
+                title: '发送中...',
+                mask: true
+            });
+            setTimeout(() => {
+                Taro.hideLoading();
+                Taro.showToast({
+                    title: '留言成功~',
+                });
+                this.setState({
+                    msg: ''
+                })
+            }, 800);
+        }
     };
 
     render() {
@@ -42,7 +68,7 @@ class SendMsg extends Component {
                                 </View>
                             </View>
                             <View className='send-msg-inner__input'>
-                                <Textarea placeholder='请留下您的祝福，将同步到弹幕留言~' focus className='send-msg-inner__area' placeholderClass='placeholder-style' maxlength={200} />
+                                <Textarea onInput={this.handleInput.bind(this, 'msg')} placeholder='请留下您的祝福，将同步到弹幕留言~' focus className='send-msg-inner__area' placeholderClass='placeholder-style' maxlength={200} />
                             </View>
                         </View>
                     </View>

@@ -3,6 +3,7 @@
         "_id": {
             "$oid": "5f12e69e00437671ae3936e5"
         },
+        "banner": "https://forguo-1302175274.cos.ap-shanghai.myqcloud.com/wedding/assets/img/invite.jpg",
         "theme": "婚礼主题100天",
         "brideName": "新娘",
         "brideMobile": "18866666666",
@@ -23,8 +24,8 @@
             "areaId": "620403",
             "provinceId": "620000",
             "cityId": "620400",
-            "lng": 104.813263,
-            "lat": 36.731502
+            "longitude": 104.813263,
+            "latitude": 36.731502
         },
         "startTime": "2020/07/18",
         "endTime": "2020/07/24",
