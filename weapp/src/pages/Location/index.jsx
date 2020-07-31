@@ -7,9 +7,9 @@ import callShe from '../../common/img/call-she.png';
 
 class Location extends Component {
     state = {
-        latitude: 36.730922,
-        longitude: 104.792082,
-        address: '甘肃省白银市平川区世纪大道',
+        latitude: 36.731502,
+        longitude: 104.813263,
+        address: '甘肃省白银市平川区兴平路街道晶虹嘉园5号楼',
         navBarTop: 44 + 36 + 6 + 45
     };
     componentDidMount() {

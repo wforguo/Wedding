@@ -4,6 +4,9 @@ import {Image, Text, View } from '@tarojs/components'
 import './index.scss'
 
 class Index extends Component {
+    state = {
+
+    };
 
     render() {
         return (
