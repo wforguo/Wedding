@@ -14,4 +14,15 @@
             height: 100%;
         }
     }
+    &-save-tips {
+        padding: 10px 15px;
+        position: absolute;
+        bottom: 66px;
+        right: 45px;
+        font-size: 22px;
+        color: #fff;
+        background: rgba(255,76,145, 0.3);
+        border-radius: 8px;
+        text-align: center;
+    }
 }

@@ -150,16 +150,23 @@ class Bless extends Component {
                       muted={false}
                       danmuList={list}
                       enableDanmu
+                      danmuBtn
                     />
                 </View>
                 {/* 留言板 */}
                 <View className='bless-msg'>
-                    <Textarea value={msg} onInput={this.handleInput.bind(this, 'msg')} className='bless-msg-input' maxlength={100} placeholder='请输入弹幕留言' placeholderClass='placeholder-style' />
+                    <Textarea value={msg}
+                      onInput={this.handleInput.bind(this, 'msg')}
+                      className='bless-msg-input'
+                      maxlength={100}
+                      placeholder='请输入弹幕留言，将同步到留言列表~'
+                      placeholderClass='placeholder-style'
+                    />
                 </View>
 
                 <View className='bless-tool'>
                     <Button className='bless-tool__send-msg' onClick={this.handleSendBless.bind(this)}>发送留言</Button>
-                    <Button className='bless-tool__share' onClick={this.handleOpenShare.bind(this)}>分享喜悦</Button>
+                    <Button className='bless-tool__share' openType='share'>分享喜悦</Button>
                 </View>
 
                 <View className='bless-share'>

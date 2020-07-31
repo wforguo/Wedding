@@ -1,13 +1,16 @@
 import Taro from '@tarojs/taro'
 import React, {Component} from 'react'
-import { Image, Text, View } from '@tarojs/components';
+import { Image, Text, Input, View } from '@tarojs/components';
 import LoadMore from "../../components/LoadMore";
+import SendMsg from "./components/SendMsg"
+import iconWrite from "../../common/img/icon-write.png";
 import './index.scss'
 
 class Msg extends Component {
     state = {
         list: [],
-        loadingStatus: 'loading'
+        loadingStatus: 'loading',
+        msgVisible: false
     };
 
     componentWillMount() {
@@ -131,11 +134,11 @@ class Msg extends Component {
             }, 1500);
         });
     };
-
     render() {
         const {
             list,
-            loadingStatus
+            loadingStatus,
+            msgVisible
         } = this.state;
         const renderList = (msgList) => {
             return msgList.map((item) => {
@@ -169,6 +172,24 @@ class Msg extends Component {
                     }
                 </View>
                 <LoadMore loadingStatus={loadingStatus} />
+                <View className='msg-send' onClick={() => {
+                    this.setState({
+                        msgVisible: true
+                    })
+                }}
+                >
+                    <Image src={iconWrite} className='msg-send-icon' />
+                    <View className='msg-send-btn'>
+                        写祝福
+                    </View>
+                </View>
+
+                <SendMsg visible={msgVisible} onHandleCloseMsg={() => {
+                    this.setState({
+                        msgVisible: false
+                    })
+                }}
+                />
             </View>
         )
     }
