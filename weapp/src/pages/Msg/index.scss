@@ -1,12 +1,12 @@
 @import "../../common/css/theme";
 Page {
     background: #fff;
-    overflow-scrolling: touch;
 }
 
 .msg {
     width: 100%;
-
+    padding-top: 30px;
+    overflow-y: auto;
     &-item {
         padding: 15px 0 10px 25px;
         margin-bottom: 5px;
@@ -52,7 +52,7 @@ Page {
             overflow: hidden;
         }
         &__msg-text {
-            padding-right: 10px;
+            padding-right: 20px;
             color: rgba(0,0,0,0.6);
             font-size: 30px;
             padding-top: 8px;
@@ -75,6 +75,7 @@ Page {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        opacity: 0.85;
         &-btn {
             width: 95px;
             font-size: 26px;

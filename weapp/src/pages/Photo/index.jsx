@@ -1,25 +1,51 @@
 import Taro from '@tarojs/taro'
 import React, {Component} from 'react'
-import {Swiper, SwiperItem, Image, View, Button} from '@tarojs/components'
+import {Swiper, SwiperItem, Image, View} from '@tarojs/components'
 import './index.scss'
+
+import cloud from '../../service/cloud';
+import LoadMore from "../../components/LoadMore";
 
 class Photo extends Component {
     state = {
-        list: [
-            {
-                desc: 'https://forguo-1302175274.cos.ap-shanghai.myqcloud.com/assets/imgs/5656.jpg_wh1200.jpg',
-                url: 'https://forguo-1302175274.cos.ap-shanghai.myqcloud.com/assets/imgs/girl1.jpg'
-            },
-            {
-                desc: 'https://forguo-1302175274.cos.ap-shanghai.myqcloud.com/assets/imgs/5a28b5d8450fe.jpg',
-                url: 'https://forguo-1302175274.cos.ap-shanghai.myqcloud.com/assets/imgs/girl2.jpg'
-            },
-            {
-                desc: 'https://forguo-1302175274.cos.ap-shanghai.myqcloud.com/assets/imgs/5656.jpg_wh1200.jpg',
-                url: 'https://forguo-1302175274.cos.ap-shanghai.myqcloud.com/wedding/invite/banner.jpg'
-            },
+        list: [],
+        loadingStatus: 'loading'
+    };
 
-        ]
+    componentWillMount() {
+        this.getList();
+    }
+
+    getList = () => {
+        Taro.showNavigationBarLoading();
+        cloud.get('wedd_photos' ).then((res) => {
+            if (res.errMsg === 'collection.get:ok') {
+                if (res.data.length <= 0) {
+                    this.setState({
+                        loadingStatus: 'noMore'
+                    });
+                } else {
+                    this.setState({
+                        list: [ ...res.data],
+                        loadingStatus: 'isMore'
+                    });
+                }
+            }
+            Taro.hideNavigationBarLoading();
+            Taro.stopPullDownRefresh();
+        }, (err) => {
+            console.log(err);
+            Taro.stopPullDownRefresh();
+            Taro.hideNavigationBarLoading();
+            this.setState({
+                loadingStatus: 'noMore'
+            });
+            Taro.showToast({
+                title: err.errMsg || '请求失败，请重试！',
+                icon: 'none',
+                duration: 3000
+            });
+        });
     };
 
     handleImgSave = (src) => {
@@ -94,14 +120,15 @@ class Photo extends Component {
 
     render() {
         const {
-            list
+            list,
+            loadingStatus
         } = this.state;
         const renderList = (photoList) => {
             return photoList.map((item) => {
                 return (
                     <SwiperItem key={Math.random() * Math.random()}>
                         <View className='photo-swiper-item'>
-                            <Image mode='scaleToFill' className='photo-swiper-photo' src={item.url} lazyLoad onClick={this.handleImgSave.bind(this, item.url)} />
+                            <Image mode='scaleToFill' className='photo-swiper-photo' src={item.src} lazyLoad onClick={this.handleImgSave.bind(this, item.src)} />
                         </View>
                     </SwiperItem>
                 )
@@ -123,6 +150,13 @@ class Photo extends Component {
                     }
                 </Swiper>
                 <View className='photo-save-tips'>点击图片保存至相册</View>
+
+                {
+                    loadingStatus === 'loading' &&
+                    <View className='spin-loading'>
+                        <LoadMore noMoreText='暂无数据，请重试！' loadingStatus={loadingStatus} />
+                    </View>
+                }
             </View>
         )
     }

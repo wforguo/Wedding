@@ -4,76 +4,25 @@ import {Button, Textarea, Video, View} from '@tarojs/components'
 import './index.scss'
 import {getRandomColor} from "../../util";
 
-const danmuList = [
-    {
-        text: '第 1s 零点的温度',
-        color: '#ff0000',
-        time: 1
-    }, {
-        text: '第 3s 恭喜恭喜',
-        color: '#ff00ff',
-        time: 3
-    },
-    {
-        text: '第 1s 新婚快乐',
-        color: '#ff0000',
-        time: 6
-    }, {
-        text: '第 3s 雨中',
-        color: '#ff00ff',
-        time: 9
-    },
-    {
-        text: '第 1s 清水无形',
-        color: '#ff0000',
-        time: 11
-    }, {
-        text: '第 3s 百年好合',
-        color: '#ff00ff',
-        time: 13
-    },
-    {
-        text: '第 1s 零点的温度',
-        color: '#ff0000',
-        time: 1
-    }, {
-        text: '第 3s 恭喜恭喜',
-        color: '#ff00ff',
-        time: 3
-    },
-    {
-        text: '第 1s 新婚快乐',
-        color: '#ff0000',
-        time: 6
-    }, {
-        text: '第 3s 雨中',
-        color: '#ff00ff',
-        time: 9
-    },
-    {
-        text: '第 1s 清水无形',
-        color: '#ff0000',
-        time: 11
-    }, {
-        text: '第 3s 百年好合',
-        color: '#ff00ff',
-        time: 13
-    }
-];
+import cloud from '../../service/cloud';
+import LoadMore from "../../components/LoadMore";
 
 let videoContext = null;
 
 class Bless extends Component {
     state = {
+        loadingStatus: 'loading',
         video: {
-            src: 'https://666f-forguo-0979a1-1251886253.tcb.qcloud.la/wxapp/wedding/static/girl.mp4?sign=82606071afbc37ec98646dd632b8675c&t=1562941106',
-            poster: 'https://forguo-1302175274.cos.ap-shanghai.myqcloud.com/wedding/assets/img/marry.jpg',
-            desc: ''
+            src: '',
+            poster: '',
+            danmuList: []
         },
         showShare: false,
-        list: danmuList
     };
 
+    componentWillMount() {
+        this.getInfo();
+    }
     componentDidMount() {
         videoContext = Taro.createVideoContext('video')
     }
@@ -82,11 +31,49 @@ class Bless extends Component {
         videoContext = null;
     }
 
-    componentDidShow() {
-    }
-
-    componentDidHide() {
-    }
+    getInfo = () => {
+        Taro.showNavigationBarLoading();
+        cloud.get(
+            'wedd_video'
+        ).then((res) => {
+            if (res.errMsg === 'collection.get:ok') {
+                if (res.data.length <= 0) {
+                    this.setState({
+                        loadingStatus: 'noMore'
+                    });
+                } else {
+                    let info = res.data[0];
+                    const {
+                        src,
+                        poster,
+                        danmuList
+                    } = info;
+                    this.setState({
+                        loadingStatus: 'isMore',
+                        video: {
+                            src,
+                            poster,
+                            danmuList
+                        },
+                    });
+                }
+            }
+            Taro.hideNavigationBarLoading();
+            Taro.stopPullDownRefresh();
+        }, (err) => {
+            console.log(err);
+            Taro.stopPullDownRefresh();
+            Taro.hideNavigationBarLoading();
+            this.setState({
+                loadingStatus: 'noMore'
+            });
+            Taro.showToast({
+                title: err.errMsg || '请求失败，请重试！',
+                icon: 'none',
+                duration: 3000
+            });
+        });
+    };
 
     handleInput = (state, e) => {
         this.setState({
@@ -156,7 +143,7 @@ class Bless extends Component {
 
     render() {
         const {
-            list,
+            loadingStatus,
             video,
             msg,
             showShare
@@ -175,7 +162,7 @@ class Bless extends Component {
                       id='video'
                       loop={false}
                       muted={false}
-                      danmuList={list}
+                      danmuList={video.danmuList}
                       enableDanmu
                       danmuBtn
                       onError={this.handleVideoError.bind(this)}
@@ -225,6 +212,13 @@ class Bless extends Component {
                         ]}
                     />
                 </View>
+
+                {
+                    loadingStatus === 'loading' &&
+                    <View className='spin-loading'>
+                        <LoadMore noMoreText='暂无数据，请重试！' loadingStatus={loadingStatus} />
+                    </View>
+                }
             </View>
         )
     }

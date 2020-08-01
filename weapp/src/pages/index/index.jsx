@@ -7,11 +7,14 @@ import inviteLetter from '../../common/img/invite-letter.png';
 import iconAbout from '../../common/img/icon-about.png';
 import iconShare from '../../common/img/icon-share.png';
 
+import cloud from '../../service/cloud';
+import LoadMore from "../../components/LoadMore";
+
 class Index extends Component {
     state = {
+        loadingStatus: 'loading',
         navBarTop: 44 + 36 + 6 + 45,
         invite: {
-            theme: '婚礼主题100天',
             groomName: '新郎',
             brideName: '新娘',
             startTime: "2020/07/18",
@@ -21,21 +24,65 @@ class Index extends Component {
     };
 
 
-    componentDidMount() {
+    componentWillMount() {
         this.getSystemInfo();
+        this.getInviteInfo();
     }
-
-
     onShareAppMessage () {
         const {
             invite
         } = this.state;
         return {
             title: `诚邀您参加${invite.groomName}&${invite.brideName}的婚礼`,
-            // path: '/page/user?id=123',
-            // imageUrl: ''
         }
     }
+
+    getInviteInfo = () => {
+        Taro.showNavigationBarLoading();
+        cloud.get('wedd_invite').then((res) => {
+            if (res.errMsg === 'collection.get:ok') {
+                if (res.data.length <= 0) {
+                    this.setState({
+                        loadingStatus: 'noMore'
+                    });
+                } else {
+                    let data = res.data[0];
+                    const {
+                        groomName,
+                        brideName,
+                        startTime,
+                        banner,
+                        location
+                    } = data;
+                    let invite = {
+                        groomName,
+                        brideName,
+                        startTime,
+                        banner,
+                        address: location.address
+                    };
+                    this.setState({
+                        invite: invite,
+                        loadingStatus: 'isMore'
+                    });
+                }
+            }
+            Taro.hideNavigationBarLoading();
+            Taro.stopPullDownRefresh();
+        }, (err) => {
+            console.log(err);
+            Taro.stopPullDownRefresh();
+            Taro.hideNavigationBarLoading();
+            this.setState({
+                loadingStatus: 'noMore'
+            });
+            Taro.showToast({
+                title: err.errMsg || '请求失败，请重试！',
+                icon: 'none',
+                duration: 3000
+            });
+        });
+    };
 
     getSystemInfo = () => {
         let systemInfo = Taro.systemInfo;
@@ -49,7 +96,8 @@ class Index extends Component {
     render() {
         const {
             invite,
-            navBarTop
+            navBarTop,
+            loadingStatus
         } = this.state;
         return (
             <View className='page invite'>
@@ -78,6 +126,13 @@ class Index extends Component {
                         <Image src={iconShare} className='invite-tool-icon invite-tool-share-icon' />
                     </Button>
                 </View>
+
+                {
+                    loadingStatus === 'loading' &&
+                    <View className='spin-loading'>
+                        <LoadMore noMoreText='暂无数据，请重试！' loadingStatus={loadingStatus} />
+                    </View>
+                }
             </View>
         )
     }

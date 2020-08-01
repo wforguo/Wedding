@@ -43,3 +43,22 @@ Page {
 .btn-hover {
     background: #f8f8f8;
 }
+
+
+/*
+ * 全屏loading
+ */
+
+.spin-loading {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 99999;
+    top: 0;
+    left: 0;
+    pointer-events: all;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

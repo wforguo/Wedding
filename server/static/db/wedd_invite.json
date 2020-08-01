@@ -3,7 +3,7 @@
         "_id": {
             "$oid": "5f12e69e00437671ae3936e5"
         },
-        "banner": "https://forguo-1302175274.cos.ap-shanghai.myqcloud.com/wedding/assets/img/invite.jpg",
+        "banner": "https://forguo-1302175274.cos.ap-shanghai.myqcloud.com/wedding/invite/banner.jpg",
         "theme": "婚礼主题100天",
         "brideName": "新娘",
         "brideMobile": "18866666666",

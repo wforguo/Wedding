@@ -4,6 +4,7 @@ import { Button, Text, Image, View, Map } from '@tarojs/components'
 import './index.scss'
 import callHe from '../../common/img/icon-call-he.png';
 import callShe from '../../common/img/icon-call-she.png';
+import cloud from "../../service/cloud";
 
 class Location extends Component {
     state = {
@@ -37,6 +38,50 @@ class Location extends Component {
         let menuButtonInfo = Taro.menuButtonInfo;
         this.setState({
             navBarTop: (systemInfo.statusBarHeight || 44) + (menuButtonInfo.height || 32) + 6 + 20
+        });
+    };
+
+    getInfo = () => {
+        Taro.showNavigationBarLoading();
+        cloud.get(
+            'wedd_video'
+        ).then((res) => {
+            if (res.errMsg === 'collection.get:ok') {
+                if (res.data.length <= 0) {
+                    this.setState({
+                        loadingStatus: 'noMore'
+                    });
+                } else {
+                    let info = res.data[0];
+                    const {
+                        src,
+                        poster,
+                        danmuList
+                    } = info;
+                    this.setState({
+                        loadingStatus: 'isMore',
+                        video: {
+                            src,
+                            poster,
+                            danmuList
+                        },
+                    });
+                }
+            }
+            Taro.hideNavigationBarLoading();
+            Taro.stopPullDownRefresh();
+        }, (err) => {
+            console.log(err);
+            Taro.stopPullDownRefresh();
+            Taro.hideNavigationBarLoading();
+            this.setState({
+                loadingStatus: 'noMore'
+            });
+            Taro.showToast({
+                title: err.errMsg || '请求失败，请重试！',
+                icon: 'none',
+                duration: 3000
+            });
         });
     };
 

@@ -3,6 +3,7 @@
 	"projectname": "%E8%B6%A3%E5%A9%9A%E7%A4%BC",
 	"description": "趣婚礼",
 	"appid": "wx29ddc6783f8e57e6",
+	"cloudfunctionRoot": "cloud/functions/",
 	"setting": {
 		"urlCheck": false,
 		"es6": false,

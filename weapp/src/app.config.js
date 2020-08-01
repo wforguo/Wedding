@@ -1,4 +1,7 @@
 export default {
+    usingComponents: {
+        'mp-loading': '/miniprogram_npm/weui-miniprogram/loading/loading'
+    },
     pages: [
         'pages/Index/index',
         'pages/Photo/index',
@@ -53,5 +56,6 @@ export default {
     },
     useExtendedLib: {
         'weui': true
-    }
+    },
+    cloud: true
 }

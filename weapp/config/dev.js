@@ -4,7 +4,7 @@ const BASE_URL = 'http://localhost'; // 开发
 
 module.exports = {
     env: {
-        NODE_ENV: '"development"'
+        NODE_ENV: '"production"'
     },
     defineConstants: {
         BASE_URL: BASE_URL,
