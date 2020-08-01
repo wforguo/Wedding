@@ -50,7 +50,8 @@ class SendMsg extends Component {
 
     render() {
         const {
-            visible
+            visible,
+            msg
         } = this.props;
         return (
             <View>
@@ -68,7 +69,18 @@ class SendMsg extends Component {
                                 </View>
                             </View>
                             <View className='send-msg-inner__input'>
-                                <Textarea onInput={this.handleInput.bind(this, 'msg')} placeholder='请留下您的祝福，将同步到弹幕留言~' focus className='send-msg-inner__area' placeholderClass='placeholder-style' maxlength={200} />
+                                <Textarea
+                                  value={msg}
+                                  show-confirm-bar
+                                  confirm-type='发送'
+                                  onConfirm={this.handleSendMsg.bind(this)}
+                                  onInput={this.handleInput.bind(this, 'msg')}
+                                  placeholder='请留下您的祝福，将同步到弹幕留言~'
+                                  focus
+                                  className='send-msg-inner__area'
+                                  placeholderClass='placeholder-style'
+                                  maxlength={200}
+                                />
                             </View>
                         </View>
                     </View>

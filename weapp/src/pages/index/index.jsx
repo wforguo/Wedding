@@ -1,12 +1,15 @@
 import Taro from '@tarojs/taro'
 import React, {Component} from 'react'
-import {Image, Text, View } from '@tarojs/components'
+import { Navigator, Image, Button, View } from '@tarojs/components'
 import './index.scss'
 import inviteTips from '../../common/img/invite-tips.png';
 import inviteLetter from '../../common/img/invite-letter.png';
+import iconAbout from '../../common/img/icon-about.png';
+import iconShare from '../../common/img/icon-share.png';
 
 class Index extends Component {
     state = {
+        navBarTop: 44 + 36 + 6 + 45,
         invite: {
             theme: '婚礼主题100天',
             groomName: '新郎',
@@ -16,6 +19,12 @@ class Index extends Component {
             banner: 'https://forguo-1302175274.cos.ap-shanghai.myqcloud.com/wedding/invite/banner.jpg',
         }
     };
+
+
+    componentDidMount() {
+        this.getSystemInfo();
+    }
+
 
     onShareAppMessage () {
         const {
@@ -28,9 +37,19 @@ class Index extends Component {
         }
     }
 
+    getSystemInfo = () => {
+        let systemInfo = Taro.systemInfo;
+        let menuButtonInfo = Taro.menuButtonInfo;
+        this.setState({
+            navBarTop: (systemInfo.statusBarHeight || 44) + (menuButtonInfo.height || 32) + 6 + 20
+        });
+    };
+
+
     render() {
         const {
-            invite
+            invite,
+            navBarTop
         } = this.state;
         return (
             <View className='page invite'>
@@ -47,6 +66,17 @@ class Index extends Component {
                         诚/挚/邀/请/您/参/加/我/们/的/婚/礼
                     </View>
                     <Image src={inviteTips} className='invite-tips' />
+                </View>
+                <View className='invite-tool' style={{
+                    top: `${navBarTop}px`
+                }}
+                >
+                    <Navigator url='/pages/About/index' className='invite-tool-btn invite-tool-about'>
+                        <Image src={iconAbout} className='invite-tool-icon invite-tool-about-icon' />
+                    </Navigator>
+                    <Button openType='share' className='invite-tool-btn invite-tool-share'>
+                        <Image src={iconShare} className='invite-tool-icon invite-tool-share-icon' />
+                    </Button>
                 </View>
             </View>
         )

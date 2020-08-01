@@ -183,10 +183,13 @@ class Bless extends Component {
                 </View>
                 {/* 留言板 */}
                 <View className='bless-msg'>
-                    <Textarea value={msg}
+                    <Textarea
+                      value={msg}
+                      show-confirm-bar confirm-type='发送'
+                      onConfirm={this.handleSendBless.bind(this)}
                       onInput={this.handleInput.bind(this, 'msg')}
                       className='bless-msg-input'
-                      maxlength={100}
+                      maxlength={200}
                       placeholder='请输入弹幕留言，将同步到留言列表~'
                       placeholderClass='placeholder-style'
                     />

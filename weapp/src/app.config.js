@@ -5,6 +5,7 @@ export default {
         'pages/Location/index',
         'pages/Bless/index',
         'pages/Msg/index',
+        'pages/About/index',
     ],
     window: {
         backgroundTextStyle: 'dark',

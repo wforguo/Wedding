@@ -32,12 +32,6 @@ class Location extends Component {
         this.getSystemInfo();
     }
 
-    componentDidShow() {
-    }
-
-    componentDidHide() {
-    }
-
     getSystemInfo = () => {
         let systemInfo = Taro.systemInfo;
         let menuButtonInfo = Taro.menuButtonInfo;

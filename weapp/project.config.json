@@ -59,8 +59,8 @@
 			"list": [
 				{
 					"id": 0,
-					"name": "pages/Bless/index",
-					"pathName": "pages/Bless/index",
+					"name": "pages/About/index",
+					"pathName": "pages/About/index",
 					"query": "",
 					"scene": null
 				},
