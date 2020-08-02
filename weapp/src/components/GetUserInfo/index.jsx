@@ -44,7 +44,7 @@ class Photo extends Component {
     }
 
     // 获取用户信息
-    handleGetUserInfo = (e) => {
+    onGetUserInfo = (e) => {
         const StoreUserInfo = this.props.userInfo;
         if (StoreUserInfo) {
             this.props.onHandleComplete(StoreUserInfo);
@@ -70,7 +70,7 @@ class Photo extends Component {
             <View className='get-user-info'>
                 {
                     canIUse ?
-                    <Button open-type='getUserInfo' onGetUserInfo={this.handleGetUserInfo.bind(this)}>点击登录</Button>
+                    <Button open-type='getUserInfo' onGetUserInfo={this.onGetUserInfo.bind(this)}>点击登录</Button>
                         :
                     <View>请升级微信版本</View>
                 }

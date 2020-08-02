@@ -1,5 +1,6 @@
 import Taro from '@tarojs/taro'
 import React, {Component} from 'react'
+import {connect} from "react-redux";
 import { Navigator, Image, Button, View } from '@tarojs/components'
 import './index.scss'
 import inviteTips from '../../common/img/invite-tips.png';
@@ -7,20 +8,25 @@ import inviteLetter from '../../common/img/invite-letter.png';
 import iconAbout from '../../common/img/icon-about.png';
 import iconShare from '../../common/img/icon-share.png';
 
-import cloud from '../../service/cloud';
 import LoadMore from "../../components/LoadMore";
+
+import {
+    dispatchGetInviteInfo
+} from "../../store/actions/invite";
+
+@connect(({account, invite}) => {
+    return {
+        invite: invite.invite,
+        loadingStatus: invite.statue,
+        userInfo: account.userInfo
+    }
+}, {
+    dispatchGetInviteInfo
+})
 
 class Index extends Component {
     state = {
-        loadingStatus: 'loading',
         navBarTop: 44 + 36 + 6 + 45,
-        invite: {
-            groomName: '新郎',
-            brideName: '新娘',
-            startTime: "2020/07/18",
-            address: "兴平路街道晶虹嘉园5号楼",
-            banner: 'https://forguo-1302175274.cos.ap-shanghai.myqcloud.com/wedding/invite/banner.jpg',
-        }
     };
 
 
@@ -31,57 +37,14 @@ class Index extends Component {
     onShareAppMessage () {
         const {
             invite
-        } = this.state;
+        } = this.props;
         return {
             title: `诚邀您参加${invite.groomName}&${invite.brideName}的婚礼`,
         }
     }
 
     getInviteInfo = () => {
-        Taro.showNavigationBarLoading();
-        cloud.get('wedd_invite').then((res) => {
-            if (res.errMsg === 'collection.get:ok') {
-                if (res.data.length <= 0) {
-                    this.setState({
-                        loadingStatus: 'noMore'
-                    });
-                } else {
-                    let data = res.data[0];
-                    const {
-                        groomName,
-                        brideName,
-                        startTime,
-                        banner,
-                        location
-                    } = data;
-                    let invite = {
-                        groomName,
-                        brideName,
-                        startTime,
-                        banner,
-                        address: location.address
-                    };
-                    this.setState({
-                        invite: invite,
-                        loadingStatus: 'isMore'
-                    });
-                }
-            }
-            Taro.hideNavigationBarLoading();
-            Taro.stopPullDownRefresh();
-        }, (err) => {
-            console.log(err);
-            Taro.stopPullDownRefresh();
-            Taro.hideNavigationBarLoading();
-            this.setState({
-                loadingStatus: 'noMore'
-            });
-            Taro.showToast({
-                title: err.errMsg || '请求失败，请重试！',
-                icon: 'none',
-                duration: 3000
-            });
-        });
+        this.props.dispatchGetInviteInfo();
     };
 
     getSystemInfo = () => {
@@ -92,13 +55,15 @@ class Index extends Component {
         });
     };
 
-
     render() {
         const {
-            invite,
             navBarTop,
-            loadingStatus
         } = this.state;
+        const {
+            invite,
+            loadingStatus
+        } = this.props;
+        console.log(loadingStatus);
         return (
             <View className='page invite'>
                 <Image className='invite-banner' src={invite.banner} />

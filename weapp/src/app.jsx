@@ -24,13 +24,8 @@ class App extends Component {
         console.log(store.getState());
     }
 
-    componentDidShow() {
-    }
-
-    componentDidHide() {
-    }
-
-    componentDidCatchError() {
+    componentDidCatchError(e) {
+        console.log(e);
     }
 
     // 获取系统信息

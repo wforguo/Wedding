@@ -1,33 +1,22 @@
 import Taro from '@tarojs/taro'
 import React, {Component} from 'react'
+import {connect} from "react-redux";
 import { Button, Text, Image, View, Map } from '@tarojs/components'
 import './index.scss'
 import callHe from '../../common/img/icon-call-he.png';
 import callShe from '../../common/img/icon-call-she.png';
-import cloud from "../../service/cloud";
+
+@connect(({invite}) => {
+    return {
+        brideMobile: invite.invite.brideMobile,
+        groomMobile: invite.invite.groomMobile,
+        location: invite.invite.location,
+    }
+})
 
 class Location extends Component {
     state = {
         navBarTop: 44 + 36 + 6 + 45,
-        brideMobile: "18866666666",
-        groomMobile: "17666666666",
-        location: {
-            "address": "兴平路街道晶虹嘉园5号楼",
-            "adjCode": [
-                "620000",
-                "620400",
-                "620403"
-            ],
-            "city": "白银市",
-            "district": "平川区",
-            "province": "甘肃省",
-            "fullAddress": "甘肃省白银市平川区兴平路街道晶虹嘉园5号楼",
-            "areaId": "620403",
-            "provinceId": "620000",
-            "cityId": "620400",
-            "longitude": 104.813263,
-            "latitude": 36.731502
-        }
     };
     componentDidMount() {
         this.getSystemInfo();
@@ -41,54 +30,10 @@ class Location extends Component {
         });
     };
 
-    getInfo = () => {
-        Taro.showNavigationBarLoading();
-        cloud.get(
-            'wedd_video'
-        ).then((res) => {
-            if (res.errMsg === 'collection.get:ok') {
-                if (res.data.length <= 0) {
-                    this.setState({
-                        loadingStatus: 'noMore'
-                    });
-                } else {
-                    let info = res.data[0];
-                    const {
-                        src,
-                        poster,
-                        danmuList
-                    } = info;
-                    this.setState({
-                        loadingStatus: 'isMore',
-                        video: {
-                            src,
-                            poster,
-                            danmuList
-                        },
-                    });
-                }
-            }
-            Taro.hideNavigationBarLoading();
-            Taro.stopPullDownRefresh();
-        }, (err) => {
-            console.log(err);
-            Taro.stopPullDownRefresh();
-            Taro.hideNavigationBarLoading();
-            this.setState({
-                loadingStatus: 'noMore'
-            });
-            Taro.showToast({
-                title: err.errMsg || '请求失败，请重试！',
-                icon: 'none',
-                duration: 3000
-            });
-        });
-    };
-
     handleMapNav = () => {
         const {
             location,
-        } = this.state;
+        } = this.props;
         const {
             latitude,
             longitude,
@@ -117,11 +62,13 @@ class Location extends Component {
 
     render() {
         const {
-            location,
             navBarTop,
+        } = this.state;
+        const {
+            location,
             brideMobile,
             groomMobile
-        } = this.state;
+        } = this.props;
         const {
             latitude,
             longitude,

@@ -18,7 +18,7 @@ class SendMsg extends Component {
 
     componentWillMount() {}
 
-    handleMaskClose = () => {
+    onMaskClose = () => {
         this.props.onHandleCloseMsg();
     };
 
@@ -28,7 +28,7 @@ class SendMsg extends Component {
         })
     };
 
-    handleSendMsg = () => {
+    onSendMsg = () => {
         const {
             msg
         } = this.state;
@@ -67,7 +67,8 @@ class SendMsg extends Component {
     };
 
     // 阻止事件冒泡
-    handleTouchMove = (e) => {
+    onTouchMove = (e) => {
+        console.log(e);
         e.stopPropagation();
     };
 
@@ -82,16 +83,16 @@ class SendMsg extends Component {
             <View>
                 {
                     visible &&
-                    <View className='send-msg' onTouchMove={this.handleTouchMove.bind(this)}>
+                    <View className='send-msg' onTouchMove={this.onTouchMove.bind(this)}>
                         <View className='send-msg-mask'
-                          onClick={this.handleMaskClose.bind(this)}
+                          onClick={this.onMaskClose.bind(this)}
                         />
                         <View className='send-msg-inner'>
                             <View className='send-msg-inner__tool-bar'>
-                                <View className='send-msg-inner__tool-btn' onClick={this.handleMaskClose.bind(this)}>
+                                <View className='send-msg-inner__tool-btn' onClick={this.onMaskClose.bind(this)}>
                                     <Image src={iconBack} className='send-msg-inner__back-icon' />
                                 </View>
-                                <View className='send-msg-inner__tool-btn' onClick={this.handleSendMsg.bind(this)}>
+                                <View className='send-msg-inner__tool-btn' onClick={this.onSendMsg.bind(this)}>
                                     <Image src={iconSend} className='send-msg-inner__send-icon' />
                                 </View>
                             </View>
@@ -100,7 +101,7 @@ class SendMsg extends Component {
                                   value={msg}
                                   show-confirm-bar
                                   confirm-type='发送'
-                                  onConfirm={this.handleSendMsg.bind(this)}
+                                  onConfirm={this.onSendMsg.bind(this)}
                                   onInput={this.handleInput.bind(this, 'msg')}
                                   placeholder='请留下您的祝福，将同步到弹幕留言~'
                                   className='send-msg-inner__area'
