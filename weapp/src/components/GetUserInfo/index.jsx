@@ -70,7 +70,7 @@ class Photo extends Component {
             <View className='get-user-info'>
                 {
                     canIUse ?
-                    <Button open-type='getUserInfo' onGetUserInfo={this.onGetUserInfo.bind(this)}>点击登录</Button>
+                    <Button className='get-user-info-btn' open-type='getUserInfo' onGetUserInfo={this.onGetUserInfo.bind(this)} />
                         :
                     <View>请升级微信版本</View>
                 }

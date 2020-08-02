@@ -1,14 +1,23 @@
 import Taro from '@tarojs/taro'
 import React, {Component} from 'react'
+import {connect} from "react-redux";
 import {Button, Textarea, Video, View} from '@tarojs/components'
 import './index.scss'
 import {getRandomColor} from "../../util";
 
 import cloud from '../../service/cloud';
 import LoadMore from "../../components/LoadMore";
+import GetUserInfo from '../../components/GetUserInfo';
+
+import { dispatchSendMsg } from '../../store/actions/msg';
 
 let videoContext = null;
 
+@connect(({account}) => ({
+    userInfo: account.userInfo
+}), {
+    dispatchSendMsg
+})
 class Bless extends Component {
     state = {
         loadingStatus: 'loading',
@@ -82,7 +91,7 @@ class Bless extends Component {
     };
 
     // 送上留言祝福
-    handleSendBless = () => {
+    handleSendBless = (userInfo) => {
         const {
             msg
         } = this.state;
@@ -96,7 +105,16 @@ class Bless extends Component {
                 title: '发送中...',
                 mask: true
             });
-            setTimeout(() => {
+            const {
+                avatarUrl,
+                nickName
+            } = userInfo;
+            this.props.dispatchSendMsg({
+                userMsg: msg,
+                avatarUrl,
+                nickName,
+                type: 'danmu'
+            }).then(() => {
                 // 发送弹幕
                 videoContext.sendDanmu({
                     text: msg,
@@ -109,7 +127,13 @@ class Bless extends Component {
                 this.setState({
                     msg: ''
                 })
-            }, 100);
+            }, (err) => {
+                Taro.showToast({
+                    title: err.errMsg || '请求失败，请重试！',
+                    icon: 'none',
+                    duration: 3000
+                });
+            })
         }
     };
 
@@ -122,7 +146,6 @@ class Bless extends Component {
 
     // 关闭分享
     handleCloseShare = (e) => {
-        console.log(e);
         this.setState({
             showShare: false
         })
@@ -134,6 +157,9 @@ class Bless extends Component {
             title: e.detail.errMsg || '播放出错，请重新进入！',
             icon: 'none'
         })
+    };
+
+    onTimeUpdate = () => {
     };
 
     handleShareClick = (e) => {
@@ -166,6 +192,7 @@ class Bless extends Component {
                       enableDanmu
                       danmuBtn
                       onError={this.handleVideoError.bind(this)}
+                      onTimeUpdate={this.onTimeUpdate.bind(this)}
                     />
                 </View>
                 {/* 留言板 */}
@@ -173,7 +200,6 @@ class Bless extends Component {
                     <Textarea
                       value={msg}
                       show-confirm-bar confirm-type='发送'
-                      onConfirm={this.handleSendBless.bind(this)}
                       onInput={this.handleInput.bind(this, 'msg')}
                       className='bless-msg-input'
                       maxlength={200}
@@ -183,7 +209,10 @@ class Bless extends Component {
                 </View>
 
                 <View className='bless-tool'>
-                    <Button className='bless-tool__send-msg' onClick={this.handleSendBless.bind(this)}>发送留言</Button>
+                    <Button className='bless-tool__send-msg'>
+                        <GetUserInfo onHandleComplete={this.handleSendBless.bind(this)} />
+                        发送留言
+                    </Button>
                     <Button className='bless-tool__share' openType='share'>分享喜悦</Button>
                 </View>
 

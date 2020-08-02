@@ -5,11 +5,13 @@ import {connect} from "react-redux";
 import iconBack from "../../../../common/img/icon-msg-back.png";
 import iconSend from "../../../../common/img/icon-msg-send.png";
 import './index.scss'
-import cloud from '../../../../service/cloud';
+import { dispatchSendMsg } from '../../../../store/actions/msg';
 
 @connect(({account}) => ({
     userInfo: account.userInfo
-}))
+}), {
+    dispatchSendMsg
+})
 
 class SendMsg extends Component {
     state = {
@@ -49,12 +51,12 @@ class SendMsg extends Component {
                 avatarUrl,
                 nickName
             } = userInfo;
-            cloud.add('wedd_msgs', {
+            this.props.dispatchSendMsg({
                 userMsg: msg,
                 avatarUrl,
-                nickName
-            }).then(res => {
-                console.log(res);
+                nickName,
+                type: 'msg'
+            }).then(() => {
                 Taro.hideLoading();
                 Taro.showToast({
                     title: '留言成功~',
@@ -62,7 +64,13 @@ class SendMsg extends Component {
                 this.setState({
                     msg: ''
                 })
-            });
+            }, (err) => {
+                Taro.showToast({
+                    title: err.errMsg || '请求失败，请重试！',
+                    icon: 'none',
+                    duration: 3000
+                });
+            })
         }
     };
 

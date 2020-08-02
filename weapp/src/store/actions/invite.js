@@ -53,6 +53,7 @@ export const dispatchGetInviteInfo = () => {
                             latitude
                         }
                     };
+                    Taro.showTabBar();
                     dispatch({
                         type: INVITE_INFO,
                         invite

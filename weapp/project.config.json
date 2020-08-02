@@ -85,6 +85,13 @@
 					"pathName": "pages/Location/index",
 					"query": "",
 					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/Bless/index",
+					"pathName": "pages/Bless/index",
+					"query": "",
+					"scene": null
 				}
 			]
 		}
