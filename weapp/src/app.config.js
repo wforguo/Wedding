@@ -5,6 +5,7 @@ export default {
         'pages/Location/index',
         'pages/Bless/index',
         'pages/Msg/index',
+        'pages/About/index',
     ],
     window: {
         backgroundTextStyle: 'dark',
@@ -52,5 +53,9 @@ export default {
     },
     useExtendedLib: {
         'weui': true
-    }
+    },
+    usingComponents: {
+        'mp-loading': '/miniprogram_npm/weui-miniprogram/loading/loading'
+    },
+    cloud: true
 }

@@ -8,11 +8,12 @@ let Schema = mongoose.Schema;
 
 let userSchema = new Schema({
     id: String,
-    url: String,
+    src: String,
     desc: String,
+    poster: String,
     createTime: String,
     updateTime: String,
-    barrage: Array //弹幕列表
+    danmuList: Array //弹幕列表
 });
 
 module.exports = mongoose.model('Video', userSchema, 'wedd_video');

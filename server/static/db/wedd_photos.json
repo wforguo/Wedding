@@ -4,7 +4,27 @@
             "$oid": "5f0b15aeb1bc1066b430ad6d"
         },
         "id": "photo1202007122152465",
-        "url": "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
+        "src": "https://forguo-1302175274.cos.ap-shanghai.myqcloud.com/assets/imgs/girl1.jpg",
+        "desc": "这是一张长图这是一张长图这是一张长图这是",
+        "createTime": "2020/07/12 21:52:46",
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "5f0b15aeb1bc1066b430ad6c"
+        },
+        "id": "photo1202007122152465",
+        "src": "https://forguo-1302175274.cos.ap-shanghai.myqcloud.com/assets/imgs/girl2.jpg",
+        "desc": "这是一张长图这是一张长图这是一张长图这是",
+        "createTime": "2020/07/12 21:52:46",
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "5f0b15aeb1bc1066b430as6d"
+        },
+        "id": "photo1202007122152465",
+        "src": "https://forguo-1302175274.cos.ap-shanghai.myqcloud.com/assets/imgs/%E4%B8%8B%E8%BD%BD.jpeg",
         "desc": "这是一张长图这是一张长图这是一张长图这是",
         "createTime": "2020/07/12 21:52:46",
         "__v": 0

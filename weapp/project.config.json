@@ -3,6 +3,7 @@
 	"projectname": "%E8%B6%A3%E5%A9%9A%E7%A4%BC",
 	"description": "趣婚礼",
 	"appid": "wx29ddc6783f8e57e6",
+	"cloudfunctionRoot": "cloud/functions/",
 	"setting": {
 		"urlCheck": false,
 		"es6": false,
@@ -27,7 +28,7 @@
 			"outputPath": ""
 		},
 		"useIsolateContext": true,
-		"useCompilerModule": true,
+		"useCompilerModule": false,
 		"userConfirmedUseCompilerModuleSwitch": false
 	},
 	"compileType": "miniprogram",
@@ -59,8 +60,8 @@
 			"list": [
 				{
 					"id": 0,
-					"name": "pages/Bless/index",
-					"pathName": "pages/Bless/index",
+					"name": "pages/About/index",
+					"pathName": "pages/About/index",
 					"query": "",
 					"scene": null
 				},
@@ -82,6 +83,13 @@
 					"id": -1,
 					"name": "pages/Location/index",
 					"pathName": "pages/Location/index",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/Bless/index",
+					"pathName": "pages/Bless/index",
 					"query": "",
 					"scene": null
 				}

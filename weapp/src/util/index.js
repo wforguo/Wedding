@@ -32,3 +32,18 @@ export const getMaxNum = function (arr) {
     }
     return Math.ceil(max);
 };
+
+
+/**
+ * @description 随机获取弹幕颜色
+ * @returns {string}
+ */
+export const getRandomColor = function () {
+    const rgb = [];
+    for (let i = 0; i < 3; ++i) {
+        let color = Math.floor(Math.random() * 256).toString(16)
+        color = color.length === 1 ? '0' + color : color
+        rgb.push(color)
+    }
+    return '#' + rgb.join('')
+};

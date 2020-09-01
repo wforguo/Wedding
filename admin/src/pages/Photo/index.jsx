@@ -75,8 +75,8 @@ const TableList = () => {
             hideInForm: false,
             align: 'center',
             render: (_, record) => (
-                <Avatar size="small" src={record.url} onClick={() => {
-                    serPreviewImage(record.url);
+                <Avatar size="small" src={record.src} onClick={() => {
+                    serPreviewImage(record.src);
                     serPreviewTitle(record.desc);
                     setPreviewVisible(true);
                 }}

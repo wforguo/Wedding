@@ -1,25 +1,25 @@
 import Taro from '@tarojs/taro'
 import React, {Component} from 'react'
+import {connect} from "react-redux";
 import { Button, Text, Image, View, Map } from '@tarojs/components'
 import './index.scss'
 import callHe from '../../common/img/icon-call-he.png';
 import callShe from '../../common/img/icon-call-she.png';
 
+@connect(({invite}) => {
+    return {
+        brideMobile: invite.invite.brideMobile,
+        groomMobile: invite.invite.groomMobile,
+        location: invite.invite.location,
+    }
+})
+
 class Location extends Component {
     state = {
-        latitude: 36.730922,
-        longitude: 104.792082,
-        address: '甘肃省白银市平川区世纪大道',
-        navBarTop: 44 + 36 + 6 + 45
+        navBarTop: 44 + 36 + 6 + 45,
     };
     componentDidMount() {
         this.getSystemInfo();
-    }
-
-    componentDidShow() {
-    }
-
-    componentDidHide() {
     }
 
     getSystemInfo = () => {
@@ -32,10 +32,13 @@ class Location extends Component {
 
     handleMapNav = () => {
         const {
+            location,
+        } = this.props;
+        const {
             latitude,
             longitude,
-            address
-        } = this.state;
+            fullAddress: address,
+        } = location;
         Taro.openLocation({
             latitude,
             longitude,
@@ -59,11 +62,18 @@ class Location extends Component {
 
     render() {
         const {
+            navBarTop,
+        } = this.state;
+        const {
+            location,
+            brideMobile,
+            groomMobile
+        } = this.props;
+        const {
             latitude,
             longitude,
             address,
-            navBarTop
-        } = this.state;
+        } = location;
         return (
             <View className='page location'>
                 <Map id='map'
@@ -99,11 +109,11 @@ class Location extends Component {
                 >一键导航</Button>
                 <View className='location__tool'>
                     <View className='location__tool-btn'>
-                        <View className='location__tool-call' onClick={this.handlePhoneCall.bind(this, '17609491107')}>
+                        <View className='location__tool-call' onClick={this.handlePhoneCall.bind(this, brideMobile)}>
                             <Image src={callHe} className='location__tool-call-img' />
                             <Text className='location__tool-call-txt'>呼叫新郎</Text>
                         </View>
-                        <View className='location__tool-call' onClick={this.handlePhoneCall.bind(this, '17609491107')}>
+                        <View className='location__tool-call' onClick={this.handlePhoneCall.bind(this, groomMobile)}>
                             <Image src={callShe} className='location__tool-call-img' />
                             <Text className='location__tool-call-txt'>呼叫新娘</Text>
                         </View>

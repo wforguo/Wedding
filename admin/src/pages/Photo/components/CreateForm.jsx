@@ -28,7 +28,7 @@ const CreateForm = props => {
             uid: '-1',
             name: 'image.png',
             status: 'done',
-            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+            src: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
         }
     ]);
 
@@ -44,7 +44,7 @@ const CreateForm = props => {
         const fieldsValue = await form.validateFields();
         handleAdd({
             ...fieldsValue, ...{
-                url: fileList[0].url
+                src: fileList[0].src
             }
         });
     };

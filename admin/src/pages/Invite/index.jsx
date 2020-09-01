@@ -8,7 +8,7 @@ import ChoseLocation from './components/ChoseLocation';
 const { TabPane } = Tabs;
 
 const {RangePicker} = DatePicker;
-const dateFormat = 'YYYY/MM/DD HH';
+const dateFormat = 'YYYY/MM/DD';
 // eslint-disable-next-line no-underscore-dangle
 let _id = null;
 
@@ -130,8 +130,7 @@ const FormSizeDemo = () => {
                                                ]}>
                                         <RangePicker
                                             style={{width: '100%'}}
-                                            showTime={{format: 'HH'}}
-                                            format="YYYY/MM/DD HH"
+                                            format="YYYY/MM/DD"
                                         />
                                     </Form.Item>
                                     <Form.Item label="举办地" name='fullAddress'>

@@ -7,12 +7,13 @@ import Taro from '@tarojs/taro';
 import {LOGIN, LOGOUT} from "../store/constants/account";
 import configStore from "../store/index";
 import {clearEmpty} from "../util";
+import config from "../common/config";
 
 const store = configStore();
-
-/* eslint-disable */
-const baseUrl = BASE_URL;
+const NODE_ENV = process.env.NODE_ENV;
+const baseUrl = NODE_ENV === 'development' ? config[config.env].api : config.prod.api;
 /* eslint-enable */
+console.log(`%c baseUrl %c ${baseUrl}`, 'padding: 1px; border-radius: 3px 0 0 3px; color: #479edf', 'padding: 1px 5px 1px 1px; border-radius: 0 3px 3px 0; color: #42c02e');
 
 // 错误码
 const CODE_MSG = {

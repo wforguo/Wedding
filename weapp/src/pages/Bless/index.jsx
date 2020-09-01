@@ -1,88 +1,97 @@
 import Taro from '@tarojs/taro'
 import React, {Component} from 'react'
-import { Button, Text,Textarea, View, Video } from '@tarojs/components'
+import {connect} from "react-redux";
+import {Button, Textarea, Video, View} from '@tarojs/components'
 import './index.scss'
+import {getRandomColor} from "../../util";
 
+import cloud from '../../service/cloud';
+import LoadMore from "../../components/LoadMore";
+import GetUserInfo from '../../components/GetUserInfo';
+
+import { dispatchSendMsg } from '../../store/actions/msg';
+
+let videoContext = null;
+
+@connect(({account}) => ({
+    userInfo: account.userInfo
+}), {
+    dispatchSendMsg
+})
 class Bless extends Component {
     state = {
-        msg: '',
+        loadingStatus: 'loading',
+        video: {
+            src: '',
+            poster: '',
+            danmuList: []
+        },
         showShare: false,
-        list: [
-            {
-                text: '第 1s 零点的温度',
-                color: '#ff0000',
-                time: 1
-            }, {
-                text: '第 3s 恭喜恭喜',
-                color: '#ff00ff',
-                time: 3
-            },
-            {
-                text: '第 1s 新婚快乐',
-                color: '#ff0000',
-                time: 6
-            }, {
-                text: '第 3s 雨中',
-                color: '#ff00ff',
-                time: 9
-            },
-            {
-                text: '第 1s 清水无形',
-                color: '#ff0000',
-                time: 11
-            }, {
-                text: '第 3s 百年好合',
-                color: '#ff00ff',
-                time: 13
-            },
-            {
-                text: '第 1s 零点的温度',
-                color: '#ff0000',
-                time: 1
-            }, {
-                text: '第 3s 恭喜恭喜',
-                color: '#ff00ff',
-                time: 3
-            },
-            {
-                text: '第 1s 新婚快乐',
-                color: '#ff0000',
-                time: 6
-            }, {
-                text: '第 3s 雨中',
-                color: '#ff00ff',
-                time: 9
-            },
-            {
-                text: '第 1s 清水无形',
-                color: '#ff0000',
-                time: 11
-            }, {
-                text: '第 3s 百年好合',
-                color: '#ff00ff',
-                time: 13
-            }
-        ]
     };
 
+    componentWillMount() {
+        this.getInfo();
+    }
+    componentDidMount() {
+        videoContext = Taro.createVideoContext('video')
+    }
+
     componentWillUnmount() {
+        videoContext = null;
     }
 
-    componentDidShow() {
-    }
-
-    componentDidHide() {
-    }
+    getInfo = () => {
+        Taro.showNavigationBarLoading();
+        cloud.get(
+            'wedd_video'
+        ).then((res) => {
+            if (res.errMsg === 'collection.get:ok') {
+                if (res.data.length <= 0) {
+                    this.setState({
+                        loadingStatus: 'noMore'
+                    });
+                } else {
+                    let info = res.data[0];
+                    const {
+                        src,
+                        poster,
+                        danmuList
+                    } = info;
+                    this.setState({
+                        loadingStatus: 'isMore',
+                        video: {
+                            src,
+                            poster,
+                            danmuList
+                        },
+                    });
+                }
+            }
+            Taro.hideNavigationBarLoading();
+            Taro.stopPullDownRefresh();
+        }, (err) => {
+            console.log(err);
+            Taro.stopPullDownRefresh();
+            Taro.hideNavigationBarLoading();
+            this.setState({
+                loadingStatus: 'noMore'
+            });
+            Taro.showToast({
+                title: err.errMsg || '请求失败，请重试！',
+                icon: 'none',
+                duration: 3000
+            });
+        });
+    };
 
     handleInput = (state, e) => {
-        console.log(e);
         this.setState({
             [state]: e.detail.value
         })
     };
 
     // 送上留言祝福
-    handleSendBless = () => {
+    handleSendBless = (userInfo) => {
         const {
             msg
         } = this.state;
@@ -96,15 +105,35 @@ class Bless extends Component {
                 title: '发送中...',
                 mask: true
             });
-            setTimeout(() => {
-               Taro.hideLoading();
-               Taro.showToast({
-                   title: '留言成功~',
-               });
-               this.setState({
-                   msg: ''
-               })
-            }, 800);
+            const {
+                avatarUrl,
+                nickName
+            } = userInfo;
+            this.props.dispatchSendMsg({
+                userMsg: msg,
+                avatarUrl,
+                nickName,
+                type: 'danmu'
+            }).then(() => {
+                // 发送弹幕
+                videoContext.sendDanmu({
+                    text: msg,
+                    color: getRandomColor()
+                });
+                Taro.hideLoading();
+                Taro.showToast({
+                    title: '留言成功~',
+                });
+                this.setState({
+                    msg: ''
+                })
+            }, (err) => {
+                Taro.showToast({
+                    title: err.errMsg || '请求失败，请重试！',
+                    icon: 'none',
+                    duration: 3000
+                });
+            })
         }
     };
 
@@ -116,11 +145,21 @@ class Bless extends Component {
     };
 
     // 关闭分享
-    handleCloseShare = (e)=>  {
-        console.log(e);
+    handleCloseShare = (e) => {
         this.setState({
             showShare: false
         })
+    };
+
+    handleVideoError = (e) => {
+        console.log(e);
+        Taro.showToast({
+            title: e.detail.errMsg || '播放出错，请重新进入！',
+            icon: 'none'
+        })
+    };
+
+    onTimeUpdate = () => {
     };
 
     handleShareClick = (e) => {
@@ -130,7 +169,8 @@ class Bless extends Component {
 
     render() {
         const {
-            list,
+            loadingStatus,
+            video,
             msg,
             showShare
         } = this.state;
@@ -140,32 +180,39 @@ class Bless extends Component {
                 <View className='bless-media'>
                     <Video
                       className='bless-media__video'
-                      src='https://666f-forguo-0979a1-1251886253.tcb.qcloud.la/wxapp/wedding/static/girl.mp4?sign=82606071afbc37ec98646dd632b8675c&t=1562941106'
+                      src={video.src}
                       controls
                       autoplay={false}
-                      poster='https://forguo-1302175274.cos.ap-shanghai.myqcloud.com/wedding/assets/img/marry.jpg'
+                      poster={video.poster}
                       initialTime='0'
                       id='video'
                       loop={false}
                       muted={false}
-                      danmuList={list}
+                      danmuList={video.danmuList}
                       enableDanmu
                       danmuBtn
+                      onError={this.handleVideoError.bind(this)}
+                      onTimeUpdate={this.onTimeUpdate.bind(this)}
                     />
                 </View>
                 {/* 留言板 */}
                 <View className='bless-msg'>
-                    <Textarea value={msg}
+                    <Textarea
+                      value={msg}
+                      show-confirm-bar confirm-type='发送'
                       onInput={this.handleInput.bind(this, 'msg')}
                       className='bless-msg-input'
-                      maxlength={100}
+                      maxlength={200}
                       placeholder='请输入弹幕留言，将同步到留言列表~'
                       placeholderClass='placeholder-style'
                     />
                 </View>
 
                 <View className='bless-tool'>
-                    <Button className='bless-tool__send-msg' onClick={this.handleSendBless.bind(this)}>发送留言</Button>
+                    <Button className='bless-tool__send-msg'>
+                        <GetUserInfo onHandleComplete={this.handleSendBless.bind(this)} />
+                        发送留言
+                    </Button>
                     <Button className='bless-tool__share' openType='share'>分享喜悦</Button>
                 </View>
 
@@ -179,21 +226,28 @@ class Bless extends Component {
                       desc='分享给好友，将直接发送给好友~'
                       tips='分享朋友圈，将会生产一张海报~'
                       buttons={[
-                          {
-                              type: 'default',
-                              className: 'bless-share-moment',
-                              text: '辅助操作',
-                              value: 0,
-                          },
-                          {
-                              type: 'default',
-                              className: 'bless-share-partner',
-                              text: '主操作',
-                              value: 1
-                          }
-                      ]}
+                            {
+                                type: 'default',
+                                className: 'bless-share-moment',
+                                text: '辅助操作',
+                                value: 0,
+                            },
+                            {
+                                type: 'default',
+                                className: 'bless-share-partner',
+                                text: '主操作',
+                                value: 1
+                            }
+                        ]}
                     />
                 </View>
+
+                {
+                    loadingStatus === 'loading' &&
+                    <View className='spin-loading'>
+                        <LoadMore noMoreText='暂无数据，请重试！' loadingStatus={loadingStatus} />
+                    </View>
+                }
             </View>
         )
     }

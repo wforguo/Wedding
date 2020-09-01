@@ -17,7 +17,7 @@ const LoadMore = function (props) {
                 </View>
             }
             {
-                loadingStatus !== 'loading' &&
+                loadingStatus === 'noMore' &&
                 <View className='weui-loadmore weui-loadmore_line'>
                     <View className='weui-loadmore__tips weui-loadmore__tips_in-line'>{noMoreText || '- 没有更多了 -'}</View>
                 </View>

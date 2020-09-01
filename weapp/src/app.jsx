@@ -1,29 +1,40 @@
 import Taro from '@tarojs/taro'
 import React, {Component} from 'react'
 import {Provider} from 'react-redux'
+import cloudConfig from './service/config'
 import configStore from './store'
 import './common/css/app.scss'
+
+// 分享
+Component.prototype.onShareAppMessage = function () {
+    return {
+        title: '诚邀您参加我们的婚礼~',
+        path: '/pages/Index/index', // 默认首页
+    };
+};
 
 const store = configStore();
 
 // app中的生命周期只会执行一次
 class App extends Component {
     componentWillMount() {
+        Taro.hideTabBar();
+        console.log(`%c Env %c ${process.env.NODE_ENV}`, 'padding: 1px; border-radius: 3px 0 0 3px; color: #fff; background: #606060', 'padding: 1px 5px 1px 1px; border-radius: 0 3px 3px 0; color: #fff; background: #42c02e');
         this.getSystemInfo();
         this.checkVersion();
     }
 
     componentDidMount() {
+        if (process.env.TARO_ENV === 'weapp') {
+            Taro.cloud.init({
+                env: cloudConfig
+            });
+        }
         console.log(store.getState());
     }
 
-    componentDidShow() {
-    }
-
-    componentDidHide() {
-    }
-
-    componentDidCatchError() {
+    componentDidCatchError(e) {
+        console.log(e);
     }
 
     // 获取系统信息
