@@ -41,7 +41,7 @@ const defaultFooterDom = (
             {
                 key: 'forguo',
                 title: 'wedding',
-                href: 'https://forguo.com',
+                href: 'https://forguo.cn',
                 blankTarget: true,
             }
         ]}

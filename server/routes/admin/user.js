@@ -5,6 +5,7 @@
  */
 
 const router = require('koa-router')();
+const { v4: uuidv4 } = require('uuid');
 const md5 = require('md5');
 const ip = require('ip');
 const User = require('../../models/User');
@@ -72,22 +73,36 @@ router.get('/list', async (ctx, next) => {
     delete params.pageSize;
     delete params.sorter;
     delete params._timestamp;
-    let res = await User.find(params).skip(Number(skip)).limit(Number(pageSize)).catch(error => {
+    let total = await User.count(params);
+    if (total > 0) {
+        let res = await User.find(params).skip(Number(skip)).limit(Number(pageSize)).catch(error => {
+            ctx.body = {
+                code: 10086,
+                success: false,
+                message: error.message
+            };
+        });
         ctx.body = {
-            code: 10086,
-            success: false,
-            message: error.message
+            code: 0,
+            message: 'ok',
+            data: res,
+            total,
+            'success': true,
+            'pageSize': pageSize || 10,
+            'current': current || 1
         };
-    });
-    ctx.body = {
-        code: 0,
-        message: 'ok',
-        data: res,
-        'total': res.length,
-        'success': true,
-        'pageSize': pageSize || 10,
-        'current': current || 1
-    };
+    } else {
+        ctx.body = {
+            code: 0,
+            message: 'ok',
+            data: [],
+            total,
+            'success': true,
+            'pageSize': pageSize || 10,
+            'current': current || 1
+        };
+    }
+
 });
 
 /**
@@ -127,14 +142,8 @@ router.post('/add', async (ctx, next) => {
         return false;
     }
     let createTime = new Date().Format('yyyy/MM/dd hh:mm:ss');
-    let platform = 'user';
-    let r1 = Math.floor(Math.random() * 10);
-    let r2 = Math.floor(Math.random() * 10);
-
-    let sysDate = new Date().Format('yyyyMMddhhmmss');
-    let id = platform + r1 + sysDate + r2;
     let user = {
-        userId: id,
+        userId: `user-${uuidv4()}`,
         userName,
         userEmail,
         userMobile,
@@ -181,29 +190,20 @@ router.post('/update', async (ctx, next) => {
     let {
         userId,
         userAvatar,
-        userName,
         userEmail,
         userMobile,
         userDesc,
+        userPwd
     } = body;
-    if (!userName || userName.length === 0) {
-        ctx.body = {
-            code: 10000,
-            success: false,
-            message: '用户名不能为空',
-        };
-        return false;
-    }
     let updateTime = new Date().Format('yyyy/MM/dd hh:mm:ss');
     let res = await User.update({
         userId
     }, {
         $set: {
-            userName,
             userEmail,
+            userPwd: md5(userPwd),
             userMobile,
             userDesc,
-            userIp: ip.address(),
             lastLoginIp: ip.address(),
             lastLoginTime: updateTime,
             updateTime,

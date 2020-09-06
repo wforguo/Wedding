@@ -137,4 +137,7 @@ export default defineConfig({
     manifest: {
         basePath: '/',
     },
+    // ... some config
+    // base: '/wedding/admin/', // 路由前缀
+    // publicPath: 'https://forguo-1302175274.cos.ap-shanghai.myqcloud.com/wedding/admin/', // 服务器地址
 });

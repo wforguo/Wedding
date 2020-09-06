@@ -21,6 +21,7 @@ const handleAdd = async fields => {
             message.warning(res.message || '添加失败，请重试');
         } else {
             message.success('添加成功');
+            return true;
         }
     } catch (error) {
         message.destroy();
@@ -35,10 +36,14 @@ const handleAdd = async fields => {
 const handleUpdate = async fields => {
     message.loading('保存中...');
     try {
-        await updateUser(fields);
+        const res = await updateUser({...fields});
         message.destroy();
-        message.success('保存成功');
-        return true;
+        if (res.code !== 200) {
+            message.warning(res.message || '保存失败，请重试');
+        } else {
+            message.success('保存成功');
+            return true;
+        }
     } catch (error) {
         message.destroy();
         message.error('保存失败请重试！');
@@ -83,6 +88,18 @@ const UserList = () => {
             maxLength: 16,
             hideInForm: false,
             align: 'center',
+            placeholder: '登录账号'
+        },
+        {
+            required: true,
+            title: '密码',
+            dataIndex: 'userPwd',
+            valueType: 'password',
+            hideInForm: false,
+            align: 'center',
+            hideInSearch: true,
+            hideInTable: true,
+            placeholder: '登录密码'
         },
         {
             required: true,
@@ -99,17 +116,8 @@ const UserList = () => {
             dataIndex: 'userMobile',
             maxLength: 11,
             hideInForm: false,
-            align: 'center'
-        },
-        {
-            required: true,
-            title: '密码',
-            dataIndex: 'userPwd',
-            valueType: 'password',
-            hideInForm: false,
             align: 'center',
-            hideInSearch: true,
-            hideInTable: true
+            type: 'tel'
         },
         {
             title: '状态',
@@ -149,12 +157,13 @@ const UserList = () => {
                     <Button type='link'
                             onClick={() => {
                                 handleUpdateModalVisible(true);
+                                console.warn(record);
                                 setFormValues(record);
                             }}
                     >编辑
                     </Button>
                     <Divider type="vertical"/>
-                    <Button type='link' danger onClick={async () => {
+                    <Button type='link' danger disabled={record.userName === 'admin'} onClick={async () => {
                         const success = await handleRemove(record);
                         if (success) {
                             if (actionRef.current) {

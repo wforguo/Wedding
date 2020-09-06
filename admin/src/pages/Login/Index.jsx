@@ -83,7 +83,10 @@ const Login = props => {
     );
 };
 
-export default connect(({login, loading}) => ({
-    userLogin: login,
-    submitting: loading.effects['login/login'],
-}))(Login);
+export default connect(({login, loading}) => {
+    return {
+        userLogin: login,
+        loading1: loading,
+        submitting: loading.effects['login/login'],
+    }
+})(Login);
