@@ -5,6 +5,7 @@
  */
 
 const router = require('koa-router')();
+const { v4: uuidv4 } = require('uuid');
 const Photo = require('../../models/Photo');
 
 // 添加路由前缀
@@ -77,14 +78,8 @@ router.post('/add', async (ctx, next) => {
         return false;
     }
     let createTime = new Date().Format('yyyy/MM/dd hh:mm:ss');
-    let platform = 'photo';
-    let r1 = Math.floor(Math.random() * 10);
-    let r2 = Math.floor(Math.random() * 10);
-
-    let sysDate = new Date().Format('yyyyMMddhhmmss');
-    let id = platform + r1 + sysDate + r2;
     let photo = {
-        id: id,
+        id: `photo-${uuidv4()}`,
         url: url,
         desc: desc,
         createTime,

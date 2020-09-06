@@ -2,7 +2,7 @@
 
 React + AntdPro
 
-## 运行
+## 开始
 
 Install `node_modules`:
 
@@ -39,3 +39,12 @@ yarn lint:fix
 ```bash
 yarn test
 ```
+
+
+## Ant Design Pro的dva-loading
+
+### onEffect(fn)
+ 
+> 封装 effect 执行。比如 dva-loading 基于此实现了自动处理 loading 状态。
+    
+https://www.cnblogs.com/ww01/p/10412404.html

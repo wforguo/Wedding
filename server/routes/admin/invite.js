@@ -5,6 +5,7 @@
  */
 
 const router = require('koa-router')();
+const { v4: uuidv4 } = require('uuid');
 const Invite = require('../../models/Invite');
 
 // 添加路由前缀
@@ -42,12 +43,7 @@ router.post('/add', async (ctx, next) => {
     }
     const {body: params} = ctx.request;
     let createTime = new Date().Format('yyyy/MM/dd hh:mm:ss');
-    let platform = 'invite';
-    let r1 = Math.floor(Math.random() * 10);
-    let r2 = Math.floor(Math.random() * 10);
-
-    let sysDate = new Date().Format('yyyyMMddhhmmss');
-    params.id = platform + r1 + sysDate + r2;
+    params.id = `invite-${uuidv4()}`;
     params.createTime = createTime;
     params.updateTime = createTime;
     let res = await Invite.create(params).catch(error => {

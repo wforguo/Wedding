@@ -5,6 +5,7 @@
  */
 
 const router = require('koa-router')();
+const { v4: uuidv4 } = require('uuid');
 const Msg = require('../../models/Msg');
 require('../../util/util');
 
@@ -28,23 +29,35 @@ router.get('/list', async (ctx, next) => {
     delete params.pageSize;
     delete params.sorter;
     delete params._timestamp;
-
-    let res = await Msg.find(params).skip(Number(skip)).limit(Number(pageSize)).catch(error => {
+    let total = await Msg.count(params);
+    if (total > 0) {
+        let res = await Msg.find(params).skip(Number(skip)).limit(Number(pageSize)).catch(error => {
+            ctx.body = {
+                success: false,
+                code: 10086,
+                message: error.message
+            };
+        });
         ctx.body = {
-            success: false,
-            code: 10086,
-            message: error.message
+            code: 200,
+            message: 'ok',
+            data: res,
+            total,
+            'success': true,
+            'pageSize': pageSize || 10,
+            'current': current || 1
         };
-    });
-    ctx.body = {
-        code: 200,
-        message: 'ok',
-        data: res,
-        'total': res.length,
-        'success': true,
-        'pageSize': pageSize || 10,
-        'current': current || 1
-    };
+    } else {
+        ctx.body = {
+            code: 200,
+            message: 'ok',
+            data: [],
+            total,
+            'success': true,
+            'pageSize': pageSize || 10,
+            'current': current || 1
+        };
+    }
 });
 
 /**
@@ -78,14 +91,8 @@ router.post('/add', async (ctx, next) => {
         return false;
     }
     let createTime = new Date().Format('yyyy/MM/dd hh:mm:ss');
-    let platform = 'photo';
-    let r1 = Math.floor(Math.random() * 10);
-    let r2 = Math.floor(Math.random() * 10);
-
-    let sysDate = new Date().Format('yyyyMMddhhmmss');
-    let id = platform + r1 + sysDate + r2;
     let photo = {
-        id: id,
+        id: `msg-${uuidv4()}`,
         url: url,
         desc: desc,
         createTime,

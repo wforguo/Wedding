@@ -22,6 +22,7 @@ const UpdateForm = props => {
 
     const handleSubmit = async () => {
         const fieldsValue = await form.validateFields();
+        console.warn(fieldsValue);
         setFormVals({...formVals, ...fieldsValue});
         handleUpdate({...formVals, ...fieldsValue});
     };
@@ -40,8 +41,9 @@ const UpdateForm = props => {
                         },
                     ]}
                 >
-                    <Input placeholder="请输入用户名"/>
+                    <Input placeholder="请输入用户名" disabled />
                 </FormItem>
+
                 <FormItem
                     name="userEmail"
                     label="邮箱"
@@ -64,7 +66,7 @@ const UpdateForm = props => {
                         },
                     ]}
                 >
-                    <Input placeholder="请输入手机"/>
+                    <Input placeholder="请输入手机" type='tel' maxLength={11}/>
                 </FormItem>
             </>
         );

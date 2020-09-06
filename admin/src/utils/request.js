@@ -3,7 +3,7 @@
  * 更详细的 api 文档: https://github.com/umijs/umi-request
  */
 import { extend } from 'umi-request';
-import { notification } from 'antd';
+import { notification, message } from 'antd';
 import {getPageQuery} from "@/utils/utils";
 import {history} from "umi";
 import {stringify} from "querystring";
@@ -31,6 +31,7 @@ const codeMessage = {
  */
 const errorHandler = (error) => {
     const { response } = error;
+    message.destroy();
     console.log(response);
     if (response && response.status) {
         if (response.status >= 200 && response.status < 300) {
@@ -85,7 +86,7 @@ const errorHandler = (error) => {
 // const currentUser = yield select(state => state.user.currentUser);
 
 const request = extend({
-    timeout: 1000,
+    timeout: 6000,
     errorHandler, // 默认错误处理
     credentials: 'include', // 默认请求是否带上cookie
 });

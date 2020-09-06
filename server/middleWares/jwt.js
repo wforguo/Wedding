@@ -12,7 +12,11 @@ const config = require('../config');
 const jwt = JWT({
     secret: config.JWT_SECRET
 }).unless({
-    path: [/^\/public/, /^\/api\/auth/] // 该prefix下的不做校验
+    path: [
+        /^\/public/, // 公共模块
+        /^\/api\/auth/, // 登录模块
+        /^\/weapp/ // 微信小程序
+    ] // 该prefix下的不做校验
 });
 
 module.exports = jwt;

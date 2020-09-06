@@ -16,45 +16,49 @@ const Model = {
                 content: '登录中...',
                 duration: 0
             });
-            const response = yield call(fakeAccountLogin, payload);
-            // Login successfully
-            message.destroy();
-            if (response.code === 200) {
-                const urlParams = new URL(window.location.href);
-                const params = getPageQuery();
-                let {redirect} = params;
-                // 更新当前登录用户角色
-                yield put({
-                    type: 'changeLoginStatus',
-                    payload: response.data,
-                });
-                console.log('登录成功 ===>', response.data);
-                yield put({
-                    type: 'user/saveCurrentUser',
-                    payload: response.data,
-                });
-                yield put({
-                    type: 'user/saveAccessToken',
-                    payload: response.data.token,
-                });
-                message.success('登录成功');
-                if (redirect) {
-                    const redirectUrlParams = new URL(redirect);
+            try {
+                const response = yield call(fakeAccountLogin, payload);
+                message.destroy();
+                // Login successfully
+                if (response.code === 200) {
+                    const urlParams = new URL(window.location.href);
+                    const params = getPageQuery();
+                    let {redirect} = params;
+                    // 更新当前登录用户角色
+                    yield put({
+                        type: 'changeLoginStatus',
+                        payload: response.data,
+                    });
+                    console.log('登录成功 ===>', response.data);
+                    yield put({
+                        type: 'user/saveCurrentUser',
+                        payload: response.data,
+                    });
+                    yield put({
+                        type: 'user/saveAccessToken',
+                        payload: response.data.token,
+                    });
+                    message.success('登录成功');
+                    if (redirect) {
+                        const redirectUrlParams = new URL(redirect);
 
-                    if (redirectUrlParams.origin === urlParams.origin) {
-                        redirect = redirect.substr(urlParams.origin.length);
+                        if (redirectUrlParams.origin === urlParams.origin) {
+                            redirect = redirect.substr(urlParams.origin.length);
 
-                        if (redirect.match(/^\/.*#/)) {
-                            redirect = redirect.substr(redirect.indexOf('#') + 1);
+                            if (redirect.match(/^\/.*#/)) {
+                                redirect = redirect.substr(redirect.indexOf('#') + 1);
+                            }
+                        } else {
+                            window.location.href = '/';
+                            return;
                         }
-                    } else {
-                        window.location.href = '/';
-                        return;
                     }
+                    history.replace(redirect || '/');
+                } else {
+                    message.warn(response.message);
                 }
-                history.replace(redirect || '/');
-            } else {
-                message.warn(response.message);
+            } catch (err) {
+                console.warn(err);
             }
         },
 
