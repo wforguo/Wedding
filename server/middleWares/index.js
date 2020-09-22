@@ -42,7 +42,7 @@ const middleware = compose([
     cors,
     helmet(),
     errHandle,
-    jwt
+    // jwt
 ]);
 
 module.exports = middleware;

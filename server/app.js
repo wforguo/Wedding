@@ -10,6 +10,7 @@ const chalk = require('chalk');
 const figlet = require('figlet');
 const middleWares = require('./middleWares');
 const dbConnect = require('./util/dbConnect');
+require('./util/util');
 
 // console.log(chalk.yellow.bold('------------- Wedding Server ------------- \n'));
 figlet('Wedding  Server', function(err, data) {
@@ -27,17 +28,17 @@ const app = new Koa();
 dbConnect();
 
 // admin
-const adminAuth = require('./routes/admin/auth');
-const adminUser = require('./routes/admin/user');
-const adminPhoto = require('./routes/admin/photo');
-const adminMsg = require('./routes/admin/msg');
-const adminInvite = require('./routes/admin/invite');
+// const adminAuth = require('./routes/admin/auth');
+// const adminUser = require('./routes/admin/user');
+const adminActivity = require('./routes/admin/activity');
+// const adminMsg = require('./routes/admin/msg');
+// const adminInvite = require('./routes/admin/invite');
 
 // common
-const common = require('./routes/common/common');
+// const common = require('./routes/common/common');
 
 // weapp
-const weAuth = require('./routes/weapp/auth');
+// const weAuth = require('./routes/weapp/auth');
 
 // error handler
 onerror(app);
@@ -49,15 +50,15 @@ if (process.env.NODE_ENV === 'production') {
 app.use(middleWares);
 
 // routes
-app.use(adminAuth.routes(), adminAuth.allowedMethods());
-app.use(adminUser.routes(), adminUser.allowedMethods());
-app.use(adminPhoto.routes(), adminPhoto.allowedMethods());
-app.use(adminMsg.routes(), adminMsg.allowedMethods());
-app.use(adminInvite.routes(), adminInvite.allowedMethods());
+// app.use(adminAuth.routes(), adminAuth.allowedMethods());
+// app.use(adminUser.routes(), adminUser.allowedMethods());
+app.use(adminActivity.routes(), adminActivity.allowedMethods());
+// app.use(adminMsg.routes(), adminMsg.allowedMethods());
+// app.use(adminInvite.routes(), adminInvite.allowedMethods());
 
-app.use(common.routes(), common.allowedMethods());
+// app.use(common.routes(), common.allowedMethods());
 
-app.use(weAuth.routes(), weAuth.allowedMethods());
+// app.use(weAuth.routes(), weAuth.allowedMethods());
 
 // error-handling
 app.on('error', (err, ctx) => {

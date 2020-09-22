@@ -15,7 +15,7 @@ export async function removeUser(params) {
 }
 
 export async function addUser(params) {
-    return request('/api/user/add', {
+    return request('/api/activity/add', {
         method: 'POST',
         data: {...params},
     });
