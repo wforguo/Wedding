@@ -29,22 +29,35 @@ router.get('/list', async (ctx, next) => {
     delete params.sorter;
     delete params._timestamp;
 
-    let res = await Photo.find(params).skip(Number(skip)).limit(Number(pageSize)).catch(error => {
+    let total = await Photo.count(params);
+    if (total > 0) {
+        let res = await Photo.find(params).skip(Number(skip)).limit(Number(pageSize)).catch(error => {
+            ctx.body = {
+                success: false,
+                code: 10086,
+                message: error.message
+            };
+        });
         ctx.body = {
-            success: false,
-            code: 10086,
-            message: error.message
+            code: 200,
+            success: true,
+            message: 'ok',
+            data: res,
+            total,
+            'pageSize': pageSize || 10,
+            'current': current || 1
         };
-    });
-    ctx.body = {
-        code: 200,
-        message: 'ok',
-        data: res,
-        'total': res.length,
-        'success': true,
-        'pageSize': pageSize || 10,
-        'current': current || 1
-    };
+    } else {
+        ctx.body = {
+            code: 0,
+            success: true,
+            message: 'ok',
+            data: [],
+            total,
+            'pageSize': pageSize || 10,
+            'current': current || 1
+        };
+    }
 });
 
 /**
@@ -93,7 +106,7 @@ router.post('/add', async (ctx, next) => {
     });
     ctx.body = {
         code: 200,
-        success: false,
+        success: true,
         message: 'ok',
         data: res
     };
@@ -121,6 +134,7 @@ router.get('/remove', async (ctx, next) => {
     });
     ctx.body = {
         code: 200,
+        success: true,
         message: 'ok',
         data: {
             _id,

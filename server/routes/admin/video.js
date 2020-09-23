@@ -24,9 +24,9 @@ router.get('/info', async (ctx, next) => {
     });
     ctx.body = {
         code: 200,
+        success: true,
         message: 'ok',
         data: res,
-        'success': true,
     };
 });
 
@@ -55,7 +55,7 @@ router.post('/add', async (ctx, next) => {
     });
     ctx.body = {
         code: 200,
-        success: false,
+        success: true,
         message: 'ok',
         data: res
     };

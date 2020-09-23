@@ -11,7 +11,7 @@ const config = {
         pwd: 'root2333', // root2333
         url: 'forguo.kqpcs.gcp.mongodb.net',
         port: '27017',
-        name: 'wedding',
+        name: 'activity',
     },
     // 本地
     // dataBase: {

@@ -20,12 +20,12 @@ router.prefix('/api/user');
  */
 router.get('/info', async (ctx, next) => {
     let query = ctx.request.query;
-    let userId = query.userId || '10001';
+    let userId = query.userId;
     if (!userId || userId.length === 0) {
         ctx.body = {
             code: 10009,
             success: false,
-            message: '用户id不能为空',
+            message: 'id不能为空',
         };
         return false;
     }
@@ -84,25 +84,24 @@ router.get('/list', async (ctx, next) => {
         });
         ctx.body = {
             code: 0,
+            success: true,
             message: 'ok',
             data: res,
             total,
-            'success': true,
             'pageSize': pageSize || 10,
             'current': current || 1
         };
     } else {
         ctx.body = {
             code: 0,
+            success: true,
             message: 'ok',
             data: [],
             total,
-            'success': true,
             'pageSize': pageSize || 10,
             'current': current || 1
         };
     }
-
 });
 
 /**
@@ -168,7 +167,7 @@ router.post('/add', async (ctx, next) => {
     });
     ctx.body = {
         code: 200,
-        success: false,
+        success: true,
         message: 'ok',
         data: res
     };
@@ -216,7 +215,6 @@ router.post('/update', async (ctx, next) => {
             message: error.message
         };
     });
-    console.log(res);
     ctx.body = {
         code: 200,
         success: true,
@@ -248,6 +246,7 @@ router.get('/remove', async (ctx, next) => {
     });
     ctx.body = {
         code: 200,
+        success: true,
         message: 'ok',
         data: {
             _id,

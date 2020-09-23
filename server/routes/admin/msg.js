@@ -39,20 +39,20 @@ router.get('/list', async (ctx, next) => {
         });
         ctx.body = {
             code: 200,
+            success: true,
             message: 'ok',
             data: res,
             total,
-            'success': true,
             'pageSize': pageSize || 10,
             'current': current || 1
         };
     } else {
         ctx.body = {
             code: 200,
+            success: true,
             message: 'ok',
             data: [],
             total,
-            'success': true,
             'pageSize': pageSize || 10,
             'current': current || 1
         };
@@ -105,7 +105,7 @@ router.post('/add', async (ctx, next) => {
     });
     ctx.body = {
         code: 200,
-        success: false,
+        success: true,
         message: 'ok',
         data: res
     };
@@ -133,6 +133,7 @@ router.get('/remove', async (ctx, next) => {
     });
     ctx.body = {
         code: 200,
+        success: true,
         message: 'ok',
         data: {
             _id,

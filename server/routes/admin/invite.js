@@ -15,7 +15,21 @@ router.prefix('/api/invite');
  * 获取信息（get方式）
  */
 router.get('/info', async (ctx, next) => {
-    let res = await Invite.find().catch(error => {
+    let query = ctx.request.query;
+    let id = query.id;
+    if (!id || id.length === 0) {
+        ctx.body = {
+            code: 10009,
+            success: false,
+            message: 'id不能为空',
+        };
+        return false;
+    }
+
+    let param = {
+        id: id
+    };
+    let res = await Invite.find(param).catch(error => {
         ctx.body = {
             success: false,
             code: 10086,
@@ -24,9 +38,9 @@ router.get('/info', async (ctx, next) => {
     });
     ctx.body = {
         code: 200,
+        success: true,
         message: 'ok',
         data: res[0],
-        'success': true,
     };
 });
 
@@ -55,7 +69,7 @@ router.post('/add', async (ctx, next) => {
     });
     ctx.body = {
         code: 200,
-        success: false,
+        success: true,
         message: 'ok',
         data: res
     };

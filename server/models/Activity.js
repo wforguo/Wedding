@@ -1,5 +1,5 @@
 /**
- * @Description: 甜蜜相册
+ * @Description: 活动
  * @author: forguo
  * @date: 2020/7/11
  */
