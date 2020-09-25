@@ -8,9 +8,36 @@ const onerror = require('koa-onerror');
 const compress = require('koa-compress');
 const chalk = require('chalk');
 const figlet = require('figlet');
+const log4js = require('log4js');
+const {name: proName} = require('./package');
 const middleWares = require('./middleWares');
 const dbConnect = require('./util/dbConnect');
 require('./util/util');
+
+log4js.configure({
+    appenders: {
+        error: {
+            type: 'file',
+            category: 'errLogger',    // 日志名称
+            filename: `./logs/${getFileName()}-${proName}.log`
+        },
+        response: {
+            type: 'dateFile',
+            category: 'resLogger',
+            filename: __dirname + './logs/responses/',
+            pattern: 'yyyy-MM-dd.log', // 日志输出模式
+            alwaysIncludePattern: true,
+            maxLogSize: 104800,
+            backups: 100
+        }
+    },
+    categories: {
+        error: {appenders: ['error'], level: 'error'},
+        response: {appenders: ['response'], level: 'info'},
+        default: { appenders: ['response'], level: 'info'}
+    },
+    replaceConsole: true
+});
 
 // console.log(chalk.yellow.bold('------------- Wedding Server ------------- \n'));
 figlet('Wedding  Server', function(err, data) {
@@ -64,5 +91,20 @@ app.use(adminActivity.routes(), adminActivity.allowedMethods());
 app.on('error', (err, ctx) => {
     console.error('server error', err, ctx)
 });
+
+//获取当前时间
+function getFileName() {
+    const date = new Date();
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+    if (month < 10) {
+        month = "0" + month;
+    }
+    if (day < 10) {
+        day = "0" + day;
+    }
+    return year + "-" + month + "-" + day;
+}
 
 module.exports = app;

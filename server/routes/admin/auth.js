@@ -63,13 +63,14 @@ router.post('/login', async (ctx, next) => {
     });
 
     if (!res || res.length === 0) {
-        ctx.throw(401, 'Bad Authorization header format. Format is "Authorization: Bearer <token>"');
-        // ctx.body = {
-        //     success: false,
-        //     code: 10086,
-        //     message: '用户名或密码错误',
-        //     data: res
-        // };
+        // ctx.throw(401, 'Bad Authorization header format. Format is "Authorization: Bearer <token>"');
+        ctx.status = 401;
+        ctx.body = {
+            success: false,
+            code: 10086,
+            message: '用户名或密码错误',
+            data: res
+        };
     } else {
         //  Header + Payload + Signature
         // 生产登录的token

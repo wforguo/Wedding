@@ -5,10 +5,10 @@
  */
 let WXBizDataCrypt = require('./WXBizDataCrypt');
 let config = require('../../config');
-let wxApp = config.wxApp;
+let weApp = config.weApp;
 
 module.exports =
     getRunData = function (params) {
-        let pc = new WXBizDataCrypt(wxApp.APPID, params.sessionKey);
+        let pc = new WXBizDataCrypt(weApp.APP_ID, params.sessionKey);
         return pc.decryptData(params.encryptedData, params.iv);
     };
