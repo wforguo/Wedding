@@ -8,6 +8,7 @@ const router = require('koa-router')();
 const { v4: uuidv4 } = require('uuid');
 const Activity = require('../../models/Activity');
 const Member = require('../../models/Member');
+const log4js = require('./../../middleWares/util/log4js');
 
 // 添加路由前缀
 router.prefix('/api/activity');
@@ -16,11 +17,12 @@ router.prefix('/api/activity');
  * 获取列表（get方式）
  */
 router.get('/list', async (ctx, next) => {
+    log4js.errLogger(ctx, 'err');
     let query = ctx.request.query; // if nothing to pass just return a {}
     let current = query.current || 1;
     let pageSize = query.pageSize || 10;
     let skip = (current - 1) * pageSize;
-
+    console.log(ctx.header);
     // 条件检索
     let params = {
         ...query

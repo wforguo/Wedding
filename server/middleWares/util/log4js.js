@@ -7,9 +7,9 @@ let errorLogger = log4js.getLogger('error');
 let resLogger = log4js.getLogger('response');
 
 // 封装错误日志
-logger.errLogger = (ctx, error, resTime) => {
+logger.errLogger = (ctx, error) => {
     if(ctx && error) {
-        errorLogger.error(formatError(ctx, error, resTime))
+        errorLogger.error(formatError(ctx, error))
     }
 };
 
@@ -19,3 +19,4 @@ logger.resLogger = (ctx, resTime) => {
         resLogger.info(formatRes(ctx, resTime))
     }
 };
+module.exports = logger
